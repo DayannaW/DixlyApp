@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Juego 1 – Fragmento Perdido</title>
+    <link rel="stylesheet" href="../css/juegos.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <div id="container">
+        <h2 id="title"></h2>
+        <p id="texto-principal"></p>
+
+        <div id="opciones"></div>
+
+        <div id="feedback"></div>
+    </div>
+
+    <script type="module">
+        import Game1 from "../js/juego1.js";
+        Game1.init('nivel-facil'); 
+    </script>
+
+</body>
+</html>

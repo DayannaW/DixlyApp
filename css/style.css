@@ -1,0 +1,182 @@
+/* =============================
+   VARIABLES DE COLOR Y TIPOGRAFÍA
+   ============================= */
+:root {
+    --color-fondo: #F5F7FA;
+    --color-primario: #4A90E2;
+    --color-secundario: #7BB6F1;
+    --color-correcto: #4CAF50;
+    --color-incorrecto: #E74C3C;
+    --color-texto: #2C3E50;
+    --color-blanco: #FFFFFF;
+
+    --fuente-principal: 'Lexend', sans-serif;
+
+    --sombra-suave: 0 4px 10px rgba(0,0,0,0.08);
+    --sombra-media: 0 6px 14px rgba(0,0,0,0.12);
+}
+
+/* =============================
+   RESETEO Y BASE GLOBAL
+   ============================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--fuente-principal);
+    background: var(--color-fondo);
+    color: var(--color-texto);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+#container {
+    width: 100%;
+    max-width: 700px;
+    background: var(--color-blanco);
+    padding: 25px 30px;
+    border-radius: 14px;
+    box-shadow: var(--sombra-suave);
+    animation: fadeIn 0.6s ease;
+}
+
+h2 {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+p {
+    font-size: 1.15rem;
+    line-height: 1.55;
+    margin-bottom: 20px;
+}
+
+/* =============================
+   OPCIONES DEL JUEGO
+   ============================= */
+#opciones {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.opcion-btn {
+    padding: 12px 14px;
+    border: none;
+    border-radius: 10px;
+    background: var(--color-secundario);
+    color: var(--color-blanco);
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.25s ease;
+    box-shadow: var(--sombra-suave);
+}
+
+.opcion-btn:hover {
+    background: var(--color-primario);
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-media);
+}
+
+/* =============================
+   FEEDBACK DE RESPUESTA
+   ============================= */
+#feedback {
+    margin-top: 20px;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.correcto {
+    background: var(--color-correcto);
+    color: var(--color-blanco);
+    opacity: 1;
+}
+
+.incorrecto {
+    background: var(--color-incorrecto);
+    color: var(--color-blanco);
+    opacity: 1;
+}
+
+/* =============================
+   ANIMACIONES SUAVES
+   ============================= */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.feedback-active {
+    animation: pop 0.4s ease-out;
+}
+
+/* =============================
+   UTILIDADES / CLASES REUSABLES
+   ============================= */
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.25s;
+}
+
+.btn-primario {
+    background: var(--color-primario);
+    color: var(--color-blanco);
+}
+
+.btn-primario:hover {
+    background: var(--color-secundario);
+}
+
+.centrado {
+    text-align: center;
+}
+
+.seccion {
+    margin-top: 25px;
+}
+
+/* =============================
+   RESPONSIVE
+   ============================= */
+@media (max-width: 600px) {
+    #container {
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    .opcion-btn {
+        font-size: 1rem;
+        padding: 10px;
+    }
+}

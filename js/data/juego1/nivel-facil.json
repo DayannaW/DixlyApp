@@ -1,0 +1,11 @@
+[
+    {
+        "titulo": "El dragón perdido",
+        "texto": "El dragón voló sobre el bosque, pero echaba de menos algo importante...",
+        "opciones": [
+            { "texto": "Su tesoro", "correcto": false },
+            { "texto": "Su amigo el niño", "correcto": true },
+            { "texto": "Su comida", "correcto": false }
+        ]
+    }
+]
