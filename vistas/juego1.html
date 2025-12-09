@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Juego 1 – Fragmento Perdido</title>
-    <link rel="stylesheet" href="../css/juegos.css">
-    <link rel="stylesheet" href="../css/style.css">
+
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/ui.css">
+    <link rel="stylesheet" href="../css/vistas/juego1.css">
+
 </head>
-<body>
+
+<body class="body--juegos">
+
+    <!-- Botón de sonido -->
+    <button id="toggle-sound" class="btn-sound">🔊</button>
 
     <div id="container">
+
+        <!-- Nueva área para imagen -->
+        <div id="img-area">
+            <img id="story-img" src="" alt="Imagen de la historia">
+        </div>
+
         <h2 id="title"></h2>
         <p id="texto-principal"></p>
 
@@ -19,8 +34,9 @@
 
     <script type="module">
         import Game1 from "../js/juego1.js";
-        Game1.init('nivel-facil'); 
+        Game1.init('nivel-facil');
     </script>
 
 </body>
+
 </html>

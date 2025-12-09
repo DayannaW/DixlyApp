@@ -5,6 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DixlyApp - Inicio</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/ui.css">
+    <link rel="stylesheet" href="css/vistas/inicio.css">
 
     <!-- Manifest de la PWA -->
     <link rel="manifest" href="manifest.json">
@@ -16,52 +20,9 @@
     <!-- Íconos opcionales -->
     <link rel="icon" type="image/png" href="assets/iconos/iconApp.png" />
 
-    <style>
-        @font-face {
-            font-family: "Lexend";
-            src: url("assets/fonts/Lexend-Regular.ttf") format("woff2");
-            font-weight: 400;
-            font-style: normal;
-            font-display: swap;
-        }
-
-        body {
-            font-family: 'Lexend', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background: #FCFFFC;
-            text-align: center;
-        }
-
-        .gif-container img {
-            max-width: 80%;
-            height: auto;
-            border-radius: 20px;
-        }
-
-        .btn-start {
-            margin-top: 30px;
-            background: #4a90e2;
-            color: white;
-            padding: 18px 45px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-start:hover {
-            background: #3576c9;
-        }
-    </style>
 </head>
 
-<body>
+<body class="body--inicio">
 
     <!-- Contenedor del título -->
     <div class="app-title">

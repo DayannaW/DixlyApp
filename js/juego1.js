@@ -6,6 +6,11 @@ const Game1 = (() => {
     let stories = [];
     let currentStoryIndex = 0;
 
+    // --- Sonido de fondo ---
+    const bgAudio = new Audio("../asset/audio/juego1-fondo.mp3");
+    bgAudio.loop = true;
+    bgAudio.volume = 0.35;
+
     // ----------------------------
     // MODEL
     // ----------------------------
@@ -30,9 +35,20 @@ const Game1 = (() => {
     function renderStory() {
         const story = getCurrentStory();
 
+        // título y texto
         document.getElementById('title').textContent = story.titulo;
         document.getElementById('texto-principal').textContent = story.texto;
-        
+
+        // imagen
+        const imgEl = document.getElementById('story-img');
+        if (story.img) {
+            imgEl.src = story.img;
+            imgEl.style.display = "block";
+        } else {
+            imgEl.style.display = "none";
+        }
+
+        // opciones
         const opcionesContainer = document.getElementById('opciones');
         opcionesContainer.innerHTML = "";
 
@@ -70,8 +86,25 @@ const Game1 = (() => {
         }
     }
 
-    async function init(level = 'nivel-facil') { //esta variable solo se usara si no se envia ningun parametro
+    // control de sonido
+    function initSoundButton() {
+        const btn = document.getElementById("toggle-sound");
+
+        btn.addEventListener("click", () => {
+            if (bgAudio.paused) {
+                bgAudio.play();
+                btn.textContent = "🔊";
+            } else {
+                bgAudio.pause();
+                btn.textContent = "🔈";
+            }
+        });
+    }
+
+    async function init(level = 'nivel-facil') {
         await loadStories(level);
+        initSoundButton();
+        bgAudio.play();
         renderStory();
     }
 

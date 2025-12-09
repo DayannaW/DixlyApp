@@ -1,61 +1,9 @@
-/* .contenedor-juegos {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 25px;
-}
-
-.tarjeta-juego {
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transition: transform .2s, box-shadow .2s;
-}
-
-.tarjeta-juego:hover {
-    transform: scale(1.03);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-}
-
-.img-juego {
-    width: 120px;
-    height: auto;
-    margin-bottom: 10px;
-}
-
-.footer {
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-}
-
-.btn-secundario {
-    background: #4a90e2;
-    color: #fff;
-    border: none;
-    padding: 12px 28px;
-    border-radius: 50px;
-    font-size: 1.1rem;
-    cursor: pointer;
-} */
-
-
-
-
-
-
-
-
-
-
 /* =============================
    VARIABLES DE COLOR Y TIPOGRAFÍA
    ============================= */
 :root {
-    --color-fondo: #F5F7FA;
+    --color-fondo-juegos:#F5F7FA; 
+    --color-fondo-inicio:#FCFFFC;
     --color-primario: #4A90E2;
     --color-secundario: #7BB6F1;
     --color-correcto: #4CAF50;
@@ -65,8 +13,8 @@
 
     --fuente-principal: 'Lexend', sans-serif;
 
-    --sombra-suave: 0 4px 10px rgba(0,0,0,0.08);
-    --sombra-media: 0 6px 14px rgba(0,0,0,0.12);
+    --sombra-suave: 0 4px 10px rgba(0, 0, 0, 0.08);
+    --sombra-media: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
 
 /* =============================
@@ -80,7 +28,7 @@
 
 body {
     font-family: var(--fuente-principal);
-    background: var(--color-fondo);
+    background: var(--color-fondo-juegos);
     color: var(--color-texto);
     padding: 20px;
     display: flex;

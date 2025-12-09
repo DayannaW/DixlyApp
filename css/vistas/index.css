@@ -1,0 +1,16 @@
+/* =========================================
+   PAGES/INDEX.CSS
+========================================= */
+
+.contenedor-juegos {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 25px;
+}
+
+.footer {
+    margin-top: 20px;
+    text-align: center;
+}
+

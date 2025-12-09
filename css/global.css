@@ -1,0 +1,91 @@
+/* =========================================
+   GLOBAL.CSS — Variables, Reset, Tipografía
+========================================= */
+
+/* VARIABLES */
+:root {
+    /* Colores */
+    --color-fondo-inicio: #FCFFFC;
+    --color-fondo-juegos: #F5F7FA;
+    --color-primario: #4A90E2;
+    --color-secundario: #7BB6F1;
+    --color-correcto: #4CAF50;
+    --color-incorrecto: #E74C3C;
+    --color-texto: #2C3E50;
+    --color-blanco: #FFFFFF;
+
+    /* Tipografía */
+    --fuente-principal: 'Lexend', sans-serif;
+
+    /* Sombras */
+    --sombra-suave: 0 4px 10px rgba(0, 0, 0, 0.08);
+    --sombra-media: 0 6px 14px rgba(0, 0, 0, 0.12);
+
+    /* Animaciones estándar */
+    --transition-base: 0.25s ease;
+}
+
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* TIPOGRAFÍA */
+@font-face {
+    font-family: "Lexend";
+    src: url("../assets/fonts/Lexend-Regular.ttf") format("woff2");
+    font-display: swap;
+}
+
+/* BODY GENERAL */
+body {
+    font-family: var(--fuente-principal);
+    color: var(--color-texto);
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    line-height: 1.5;
+    letter-spacing: 0.5px;
+}
+
+/* UTILIDADES */
+.hidden {
+    display: none !important;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* ANIMACIONES BASE */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.5s forwards ease-in-out;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+.scale-in {
+    transform: scale(0.9);
+    opacity: 0;
+    animation: scaleIn 0.35s forwards ease;
+}
+
+@keyframes scaleIn {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

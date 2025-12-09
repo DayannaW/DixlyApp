@@ -2,7 +2,8 @@
    VARIABLES DE COLOR Y TIPOGRAFÍA
    ============================= */
 :root {
-    --color-fondo: #F5F7FA;
+    --color-fondo-juegos:#F5F7FA; 
+    --color-fondo-inicio:#FCFFFC;
     --color-primario: #4A90E2;
     --color-secundario: #7BB6F1;
     --color-correcto: #4CAF50;
@@ -12,8 +13,8 @@
 
     --fuente-principal: 'Lexend', sans-serif;
 
-    --sombra-suave: 0 4px 10px rgba(0,0,0,0.08);
-    --sombra-media: 0 6px 14px rgba(0,0,0,0.12);
+    --sombra-suave: 0 4px 10px rgba(0, 0, 0, 0.08);
+    --sombra-media: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
 
 /* =============================
@@ -25,139 +26,106 @@
     box-sizing: border-box;
 }
 
+
+@font-face {
+    font-family: "Lexend";
+    src: url("../assets/fonts/Lexend-Regular.ttf") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 body {
     font-family: var(--fuente-principal);
-    background: var(--color-fondo);
+    background: var(--color-fondo-inicio);
     color: var(--color-texto);
+    /* height: 100vh;
+            margin: 0; */
     padding: 20px;
     display: flex;
+    align-items: center;
+    flex-direction: column;
     justify-content: center;
-}
-
-#container {
-    width: 100%;
-    max-width: 700px;
-    background: var(--color-blanco);
-    padding: 25px 30px;
-    border-radius: 14px;
-    box-shadow: var(--sombra-suave);
-    animation: fadeIn 0.6s ease;
-}
-
-h2 {
-    font-size: 1.6rem;
-    margin-bottom: 15px;
-    font-weight: 600;
-}
-
-p {
-    font-size: 1.15rem;
-    line-height: 1.55;
-    margin-bottom: 20px;
+    text-align: center;
 }
 
 /* =============================
-   OPCIONES DEL JUEGO
+   INICIO HTML
    ============================= */
-#opciones {
+
+.gif-container img {
+    max-width: 80%;
+    height: auto;
+    border-radius: 20px;
+}
+
+.btn-start {
+    margin-top: 30px;
+    background: #4a90e2;
+    color: white;
+    padding: 18px 45px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-start:hover {
+    background: #3576c9;
+}
+
+
+/* =============================
+   INDEX PHP
+   ============================= */
+
+.contenedor-juegos {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-top: 10px;
+    gap: 20px;
+    padding: 25px;
 }
 
-.opcion-btn {
-    padding: 12px 14px;
+.tarjeta-juego {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 20px;
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform .2s, box-shadow .2s;
+}
+
+.tarjeta-juego:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+.img-juego {
+    width: 120px;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.btn-secundario {
+    background: #4a90e2;
+    color: #fff;
     border: none;
-    border-radius: 10px;
-    background: var(--color-secundario);
-    color: var(--color-blanco);
+    padding: 12px 28px;
+    border-radius: 50px;
     font-size: 1.1rem;
     cursor: pointer;
-    text-align: left;
-    transition: all 0.25s ease;
-    box-shadow: var(--sombra-suave);
 }
 
-.opcion-btn:hover {
-    background: var(--color-primario);
-    transform: translateY(-2px);
-    box-shadow: var(--sombra-media);
-}
-
-/* =============================
-   FEEDBACK DE RESPUESTA
-   ============================= */
-#feedback {
-    margin-top: 20px;
-    padding: 12px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-align: center;
-    border-radius: 10px;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-
-.correcto {
-    background: var(--color-correcto);
-    color: var(--color-blanco);
-    opacity: 1;
-}
-
-.incorrecto {
-    background: var(--color-incorrecto);
-    color: var(--color-blanco);
-    opacity: 1;
-}
-
-/* =============================
-   ANIMACIONES SUAVES
-   ============================= */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-.feedback-active {
-    animation: pop 0.4s ease-out;
-}
-
-/* =============================
-   UTILIDADES / CLASES REUSABLES
-   ============================= */
-.btn {
-    display: inline-block;
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-size: 1rem;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.25s;
-}
-
-.btn-primario {
-    background: var(--color-primario);
-    color: var(--color-blanco);
-}
-
-.btn-primario:hover {
-    background: var(--color-secundario);
-}
-
-.centrado {
-    text-align: center;
-}
-
-.seccion {
-    margin-top: 25px;
-}
 
 /* =============================
    RESPONSIVE

@@ -1,0 +1,33 @@
+/* =========================================
+   PAGES/INICIO.CSS
+========================================= */
+
+.app-title {
+    margin-top: 20px;
+}
+
+.app-title h1 {
+    font-size: 2.4rem;
+}
+
+.gif-container img {
+    max-width: 80%;
+    height: auto;
+    border-radius: 20px;
+}
+
+.btn-start {
+    margin-top: 30px;
+    background: #4a90e2;
+    color: white;
+    padding: 18px 45px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-start:hover {
+    background: #3576c9;
+}

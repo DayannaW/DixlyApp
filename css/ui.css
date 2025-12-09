@@ -1,0 +1,90 @@
+/* =========================================
+   UI.CSS — Componentes Reutilizables
+========================================= */
+
+/* BOTONES */
+.btn {
+    padding: 12px 28px;
+    border-radius: 50px;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.btn-primary {
+    background: var(--color-primario);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #3576c9;
+}
+
+.btn-secondary {
+    background: var(--color-secundario);
+    color: var(--color-blanco);
+}
+
+.btn-secondary:hover {
+    background: #6aa7e3;
+}
+
+/* TARJETAS DE JUEGO */
+.tarjeta-juego {
+    background: var(--color-blanco);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: var(--sombra-suave);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.tarjeta-juego:hover {
+    transform: scale(1.03);
+    box-shadow: var(--sombra-media);
+}
+
+/* IMÁGENES */
+.img-juego {
+    width: 120px;
+    margin-bottom: 10px;
+}
+
+/* MODAL */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(3px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    width: 85%;
+    max-width: 450px;
+    box-shadow: var(--sombra-media);
+    animation: scaleIn 0.35s ease forwards;
+}
+
+/* LOADER */
+.loader {
+    border: 4px solid #ddd;
+    border-top-color: var(--color-primario);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

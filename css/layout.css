@@ -1,0 +1,72 @@
+/* =========================================
+   LAYOUT.CSS — Distribución y Estructura
+========================================= */
+
+html, body {
+    height: 100svh;  /* altura real visible en móviles */
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* FONDOS ESPECÍFICOS POR PANTALLA */
+.body--inicio {
+    background: var(--color-fondo-inicio);
+}
+
+
+.body--juegos {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--color-fondo-juegos);
+}
+
+
+/* CONTENEDOR PRINCIPAL DE PÁGINA */
+.page-container {
+    width: 100%;
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* CONTENEDOR DE JUEGO */
+.juego-container {
+    background: var(--color-blanco);
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: var(--sombra-suave);
+    width: 100%;
+    max-width: 700px;
+    margin: 40px auto;
+}
+
+/* HEADERS */
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.header p {
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .juego-container {
+        padding: 18px;
+    }
+
+    .header h1 {
+        font-size: 1.6rem;
+    }
+}

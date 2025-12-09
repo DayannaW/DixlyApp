@@ -4,6 +4,7 @@
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,8 +14,11 @@
     <link rel="manifest" href="manifest.json">
 
     <!-- Estilos globales -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/juegos.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/ui.css">
+    <link rel="stylesheet" href="css/vistas/index.css">
+
 
     <!-- Colores PWA -->
     <meta name="theme-color" content="#4a90e2">
@@ -23,7 +27,8 @@
     <link rel="icon" href="asset/iconos/icon-192.png" type="image/png">
 
 </head>
-<body>
+
+<body class="body--juegos">
 
     <header class="header">
         <h1>Elige un Juego</h1>
@@ -34,9 +39,9 @@
 
         <!-- JUEGO 1 -->
         <div class="tarjeta-juego" onclick="location.href='vistas/juego1.html'">
-            <img src="asset/imagenes/juego1.png" alt="Juego de Discriminación Visual" class="img-juego">
+            <img src="assets/imagenes/logoJuego1.jpg" alt="Juego de Discriminación Visual" class="img-juego">
             <h2>Juego 1</h2>
-            <p>Discriminación visual</p>
+            <p>Aventura entre Palabras</p>
         </div>
 
         <!-- JUEGO 2 -->
@@ -56,13 +61,13 @@
     </main>
 
     <footer class="footer">
-        <button class="btn-secundario" onclick="location.href='vistas/resultados.html'">
+        <button class="btn btn-secondary" onclick="location.href='vistas/resultados.html'">
             Ver Progreso
         </button>
     </footer>
 
     <!-- Scripts globales -->
-    <script src="js/util.js"></script>
+    <script type="module" src="js/util.js"></script>
     <script src="js/main.js"></script>
     <script src="js/pwa.js"></script>
 
@@ -76,4 +81,5 @@
     </script>
 
 </body>
+
 </html>
