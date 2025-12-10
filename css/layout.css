@@ -17,6 +17,7 @@ html, body {
 
 
 .body--juegos {
+    overflow-y: auto;
     min-height: 100svh;
     display: flex;
     flex-direction: column;
