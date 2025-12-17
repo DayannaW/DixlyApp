@@ -38,21 +38,21 @@
     <main class="contenedor-juegos">
 
         <!-- JUEGO 1 -->
-        <div class="tarjeta-juego" onclick="location.href='vistas/juego1.html'">
+        <div class="tarjeta-juego" onclick="location.href='vistas/juego1/index.html'">
             <img src="assets/imagenes/logoJuego1.jpg" alt="Juego de Discriminación Visual" class="img-juego">
             <h2>Juego 1</h2>
             <p>Aventura entre Palabras</p>
         </div>
 
         <!-- JUEGO 2 -->
-        <div class="tarjeta-juego" onclick="location.href='vistas/juego2.html'">
+        <div class="tarjeta-juego" onclick="location.href='vistas/juego2/index.html'">
             <img src="asset/imagenes/juego2.png" alt="Juego de Memoria Verbal" class="img-juego">
             <h2>Juego 2</h2>
             <p>Memoria verbal</p>
         </div>
 
         <!-- JUEGO 3 -->
-        <div class="tarjeta-juego" onclick="location.href='vistas/juego3.html'">
+        <div class="tarjeta-juego" onclick="location.href='vistas/juego3/index.html'">
             <img src="asset/imagenes/juego3.png" alt="Juego de Conciencia Fonológica" class="img-juego">
             <h2>Juego 3</h2>
             <p>Conciencia fonológica</p>

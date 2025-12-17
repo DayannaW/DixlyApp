@@ -2,7 +2,7 @@
     {
         "titulo": "La noche del faro",
         "texto": "Cada verano, Leo visitaba a su tía en la costa, pero ese año algo era diferente. El faro del acantilado, que siempre permanecía encendido, llevaba dos noches apagado. La gente del pueblo murmuraba que el encargado del faro había dejado una nota antes de desaparecer, pero nadie sabía qué decía realmente. Intrigado, Leo decidió subir al faro por su cuenta. El viento era tan fuerte que cada paso se sentía como una pequeña batalla, pero llegó hasta la puerta. Adentro encontró papeles tirados, una linterna descargada y un cuaderno abierto sobre la mesa. Parecía que había alguien allí poco antes de marcharse.En la primera página del cuaderno había un mensaje incompleto. Decía:<br><br>“Quien encuentre esto debe saber que el motivo de mi ausencia es {{espacio}}”<br><br>Aunque Leo podía leer el inicio, faltaba la parte más importante: la razón por la que el encargado había desaparecido. Sin esa frase, la historia no tenía sentido. Leo respiró hondo y trató de imaginar qué podía haberlos llevado a apagar el faro y marcharse sin avisar.",
-        "img": "../assets/imagenes/cuento1Juego1.jpg", 
+        "img": "../../assets/imagenes/cuento1Juego1.jpg", 
         "opciones": [
             { "texto": "Una receta de sopa que había salido mal.", "correcto": false },
             { "texto": "Un viejo misterio que finalmente se debe resolver.", "correcto": true },
@@ -10,13 +10,13 @@
         ]
     },
      {
-        "titulo": "La noche del foro",
-        "texto": "Cada verano, Leo visitaba a su tía en la costa, pero ese año algo era diferente. El faro del acantilado, que siempre permanecía encendido, llevaba dos noches apagado. La gente del pueblo murmuraba que el encargado del faro había dejado una nota antes de desaparecer, pero nadie sabía qué decía realmente. Intrigado, Leo decidió subir al faro por su cuenta. El viento era tan fuerte que cada paso se sentía como una pequeña batalla, pero llegó hasta la puerta. Adentro encontró papeles tirados, una linterna descargada y un cuaderno abierto sobre la mesa. Parecía que había alguien allí poco antes de marcharse.En la primera página del cuaderno había un mensaje incompleto. Decía:\n\n“Quien encuentre esto debe saber que el motivo de mi ausencia es…”\n\nAunque Leo podía leer el inicio, faltaba la parte más importante: la razón por la que el encargado había desaparecido. Sin esa frase, la historia no tenía sentido. Leo respiró hondo y trató de imaginar qué podía haberlos llevado a apagar el faro y marcharse sin avisar.",
-        "img": "../assets/imagenes/cuento1Juego1.jpg", 
+        "titulo": "La historia de Nico",
+        "texto": "Nico siempre llegaba tarde. Tarde a clases, tarde a entrenar, tarde a todo. Por eso, cuando el director le dijo que tenía cinco minutos para demostrar que merecía seguir en el equipo de básquet, pensó que ya estaba perdido. El gimnasio estaba casi vacío. El balón parecía más pesado que nunca. Falló el primer tiro. Luego el segundo. Sus compañeros miraban en silencio. Respiró hondo y recordó por qué había empezado a jugar: no para ganar, sino para {{espacio}}.\n\nEl tercer tiro entró limpio.\n\nEl cuarto también.\n\nCuando el tiempo se acabó, Nico estaba sonriendo, sudado y sin aliento.\n\n—No llegaste tarde —dijo el director—. Llegaste justo a tiempo.",
+        "img": "../../assets/imagenes/cuento1Juego1_2.png", 
         "opciones": [
-            { "texto": "Una receta de sopa que había salido mal.", "correcto": false },
-            { "texto": "Un viejo misterio que finalmente debía resolver.", "correcto": true },
-            { "texto": "Una colección de piedras que quería ordenar.", "correcto": false }
+            { "texto": "Sentirse bien.", "correcto": true },
+            { "texto": "Viajar a China.", "correcto": false },
+            { "texto": "Visitar zoológicos.", "correcto": false }
         ]
     }
 ]

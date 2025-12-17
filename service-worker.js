@@ -19,12 +19,13 @@ const FILES_TO_CACHE = [
   'js/main.js',
   'js/pwa.js',
   'js/util.js',
-  'js/juego1.js',
+  'js/juego1nivel1.js',
   'js/juego2.js',
   'js/juego3.js',
 
   // Otras vistas
-  'vistas/juego1.html',
+  'vistas/juego1/index.html',
+  'vistas/juego1/juego1nivel1.html',
   'vistas/juego2.html',
   'vistas/juego3.html',
   'vistas/resultados.html',

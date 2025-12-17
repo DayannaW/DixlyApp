@@ -1,7 +1,8 @@
-/* =========================================
-   PAGES/JUEGO1.CSS
-========================================= */
+/* Copiado de juego1.css y renombrado para nivel1 */
 
+/* =========================================
+   PAGES/JUEGO1NIVEL1.CSS
+========================================= */
 
 #title {
     font-size: clamp(1.8rem, 4vw, 3rem);
@@ -197,3 +198,85 @@
     background: rgba(255, 0, 0, 0.15);
     color: var(--color-incorrecto);
 }
+
+/* Mascota virtual (Lottie) */
+#pixel-container {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    width: 140px;
+    max-width: 22vw;
+    z-index: 60;
+    display: flex;
+    flex-direction: column-reverse; /* el diálogo se muestra arriba */
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+}
+
+#pixel-animation { width: 100%; height: 100px; pointer-events: auto; }
+.pet-anim-container { width: 100%; height: 100px; }
+
+#pixel-dialog {
+    background: rgba(255,255,255,0.98);
+    border-radius: 12px;
+    padding: 8px 10px;
+    box-shadow: var(--sombra-media);
+    transform-origin: bottom right;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    pointer-events: auto;
+    max-width: 220px;
+    font-size: 0.95rem;
+}
+
+#pixel-dialog.visible { opacity: 1; transform: translateY(-6px); }
+
+#pixel-text { margin: 0; color: var(--color-primario); text-align: center; }
+
+@media (max-width: 720px) {
+    #pixel-container { width: 120px; bottom: 12px; right: 12px; }
+    #pixel-animation { height: 84px; }
+}
+
+/* Estilos para las opciones arrastrables creadas en JS (.draggable-option) */
+.draggable-option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* centro el contenido */
+    padding: 12px 14px;
+    padding-left: 64px; /* espacio para la burbuja/icono absoluto */
+    background: linear-gradient(180deg, #ffffff, #f6f9ff);
+    border: 1px solid rgba(18,38,63,0.06);
+    border-radius: 12px;
+    box-shadow: 0 8px 18px rgba(16,24,40,0.06);
+    cursor: grab;
+    font-size: clamp(1rem, 2.6vw, 1.2rem);
+    color: var(--color-primario);
+    transition: transform 0.14s ease, box-shadow 0.14s ease, opacity 0.14s ease;
+    user-select: none;
+    text-align: center; /* centrar texto */
+}
+
+.draggable-option::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(46,125,246,0.14), rgba(99,102,241,0.12));
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.6);
+}
+
+.draggable-option:active { cursor: grabbing; transform: translateY(-2px); }
+
+.draggable-option.hide { opacity: 0.18; transform: scale(0.98); pointer-events: none; }
+.draggable-option.dragging { opacity: 0.85; transform: scale(1.02); box-shadow: 0 14px 26px rgba(16,24,40,0.12); }
+
+.draggable-option:hover { transform: translateY(-4px); box-shadow: 0 12px 22px rgba(16,24,40,0.08); }
+
+.draggable-option[draggable="false"] { opacity: 0.55; cursor: not-allowed; box-shadow: none; }

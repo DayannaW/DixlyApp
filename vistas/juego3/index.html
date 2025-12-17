@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Juego 3 — Selección de Nivel</title>
+    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/ui.css">
+    <link rel="stylesheet" href="../../css/vistas/index.css">
+</head>
+<body class="body--juegos">
+    <main class="contenedor-juego-descripcion">
+        <button class="btn btn-ghost" onclick="location.href='../../index.php'">← Volver</button>
+        <h1>Juego 3 — Conciencia fonológica</h1>
+        <p>Descripción breve del juego 3. Selecciona un nivel para comenzar.</p>
+
+                <section class="niveles">
+                        <h3>Elegir nivel</h3>
+                        <div class="lista-niveles">
+                                <button class="btn btn-primary level-btn" data-level="nivel-facil">Nivel 1</button>
+                        </div>
+                </section>
+                <style>
+                    .level-locked { background:#2b2b2b !important; color:#fff !important; opacity:0.9; cursor:not-allowed; }
+                </style>
+                <script type="module">
+                    import { hasCompletedLevel } from '../../js/util.js';
+                    const buttons = document.querySelectorAll('.level-btn');
+                    const levelOrder = ['nivel-facil','nivel-intermedio','nivel-dificil'];
+                    const gameId = 'juego3';
+                    buttons.forEach(btn=>{
+                        const lvl = btn.dataset.level;
+                        btn.addEventListener('click', ()=>{ if(btn.disabled) return; location.href = `juego3nivel1.html?level=${encodeURIComponent(lvl)}` });
+                    });
+                    (async ()=>{ if(buttons[0]) buttons[0].disabled = false; })();
+                </script>
+    </main>
+</body>
+</html>

@@ -1,10 +1,11 @@
-import { loadJSON } from './util.js';
+import { loadJSON, addLevelCompletion, hasBadge } from './util.js';
+import Pet from './pet.js';
 
 // --- SONIDOS DEL JUEGO ---
-const sDrag = new Audio("../assets/sonidos/drag.mp3");
-const sDrop = new Audio("../assets/sonidos/drop.mp3");
-const sCorrect = new Audio("../assets/sonidos/correct.mp3");
-const sWrong = new Audio("../assets/sonidos/wrong.mp3");
+const sDrag = new Audio("../../assets/sonidos/drag.mp3");
+const sDrop = new Audio("../../assets/sonidos/drop.mp3");
+const sCorrect = new Audio("../../assets/sonidos/correct.mp3");
+const sWrong = new Audio("../../assets/sonidos/wrong.mp3");
 
 // Para evitar retraso al reproducir
 [sDrag, sDrop, sCorrect, sWrong].forEach(s => { s.preload = "auto"; });
@@ -15,9 +16,10 @@ const Game1 = (() => {
     let currentLevel = 'nivel-facil';
     let stories = [];
     let currentStoryIndex = 0;
+    let feedbackTimeout = null;
 
     // --- Sonido de fondo ---
-    const bgAudio = new Audio("../asset/audio/juego1-fondo.mp3");
+    const bgAudio = new Audio("../../assets/sonidos/juego1-fondo.mp3");
     bgAudio.loop = true;
     bgAudio.volume = 0.35;
 
@@ -26,7 +28,7 @@ const Game1 = (() => {
     // ----------------------------
     async function loadStories(level) {
         currentLevel = level;
-        stories = await loadJSON(`../js/data/juego1/${level}.json`);
+        stories = await loadJSON(`../../js/data/juego1nivel1/${level}.json`);
         currentStoryIndex = 0;
     }
 
@@ -153,12 +155,41 @@ const Game1 = (() => {
 
                 showFeedback(true);
 
+                setTimeout(() => {
+                    if (nextStory()) {
+                        renderStory();
+                    } else {
+                        // Intentar añadir la finalización y detectar si se otorgó insignia
+                        let badgeParam = '';
+                        try {
+                            const res = addLevelCompletion('juego1', currentLevel);
+                            console.log('addLevelCompletion result:', res);
+                            if (res && res.badges && res.badges.length) {
+                                console.log('Badge earned:', res.badges[0]);
+                                badgeParam = `&badge=${encodeURIComponent(res.badges[0])}`;
+                            }
+                        } catch (e) {
+                            // fallo al escribir progreso, continuamos intentando comprobar si ya existe la insignia
+                        }
+
+                        try {
+                            if (!badgeParam && hasBadge('juego1','primer-paso')) badgeParam = '&badge=primer-paso';
+                            console.log('Existing badge check, badgeParam:', badgeParam);
+                        } catch (e) {
+                            console.error('Error checking existing badges:', e);
+                            // ignorar
+                        }
+
+                        window.location.href = `../resultados.html?game=juego1&level=${encodeURIComponent(currentLevel)}` + badgeParam;
+                    }
+                }, 1600);
+
             } else {
                 // Incorrecto
                 dropZone.classList.add("drop-incorrecto");
                 setTimeout(() => {
                     dropZone.classList.remove("drop-incorrecto");
-                }, 600);
+                }, 1600);
 
                 // reproducir sonido incorrecto
                 sWrong.currentTime = 0;
@@ -174,8 +205,27 @@ const Game1 = (() => {
 
     function showFeedback(isCorrect) {
         const feedback = document.getElementById('feedback');
+        // limpiar timeout previo
+        if (feedbackTimeout) clearTimeout(feedbackTimeout);
+
         feedback.textContent = isCorrect ? "¡Correcto!" : "Intenta otra vez";
         feedback.className = isCorrect ? "correcto" : "incorrecto";
+        try {
+            if (isCorrect) {
+                Pet.setHappy();
+                Pet.speak('¡Muy bien!', 1800);
+            } else {
+                Pet.setSad();
+                Pet.speak('Intenta otra vez', 1600);
+            }
+        } catch (e) {}
+
+        // ocultar feedback después de unos segundos
+        feedbackTimeout = setTimeout(() => {
+            feedback.textContent = '';
+            feedback.className = '';
+            try { Pet.setIdle(); } catch (e) {}
+        }, 1600);
     }
 
     // ----------------------------
@@ -190,7 +240,22 @@ const Game1 = (() => {
                 if (nextStory()) {
                     renderStory();
                 } else {
-                    window.location.href = './resultados.html';
+                    // Intentar añadir la finalización y detectar si se otorgó insignia
+                    let badgeParam = '';
+                    try {
+                        const res = addLevelCompletion('juego1', currentLevel);
+                        if (res && res.badges && res.badges.length) {
+                            badgeParam = `&badge=${encodeURIComponent(res.badges[0])}`;
+                        }
+                    } catch (e) {
+                        // ignorar
+                    }
+
+                    try {
+                        if (!badgeParam && hasBadge('juego1','primer-paso')) badgeParam = '&badge=primer-paso';
+                    } catch (e) {}
+
+                    window.location.href = `../resultados.html?game=juego1&level=${encodeURIComponent(currentLevel)}` + badgeParam;
                 }
             }, 800);
         }
@@ -213,6 +278,7 @@ const Game1 = (() => {
 
     async function init(level = 'nivel-facil') {
         await loadStories(level);
+        try { Pet.init(); } catch (e) {}
         initSoundButton();
         //bgAudio.play();
         renderStory();
