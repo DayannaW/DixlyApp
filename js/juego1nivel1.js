@@ -213,10 +213,10 @@ const Game1 = (() => {
         try {
             if (isCorrect) {
                 Pet.setHappy();
-                Pet.speak('¡Muy bien!', 1800);
+                Pet.speak('¡Muy bien!');
             } else {
                 Pet.setSad();
-                Pet.speak('Intenta otra vez', 1600);
+                Pet.speak('Intenta otra vez');
             }
         } catch (e) {}
 

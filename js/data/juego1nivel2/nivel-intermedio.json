@@ -1,0 +1,38 @@
+[
+    {
+        "titulo": "No abras la puerta",
+        "img": "../../assets/imagenes/cuento1Juego1_3.jpg",
+        "audio": "../../assets/sonidos/microcuento1.mp4",
+        "fragments": [
+            "El celular de Leo vibró en la madrugada.",
+            "El mensaje decía: “No abras la puerta mañana.”",
+            "Al despertar, escuchó a su madre decir que un técnico vendría.",
+            "Cuando tocaron el timbre, su corazón latió fuerte.",
+            "El hombre se fue sin entrar. Esa noche, otro mensaje apareció: “Bien hecho”."
+        ]
+    },
+    {
+        "titulo": "Lo que quedó del tren",
+        "img": "../../assets/imagenes/cuento1Juego1_4.png",
+        "audio": "../../assets/sonidos/microcuento2.mp4",
+        "fragments": [
+            "A las 11:45 p.m., escuchaba el tren. El mismo ruido, la misma vibración.",
+            "Esa noche, el sonido se detuvo. El tren estaba frente a mi casa.",
+            "Me asomé y vi algo extraño. Una luz se apagaba dentro de un vagón vacío.",
+            "La estación nunca tenía trenes a esa hora. Ninguno pasaba desde hacía años.",
+            "Al despertar, nadie recordaba el tren, pero yo aún sentía su vibración."
+        ]
+    },
+    {
+        "titulo": "Un café por la tarde",
+        "img": "../../assets/imagenes/cuento1Juego1_5.jpg",
+        "audio": "../../assets/sonidos/microcuento3.mp4",
+        "fragments": [
+            "Cada tarde, me sentaba junto a la ventana, esperando verla entrar. Ella pedía un té verde.",
+            "Cruzábamos miradas. Sonreíamos. No decíamos nada. Solo nos entendíamos.",
+            "Un día, nuestras manos se rozaron al tomar el café. Ella se sonrojó.",
+            "Desde ese momento, nuestras miradas siempre se buscaban.",
+            "Cada tarde, sabíamos que al final del día, nos encontraríamos otra vez. Sin decir una palabra."
+        ]
+    }
+]

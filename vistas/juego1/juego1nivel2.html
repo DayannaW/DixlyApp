@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Juego 1 – Fragmento Perdido (Nivel Intermedio)</title>
+
+    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/ui.css">
+    <link rel="stylesheet" href="../../css/vistas/juego1nivel2.css">
+
+</head>
+
+<body class="body--juegos">
+
+    <!-- Botón de sonido -->
+    <button id="toggle-sound" class="btn-sound">🔊</button>
+
+    <div id="container">
+
+
+        <!-- Nueva área para imagen -->
+        <div id="img-area">
+            <img id="story-img" src="" alt="Imagen de la historia">
+        </div>
+        <h2 id="title"></h2>
+        <p id="texto-principal"></p>
+
+        <div class="controls-row">
+            <button id="play-audio" class="btn-audio">Reproducir audio</button>
+            <span class="play-count" id="play-count">0/2</span>
+            <button id="btn-review" class="btn-review" disabled>Revisar</button>
+        </div>
+
+        <div id="feedback"></div>
+        <div id="opciones" class="fragments-container" aria-live="polite"></div>
+    </div>
+
+    <div id="pixel-container">
+        <div id="pixel-animation"></div>
+        <div id="pixel-dialog">
+            <p id="pixel-text"></p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+
+
+    <script type="module">
+        import Game1_2 from "../../js/juego1nivel2.js";
+        const params = new URLSearchParams(location.search);
+        const level = params.get('level') || 'nivel-intermedio';
+        Game1_2.init(level);
+    </script>
+
+</body>
+
+</html>

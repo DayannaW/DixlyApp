@@ -95,7 +95,13 @@
     function resolveGamePath(gameId, lvl) {
       // Map known games to their level page structure
       if (!gameId) return '../index.php';
-      if (gameId === 'juego1') return `./juego1/juego1nivel1.html?level=${encodeURIComponent(lvl)}`;
+      if (gameId === 'juego1') {
+        // Map specific level identifiers to the correct page for juego1
+        if (lvl === 'nivel-facil') return `./juego1/juego1nivel1.html?level=${encodeURIComponent(lvl)}`;
+        if (lvl === 'nivel-intermedio') return `./juego1/juego1nivel2.html?level=${encodeURIComponent(lvl)}`;
+        if (lvl === 'nivel-dificil') return `./juego1/juego1nivel3.html?level=${encodeURIComponent(lvl)}`;
+        return `./juego1/juego1nivel1.html?level=${encodeURIComponent(lvl)}`;
+      }
       if (gameId === 'juego2') return `./juego2/juego2nivel1.html?level=${encodeURIComponent(lvl)}`;
       if (gameId === 'juego3') return `./juego3/juego3nivel1.html?level=${encodeURIComponent(lvl)}`;
       return '../index.php';
@@ -153,15 +159,18 @@
       const idx = levelOrder.indexOf(level);
       const next = idx >= 0 && idx < levelOrder.length - 1 ? levelOrder[idx+1] : null;
       if (!next) {
-        btnNext.disabled = true;
+        // no next level — hide the button
+        try { btnNext.style.display = 'none'; } catch (e) {}
         return;
       }
       const path = resolveGamePath(game, next);
       location.href = path;
     });
 
-    // disable next if already at last
-    if (!level || level === levelOrder[levelOrder.length-1]) btnNext.disabled = true;
+    // hide next if already at last level
+    if (!level || level === levelOrder[levelOrder.length-1]) {
+      try { btnNext.style.display = 'none'; } catch (e) {}
+    }
 
   </script>
 </body>
