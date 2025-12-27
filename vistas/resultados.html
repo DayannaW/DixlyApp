@@ -96,11 +96,10 @@
       // Map known games to their level page structure
       if (!gameId) return '../index.php';
       if (gameId === 'juego1') {
-        // Map specific level identifiers to the correct page for juego1
-        if (lvl === 'nivel-facil') return `./juego1/juego1nivel1.html?level=${encodeURIComponent(lvl)}`;
-        if (lvl === 'nivel-intermedio') return `./juego1/juego1nivel2.html?level=${encodeURIComponent(lvl)}`;
-        if (lvl === 'nivel-dificil') return `./juego1/juego1nivel3.html?level=${encodeURIComponent(lvl)}`;
-        return `./juego1/juego1nivel1.html?level=${encodeURIComponent(lvl)}`;
+        if (lvl === 'nivel-facil') return `./juego1/juego1nivel1.html?level=nivel-facil`;
+        if (lvl === 'nivel-intermedio') return `./juego1/juego1nivel2.html?level=nivel-intermedio`;
+        if (lvl === 'nivel-dificil') return `./juego1/juego1nivel3.html?level=nivel-dificil`;
+        return `./juego1/juego1nivel1.html?level=nivel-facil`;
       }
       if (gameId === 'juego2') return `./juego2/juego2nivel1.html?level=${encodeURIComponent(lvl)}`;
       if (gameId === 'juego3') return `./juego3/juego3nivel1.html?level=${encodeURIComponent(lvl)}`;
@@ -158,7 +157,7 @@
       if (!level) return;
       const idx = levelOrder.indexOf(level);
       const next = idx >= 0 && idx < levelOrder.length - 1 ? levelOrder[idx+1] : null;
-      if (!next) {
+      if (!next || level === 'nivel-dificil') {
         // no next level — hide the button
         try { btnNext.style.display = 'none'; } catch (e) {}
         return;
@@ -168,7 +167,7 @@
     });
 
     // hide next if already at last level
-    if (!level || level === levelOrder[levelOrder.length-1]) {
+    if (!level || level === 'nivel-dificil') {
       try { btnNext.style.display = 'none'; } catch (e) {}
     }
 

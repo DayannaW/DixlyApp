@@ -1,0 +1,58 @@
+[
+  {
+    "titulo": "El misterio del faro",
+    "img": "../../assets/imagenes/faro.jpg",
+    "base": "La tormenta azotaba la costa y el faro permanecía encendido. Los habitantes del pueblo miraban con preocupación, pues el guardián no había sido visto en días. Nadie sabía qué había pasado, pero todos esperaban que la luz siguiera guiando a los barcos a salvo. [FINAL]",
+    "fragmentos": [
+      "De pronto, la puerta del faro se abrió y el guardián apareció sano y salvo, explicando que solo había estado reparando la linterna.",
+      "Un barco perdido divisó la luz y logró llegar a puerto, salvando a toda la tripulación.",
+      "La tormenta cesó y el pueblo celebró la valentía del guardián.",
+      "El faro se apagó misteriosamente y un barco encalló en las rocas.",
+      "El guardián nunca regresó y el faro quedó abandonado para siempre.",
+      "Los habitantes decidieron turnarse para cuidar el faro y nunca más volvió a apagarse."
+    ],
+    "final_correcto": [0,1,2]
+  },
+  {
+    "titulo": "El concurso de pasteles",
+    "img": "../../assets/imagenes/pastel.jpg",
+    "base": "Cada año, el pueblo organizaba un concurso de pasteles. Marta, la repostera más joven, decidió participar por primera vez. Pasó días perfeccionando su receta secreta y el día del concurso llegó con nervios y esperanza. [FINAL]",
+    "fragmentos": [
+      "El jurado probó su pastel y quedó sorprendido por el sabor único.",
+      "Marta ganó el primer premio y todos la felicitaron.",
+      "Su abuela, orgullosa, la abrazó entre lágrimas.",
+      "El pastel de Marta se quemó y no pudo presentarlo.",
+      "El jurado no entendió el sabor y Marta quedó desilusionada.",
+      "A pesar de no ganar, Marta prometió volver a intentarlo el próximo año."
+    ],
+    "final_correcto": [0,1,2]
+  },
+  {
+    "titulo": "El perro perdido",
+    "img": "../../assets/imagenes/perro.jpg",
+    "base": "Lucas buscaba a su perro por todo el vecindario. Pegó carteles, preguntó a los vecinos y recorrió cada calle. No perdió la esperanza y cada noche dejaba la puerta entreabierta por si volvía. [FINAL]",
+    "fragmentos": [
+      "Una noche escuchó un ladrido y corrió a la puerta.",
+      "Su perro estaba allí, moviendo la cola y cubierto de polvo.",
+      "Lucas lo abrazó y prometió no dejarlo salir solo nunca más.",
+      "Nunca volvió a ver a su perro, pero siguió buscándolo cada día.",
+      "Un vecino lo encontró y lo llevó a casa de Lucas.",
+      "Lucas adoptó otro perro y aprendió a quererlo también."
+    ],
+    "final_correcto": [0,1,2]
+  },
+  {
+    "titulo": "La carta misteriosa",
+    "img": "../../assets/imagenes/carta.jpg",
+    "base": "Sofía encontró una carta sin remitente en su buzón. La abrió con curiosidad y leyó palabras que parecían escritas para ella. Durante días, pensó en quién podría haberla enviado y qué significaba el mensaje. [FINAL]",
+    "fragmentos": [
+      "Finalmente, descubrió que era de su mejor amiga, quien quería sorprenderla.",
+      "Sofía respondió la carta y comenzó una divertida correspondencia secreta.",
+      "La carta la animó a escribir sus propios mensajes misteriosos.",
+      "Nunca supo quién la envió, pero guardó la carta como un tesoro.",
+      "La carta era de un admirador secreto que nunca se reveló.",
+      "Sofía decidió escribir un libro inspirado en la carta misteriosa."
+    ],
+    "final_correcto": [0,1,2]
+  }
+]

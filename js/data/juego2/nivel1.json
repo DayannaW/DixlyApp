@@ -1,0 +1,38 @@
+[
+  {
+    "palabra": "prado",
+    "audio": "../../assets/sonidos/prado.mp3",
+    "opciones": [
+      {"texto": "prado", "correcto": true},
+      {"texto": "plado", "correcto": false},
+      {"texto": "pardo", "correcto": false}
+    ]
+  },
+  {
+    "palabra": "cama",
+    "audio": "../../assets/sonidos/cama.mp3",
+    "opciones": [
+      {"texto": "cama", "correcto": true},
+      {"texto": "cana", "correcto": false},
+      {"texto": "caba", "correcto": false}
+    ]
+  },
+  {
+    "palabra": "pato",
+    "audio": "../../assets/sonidos/pato.mp3",
+    "opciones": [
+      {"texto": "pato", "correcto": true},
+      {"texto": "palo", "correcto": false},
+      {"texto": "pata", "correcto": false}
+    ]
+  },
+  {
+    "palabra": "lata",
+    "audio": "../../assets/sonidos/lata.mp3",
+    "opciones": [
+      {"texto": "lata", "correcto": true},
+      {"texto": "laca", "correcto": false},
+      {"texto": "lapa", "correcto": false}
+    ]
+  }
+]

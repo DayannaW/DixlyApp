@@ -6,13 +6,18 @@
     <link rel="stylesheet" href="../../css/global.css">
     <link rel="stylesheet" href="../../css/layout.css">
     <link rel="stylesheet" href="../../css/ui.css">
-    <link rel="stylesheet" href="../../css/vistas/juego1nivel1.css">
+    <link rel="stylesheet" href="../../css/vistas/juego2nivel1.css">
 </head>
 <body class="body--juegos">
-    <main style="padding:3rem;">
-        <button class="btn btn-ghost" onclick="location.href='index.html'">← Volver</button>
-        <h1>Juego 2 — Nivel 1</h1>
-        <p>Placeholder: implementar juego 2 aquí.</p>
-    </main>
+        <main id="main-container"></main>
+        <div id="pixel-container">
+            <div id="pixel-animation"></div>
+            <div id="pixel-dialog"><p id="pixel-text"></p></div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+        <script type="module">
+            import Game2 from '../../js/juego2nivel1.js';
+            Game2.init();
+        </script>
 </body>
 </html>

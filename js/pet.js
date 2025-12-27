@@ -21,8 +21,9 @@ const Pet = (() => {
 
     function load() {
         const root = document.getElementById('pixel-animation');
-        if (!root || typeof lottie === 'undefined') return;
-
+ 
+        if (!root || typeof lottie === 'undefined') return;    
+   
         // create containers for each anim
         Object.keys(ANIMS).forEach(key => {
             const cont = createContainer('pet-' + key);
@@ -58,7 +59,7 @@ const Pet = (() => {
     function calcSpeakDuration(text) {
         if (!text) return 1200;
         const words = (text + '').trim().split(/\s+/).filter(Boolean).length;
-        const dur = Math.round(words * 300);
+        const dur = Math.round(words * 500);
         return Math.max(800, Math.min(8000, dur));
     }
 
