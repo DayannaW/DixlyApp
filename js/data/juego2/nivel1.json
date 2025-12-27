@@ -1,7 +1,7 @@
 [
   {
     "palabra": "prado",
-    "audio": "../../assets/sonidos/prado.mp3",
+    "audio": "../../assets/sonidos/juego2/prado.mp3",
     "opciones": [
       {"texto": "prado", "correcto": true},
       {"texto": "plado", "correcto": false},
@@ -9,8 +9,17 @@
     ]
   },
   {
+    "palabra": "brazo",
+    "audio": "../../assets/sonidos/juego2/prado.mp3",
+    "opciones": [
+      {"texto": "brazo", "correcto": true},
+      {"texto": "blazo", "correcto": false},
+      {"texto": "barzo", "correcto": false}
+    ]
+  },
+  {
     "palabra": "cama",
-    "audio": "../../assets/sonidos/cama.mp3",
+    "audio": "../../assets/sonidos/juego2/cama.mp3",
     "opciones": [
       {"texto": "cama", "correcto": true},
       {"texto": "cana", "correcto": false},
@@ -19,7 +28,7 @@
   },
   {
     "palabra": "pato",
-    "audio": "../../assets/sonidos/pato.mp3",
+    "audio": "../../assets/sonidos/juego2/pato.mp3",
     "opciones": [
       {"texto": "pato", "correcto": true},
       {"texto": "palo", "correcto": false},
@@ -28,7 +37,7 @@
   },
   {
     "palabra": "lata",
-    "audio": "../../assets/sonidos/lata.mp3",
+    "audio": "../../assets/sonidos/juego2/lata.mp3",
     "opciones": [
       {"texto": "lata", "correcto": true},
       {"texto": "laca", "correcto": false},

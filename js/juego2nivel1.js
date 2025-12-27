@@ -88,14 +88,28 @@ const Game2 = (() => {
     doCountdown();
     function playAudioAndStart() {
       const audio = new Audio(palabraObj.audio);
-      audio.play();
-      // Mostrar botón de audio por si el usuario quiere repetir
-      const audioArea = document.getElementById('audio-area');
-      audioArea.style.display = '';
-      document.getElementById('play-audio').onclick = () => { audio.currentTime = 0; audio.play(); };
+      let playCount = 0;
+      function playNext() {
+        if (playCount < 2) {
+          audio.currentTime = 0;
+          audio.play();
+        } else {
+          // Mostrar botón de audio por si el usuario quiere repetir
+          const audioArea = document.getElementById('audio-area');
+          audioArea.style.display = '';
+          document.getElementById('play-audio').onclick = () => { audio.currentTime = 0; audio.play(); };
+          startFallingWords();
+        }
+      }
       audio.onended = () => {
-        startFallingWords();
+        playCount++;
+        if (playCount < 2) {
+          setTimeout(playNext, 2000); // 1 segundo de silencio entre repeticiones
+        } else {
+          playNext();
+        }
       };
+      playNext();
     }
     function startFallingWords() {
       const fallArea = document.getElementById('fall-area');
@@ -104,6 +118,8 @@ const Game2 = (() => {
       const areaWidth = fallArea.offsetWidth || 360;
       const n = opciones.length;
       const spacing = areaWidth / (n + 1);
+      // Para lluvia: cada palabra cae con diferente delay y diferente destino vertical
+      const minTop = 140, maxTop = 220;
       opciones.forEach((op, i) => {
         const w = document.createElement('div');
         w.className = 'fall-word';
@@ -113,12 +129,14 @@ const Game2 = (() => {
         w.style.left = `${Math.round(spacing * (i + 1) - 60)}px`;
         w.style.opacity = '0';
         fallArea.appendChild(w);
-        // Animación de caída lenta y pausada
+        // Lluvia: cada palabra cae con diferente delay y diferente top final
+        const delay = 600 + Math.random() * 900 + i * 600; // entre 0.6s y 2.1s, más separación
+        const finalTop = minTop + Math.random() * (maxTop - minTop);
         setTimeout(() => {
-          w.style.transition = 'top 2.7s cubic-bezier(.4,1.2,.6,1), opacity 0.7s';
-          w.style.top = '180px';
+          w.style.transition = 'top 4.5s cubic-bezier(.4,1.2,.6,1), opacity 1.2s';
+          w.style.top = `${finalTop}px`;
           w.style.opacity = '1';
-        }, 400 + i * 900);
+        }, delay);
         // Drag events
         w.ondragstart = e => {
           e.dataTransfer.setData('text/plain', op.idx);
