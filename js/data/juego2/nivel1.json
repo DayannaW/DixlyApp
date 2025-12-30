@@ -10,7 +10,7 @@
   },
   {
     "palabra": "brazo",
-    "audio": "../../assets/sonidos/juego2/prado.mp3",
+    "audio": "../../assets/sonidos/juego2/brazo.mp3",
     "opciones": [
       {"texto": "brazo", "correcto": true},
       {"texto": "blazo", "correcto": false},
