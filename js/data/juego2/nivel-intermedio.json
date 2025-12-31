@@ -1,0 +1,152 @@
+[
+  { "id": 1, "audio": [
+    { "palabra": "perro", "ruta": "../../assets/sonidos/juego2/perro.mp3", "correcta": true },
+    { "palabra": "perdo", "ruta": "../../assets/sonidos/juego2/pero.mp3", "correcta": false },
+    { "palabra": "pero", "ruta": "../../assets/sonidos/juego2/pedro.mp3", "correcta": false }
+  ], "opciones": [
+    { "texto": "perro", "correcta": true },
+    { "texto": "pierdo", "correcta": false },
+    { "texto": "perlo", "correcta": false },
+    { "texto": "pedro", "correcta": false }
+  ] },
+  { "id": 2, "audio": [
+    { "palabra": "casa", "ruta": "../../assets/sonidos/juego2/casa.mp3", "correcta": true },
+    { "palabra": "masa", "ruta": "../../assets/sonidos/juego2/masa.mp3", "correcta": false },
+    { "palabra": "saca", "ruta": "../../assets/sonidos/juego2/saca.mp3", "correcta": false }
+  ], "opciones": [
+    { "texto": "casa", "correcta": true },
+    { "texto": "saco", "correcta": false },
+    { "texto": "tasa", "correcta": false },
+    { "texto": "masca", "correcta": false }
+  ] },
+  { "id": 3, "audio": [
+    { "palabra": "plato", "ruta": "../../assets/sonidos/juego2/plato.mp3", "correcta": true },
+    { "palabra": "gato", "ruta": "../../assets/sonidos/juego2/gato.mp3", "correcta": false },
+    { "palabra": "lato", "ruta": "../../assets/sonidos/juego2/lato.mp3", "correcta": false }
+  ], "opciones": [
+    { "texto": "plato", "correcta": true },
+    { "texto": "palto", "correcta": false },
+    { "texto": "pato", "correcta": false },
+    { "texto": "planto", "correcta": false }
+  ] },
+  { "id": 4, "audio": [
+    { "palabra": "brazo", "ruta": "../../assets/sonidos/juego2/brazo.mp3", "correcta": true },
+    { "palabra": "trazo", "ruta": "../../assets/sonidos/juego2/trazo.mp3", "correcta": false },
+    { "palabra": "abraso", "ruta": "../../assets/sonidos/juego2/abraso.mp3", "correcta": false }
+  ], "opciones": [
+    { "texto": "brazo", "correcta": true },
+    { "texto": "braso", "correcta": false },
+    { "texto": "bazo", "correcta": false },
+    { "texto": "brasso", "correcta": false }
+  ] },
+  { "id": 5, "audio": [
+    { "palabra": "silla", "ruta": "../../assets/sonidos/juego2/silla.mp3", "correcta": true },
+    { "palabra": "villa", "ruta": "../../assets/sonidos/juego2/villa.mp3", "correcta": false },
+    { "palabra": "lisa", "ruta": "../../assets/sonidos/juego2/lisa.mp3", "correcta": false }
+  ], "opciones": [
+    { "texto": "silla", "correcta": true },
+    { "texto": "sila", "correcta": false },
+    { "texto": "zilla", "correcta": false },
+    { "texto": "siya", "correcta": false }
+  ] },
+  { "id": 6, "audio": [
+    { "palabra": "camino", "ruta": "../../assets/sonidos/juego2/camino.mp3", "correcta": true },
+    { "palabra": "mimo", "ruta": "../../assets/sonidos/juego2/mimo.mp3", "correcta": false },
+    { "palabra": "caino", "ruta": "../../assets/sonidos/juego2/caino.mp3", "correcta": false }
+  ], "opciones": [
+    { "texto": "camino", "correcta": true },
+    { "texto": "canino", "correcta": false },
+    { "texto": "camimo", "correcta": false },
+    { "texto": "canimo", "correcta": false }
+  ] },
+  { "id": 7, "audio": [
+    { "palabra": "fresa", "ruta": "../../assets/sonidos/juego2/fresa.mp3", "correcta": true },
+    { "palabra": "trenza", "ruta": "../../assets/sonidos/juego2/trenza.mp3", "correcta": false },
+    { "palabra": "prisa", "ruta": "../../assets/sonidos/juego2/prisa.mp3", "correcta": false }
+  ], "opciones": [
+    { "texto": "fresa", "correcta": true },
+    { "texto": "freza", "correcta": false },
+    { "texto": "presa", "correcta": false },
+    { "texto": "fressa", "correcta": false }
+  ] },
+  { "id": 8, "audio": [
+    { "palabra": "grande", "ruta": "../../assets/sonidos/juego2/grande.mp3", "correcta": true },
+    { "palabra": "glande", "ruta": "../../assets/sonidos/juego2/glande.mp3", "correcta": false },
+    { "palabra": "rande", "ruta": "../../assets/sonidos/juego2/rande.mp3", "correcta": false }
+  ], "opciones": [
+    { "texto": "grande", "correcta": true },
+    { "texto": "glante", "correcta": false },
+    { "texto": "granbe", "correcta": false },
+    { "texto": "drande", "correcta": false }
+  ] },
+  { "id": 9, "audio": [
+    { "palabra": "pollo", "ruta": "../../assets/sonidos/juego2/pollo.mp3", "correcta": true },
+    { "palabra": "bollo", "ruta": "../../assets/sonidos/juego2/bollo.mp3", "correcta": false },
+    { "palabra": "lobo", "ruta": "../../assets/sonidos/juego2/lobo.mp3", "correcta": false }
+  ], "opciones": [
+    { "texto": "pollo", "correcta": true },
+    { "texto": "poyo", "correcta": false },
+    { "texto": "polo", "correcta": false },
+    { "texto": "bolo", "correcta": false }
+  ] },
+  { "id": 10, "audio": [
+    { "palabra": "tarde", "ruta": "../../assets/sonidos/juego2/tarde.mp3", "correcta": true },
+    { "palabra": "trade", "ruta": "../../assets/sonidos/juego2/trade.mp3", "correcta": false },
+    { "palabra": "traer", "ruta": "../../assets/sonidos/juego2/traer.mp3", "correcta": false }
+  ], "opciones": [
+    { "texto": "tarde", "correcta": true },
+    { "texto": "tarte", "correcta": false },
+    { "texto": "darte", "correcta": false },
+    { "texto": "trate", "correcta": false }
+  ] },
+  { "id": 11, "audio": [
+    { "palabra": "mesa", "ruta": "../../assets/sonidos/juego2/mesa.mp3", "correcta": true },
+    { "palabra": "besa", "ruta": "../../assets/sonidos/juego2/besa.mp3", "correcta": false },
+    { "palabra": "misa", "ruta": "../../assets/sonidos/juego2/misa.mp3", "correcta": false }
+  ], "opciones": [
+    { "texto": "mesa", "correcta": true },
+    { "texto": "meza", "correcta": false },
+    { "texto": "meta", "correcta": false },
+    { "texto": "pesa", "correcta": false }
+  ] },
+  { "id": 12, "audio": [
+    { "palabra": "lago", "ruta": "../../assets/sonidos/juego2/lago.mp3", "correcta": true },
+    { "palabra": "lego", "ruta": "../../assets/sonidos/juego2/lego.mp3", "correcta": false },
+    { "palabra": "lugar", "ruta": "../../assets/sonidos/juego2/lugar.mp3", "correcta": false }
+  ], "opciones": [
+    { "texto": "lago", "correcta": true },
+    { "texto": "algo", "correcta": false },
+    { "texto": "largo", "correcta": false },
+    { "texto": "lajo", "correcta": false }
+  ] },
+  { "id": 13, "audio": [
+    { "palabra": "carta", "ruta": "../../assets/sonidos/juego2/carta.mp3", "correcta": true },
+    { "palabra": "cartia", "ruta": "../../assets/sonidos/juego2/cartia.mp3", "correcta": false },
+    { "palabra": "carita", "ruta": "../../assets/sonidos/juego2/carita.mp3", "correcta": false }
+  ], "opciones": [
+    { "texto": "carta", "correcta": true },
+    { "texto": "cuarta", "correcta": false },
+    { "texto": "corta", "correcta": false },
+    { "texto": "catta", "correcta": false }
+  ] },
+  { "id": 14, "audio": [
+    { "palabra": "rosa", "ruta": "../../assets/sonidos/juego2/rosa.mp3", "correcta": true },
+    { "palabra": "loza", "ruta": "../../assets/sonidos/juego2/loza.mp3", "correcta": false },
+    { "palabra": "osa", "ruta": "../../assets/sonidos/juego2/osa.mp3", "correcta": false }
+  ], "opciones": [
+    { "texto": "rosa", "correcta": true },
+    { "texto": "risa", "correcta": false },
+    { "texto": "roca", "correcta": false },
+    { "texto": "roxa", "correcta": false }
+  ] },
+  { "id": 15, "audio": [
+    { "palabra": "nube", "ruta": "../../assets/sonidos/juego2/nube.mp3", "correcta": true },
+    { "palabra": "ubre", "ruta": "../../assets/sonidos/juego2/ubre.mp3", "correcta": false },
+    { "palabra": "cubre", "ruta": "../../assets/sonidos/juego2/cubre.mp3", "correcta": false }
+  ], "opciones": [
+    { "texto": "nube", "correcta": true },
+    { "texto": "tuve", "correcta": false },
+    { "texto": "sube", "correcta": false },
+    { "texto": "nubbe", "correcta": false }
+  ] }
+]

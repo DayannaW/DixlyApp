@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Juego 2 - Nivel Intermedio</title>
+    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/ui.css">
+    <link rel="stylesheet" href="../../css/vistas/juego2nivel2.css">
+</head>
+
+<body class="body--juegos">
+    <main>
+        <div id="main-container"></div>
+    </main>
+    <div id="pixel-container">
+        <div id="pixel-animation"></div>
+        <div id="pixel-dialog">
+            <p id="pixel-text"></p>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+    <script type="module">
+        import Game2Nivel2 from '../../js/juego2nivel2.js';
+        Game2Nivel2.init();
+    </script>
+</body>
+
+</html>

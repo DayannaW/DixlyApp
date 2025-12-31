@@ -1,14 +1,6 @@
 from gtts import gTTS
 
-palabras = ["cama",
-"cana",
-"caba",
-"pato",
-"palo",
-"pata",
-"lata",
-"laca",
-"lapa"]
+palabras = ["pedro"]
 
 for palabra in palabras:
     tts = gTTS(text=palabra, lang="es")

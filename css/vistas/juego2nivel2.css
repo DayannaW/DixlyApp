@@ -1,0 +1,132 @@
+/* Pixel en esquina superior izquierda, pequeño y en primer plano */
+#pixel-container {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  width: 110px;
+  height: 110px;
+  z-index: 4000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+#pixel-animation {
+  width: 90px;
+  height: 90px;
+}
+#pixel-dialog {
+  margin-top: 0.2rem;
+  background: rgba(255,255,255,0.95);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px #0001;
+  padding: 0.3rem 0.7rem;
+  font-size: 1rem;
+  color: #234;
+  min-width: 60px;
+  max-width: 120px;
+  text-align: center;
+  pointer-events: auto;
+}
+/* Estilos específicos para el nivel intermedio del juego 2 */
+.j2-card {
+  max-width: 480px;
+  margin: 2.5rem auto;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  border-radius: 16px;
+  background: var(--color-blanco);
+  box-shadow: var(--sombra-media);
+  text-align: center;
+}
+.fall-area {
+  position: relative;
+  height: 220px;
+  margin: 1.5rem 0 1rem 0;
+  background: #f7faff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.fall-word {
+  position: absolute;
+  min-width: 90px;
+  padding: 0.7rem 1.2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px #0001;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #234;
+  cursor: grab;
+  user-select: none;
+  transition: box-shadow 0.2s, background 0.2s, opacity 0.7s, transform 0.7s;
+  z-index: 2;
+}
+.fall-word.fall-correcta {
+  background: #e0ffe0;
+  box-shadow: 0 0 16px #6f6;
+  animation: brillo 0.7s linear 1;
+}
+@keyframes brillo {
+  0% { box-shadow: 0 0 0 #6f6; }
+  50% { box-shadow: 0 0 24px #6f6; }
+  100% { box-shadow: 0 0 0 #6f6; }
+}
+.fall-word.fall-inactiva {
+  opacity: 0.5;
+  cursor: default;
+}
+.drop-box {
+  margin: 1.2rem auto 0 auto;
+  padding: 1.1rem 0.5rem;
+  background: #eaf2ff;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  color: #234;
+  font-weight: 500;
+  min-height: 48px;
+  transition: background 0.2s, color 0.2s;
+}
+.drop-box.drop-hover {
+  background: #d0e6ff;
+  color: #1a3a6e;
+}
+.drop-box.drop-correct {
+  background: #e0ffe0;
+  color: #1a6e2a;
+}
+.drop-box.drop-wrong {
+  background: #ffe0e0;
+  color: #a61a1a;
+}
+.j2-feedback {
+  margin-top: 1.2rem;
+  font-size: 1.1rem;
+  min-height: 32px;
+  color: #234;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.j2-feedback.correcto {
+  color: #1a6e2a;
+}
+.j2-feedback.incorrecto {
+  color: #a61a1a;
+}
+.instructions-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.35);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 3000;
+}
+.instructions-card {
+  background: #fff;
+  padding: 2.5rem 2.5rem 2rem 2.5rem;
+  border-radius: 18px;
+  box-shadow: 0 4px 32px #0002;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #234;
+  max-width: 420px;
+  text-align: center;
+}

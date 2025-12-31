@@ -1,0 +1,32 @@
+<!-- Vista para Juego 2 Nivel 3 -->
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego 2 - Nivel 3</title>
+    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/ui.css">
+    <link rel="stylesheet" href="../../css/vistas/juego2nivel3.css">
+</head>
+
+<body>
+    <div id="container">
+        <div id="main-container"></div>
+    </div>
+    <div id="pixel-container">
+        <div id="pixel-animation"></div>
+        <div id="pixel-dialog">
+            <p id="pixel-text"></p>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+    <script type="module">
+        import Game2Nivel3 from '../../js/juego2nivel3.js';
+        Game2Nivel3.init();
+    </script>
+</body>
+
+</html>
