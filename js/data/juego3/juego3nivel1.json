@@ -1,0 +1,14 @@
+[
+    { "id": "puente", "texto": "puente", "categoria": "lugar", "imagen": "../../../assets/imagenes/juego3/puente.jpg" },
+    { "id": "barco", "texto": "barco", "categoria": "transporte", "imagen": "../../../assets/imagenes/juego3/barco.jpg" },
+    { "id": "bosque", "texto": "bosque", "categoria": "lugar", "imagen": "../../../assets/imagenes/juego3/bosque.jpg" },
+    { "id": "escalera", "texto": "escalera", "categoria": "objeto_entorno", "imagen": "../../../assets/imagenes/juego3/escalera.jpg" },
+    { "id": "ventana", "texto": "ventana", "categoria": "objeto_entorno", "imagen": "../../../assets/imagenes/juego3/ventana.jpg" },
+    { "id": "camino", "texto": "camino", "categoria": "lugar", "imagen": "../../../assets/imagenes/juego3/camino.jpg" },
+    { "id": "sombrero", "texto": "sombrero", "categoria": "objeto_personal", "imagen": "../../../assets/imagenes/juego3/sombrero.jpg" },
+    { "id": "arbol", "texto": "árbol", "categoria": "lugar", "imagen": "../../../assets/imagenes/juego3/arbol.jpg" },
+    { "id": "llave", "texto": "llave", "categoria": "objeto_personal", "imagen": "../../../assets/imagenes/juego3/llave.jpg" },
+    { "id": "reloj", "texto": "reloj", "categoria": "objeto_personal", "imagen": "../../../assets/imagenes/juego3/reloj.jpg" },
+    { "id": "gorra", "texto": "gorra", "categoria": "objeto_personal", "imagen": "../../../assets/imagenes/juego3/gorra.jpg" },
+    { "id": "puerta", "texto": "puerta", "categoria": "objeto_entorno", "imagen": "../../../assets/imagenes/juego3/puerta.jpg" }
+]

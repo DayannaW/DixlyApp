@@ -1,47 +1,287 @@
 [
   {
-    "palabra": "prado",
-    "audio": "../../assets/sonidos/juego2/prado.mp3",
+    "palabra": "El perro cruzó rápido la carretera",
+    "audio": "../../assets/sonidos/juego2nivel3/audio_1.mp3",
     "opciones": [
-      {"texto": "prado", "correcto": true},
-      {"texto": "pralo", "correcto": false},
-      {"texto": "prado", "correcto": true}
+      {
+        "texto": "perro",
+        "correcto": true
+      },
+      {
+        "texto": "cruzó",
+        "correcto": true
+      },
+      {
+        "texto": "caretera",
+        "correcto": false,
+        "textoCorrecto": "carretera"
+      }
     ]
   },
   {
-    "palabra": "brazo",
-    "audio": "../../assets/sonidos/juego2/brazo.mp3",
+    "palabra": "La brisa movía las ramas del árbol",
+    "audio": "../../assets/sonidos/juego2nivel3/audio_2.mp3",
     "opciones": [
-      {"texto": "brazo", "correcto": true},
-      {"texto": "braso", "correcto": false},
-      {"texto": "brazo", "correcto": true}
+      {
+        "texto": "brisa",
+        "correcto": true
+      },
+      {
+        "texto": "ramas",
+        "correcto": true
+      },
+      {
+        "texto": "arbol",
+        "correcto": false,
+        "textoCorrecto": "árbol"
+      }
     ]
   },
   {
-    "palabra": "cama",
-    "audio": "../../assets/sonidos/juego2/cama.mp3",
+    "palabra": "El barco partió al borde del muelle",
+    "audio": "../../assets/sonidos/juego2nivel3/audio_3.mp3",
     "opciones": [
-      {"texto": "cama", "correcto": true},
-      {"texto": "cana", "correcto": false},
-      {"texto": "cama", "correcto": true}
+      {
+        "texto": "muelle",
+        "correcto": true
+      },
+      {
+        "texto": "borde",
+        "correcto": true
+      },
+      {
+        "texto": "barqo",
+        "correcto": false,
+        "textoCorrecto": "barco"
+      }
     ]
   },
   {
-    "palabra": "pato",
-    "audio": "../../assets/sonidos/juego2/pato.mp3",
+    "palabra": "El niño abrió la puerta despacio",
+    "audio": "../../assets/sonidos/juego2nivel3/audio_4.mp3",
     "opciones": [
-      {"texto": "pato", "correcto": true},
-      {"texto": "pato", "correcto": true},
-      {"texto": "palo", "correcto": false}
+      {
+        "texto": "despacio",
+        "correcto": true
+      },
+      {
+        "texto": "puerta",
+        "correcto": true
+      },
+      {
+        "texto": "habrió",
+        "correcto": false,
+        "textoCorrecto": "abrió"
+      }
     ]
   },
   {
-    "palabra": "lata",
-    "audio": "../../assets/sonidos/juego2/lata.mp3",
+    "palabra": "La sombra cubría todo el suelo",
+    "audio": "../../assets/sonidos/juego2nivel3/audio_5.mp3",
     "opciones": [
-      {"texto": "lata", "correcto": true},
-      {"texto": "lata", "correcto": true},
-      {"texto": "lapa", "correcto": false}
+      {
+        "texto": "suelo",
+        "correcto": true
+      },
+      {
+        "texto": "sombra",
+        "correcto": true
+      },
+      {
+        "texto": "cubria",
+        "correcto": false,
+        "textoCorrecto": "cubría"
+      }
+    ]
+  },
+  {
+    "palabra": "El tren avanzó entre montañas frías",
+    "audio": "../../assets/sonidos/juego2nivel3/audio_6.mp3",
+    "opciones": [
+      {
+        "texto": "tren",
+        "correcto": true
+      },
+      {
+        "texto": "montañas",
+        "correcto": true
+      },
+      {
+        "texto": "avansó",
+        "correcto": false,
+        "textoCorrecto": "avanzó"
+      }
+    ]
+  },
+  {
+    "palabra": "La lluvia golpeaba fuerte las ventanas",
+    "audio": "../../assets/sonidos/juego2nivel3/audio_7.mp3",
+    "opciones": [
+      {
+        "texto": "ventanas",
+        "correcto": true
+      },
+      {
+        "texto": "golpeaba",
+        "correcto": true
+      },
+      {
+        "texto": "Yuvia",
+        "correcto": false,
+        "textoCorrecto": "lluvia"
+      }
+    ]
+  },
+  {
+    "palabra": "El zorro saltó sobre la cerca rota",
+    "audio": "../../assets/sonidos/juego2nivel3/audio_8.mp3",
+    "opciones": [
+      {
+        "texto": "zorro",
+        "correcto": true
+      },
+      {
+        "texto": "saltó",
+        "correcto": true
+      },
+      {
+        "texto": "serca",
+        "correcto": false,
+        "textoCorrecto": "cerca"
+      }
+    ]
+  },
+  {
+    "palabra": "La bruma escondía luces distantes",
+    "audio": "../../assets/sonidos/juego2nivel3/audio_9.mp3",
+    "opciones": [
+      {
+        "texto": "bruma",
+        "correcto": true
+      },
+      {
+        "texto": "escondía",
+        "correcto": true
+      },
+      {
+        "texto": "diztantes",
+        "correcto": false,
+        "textoCorrecto": "distantes"
+      }
+    ]
+  },
+  {
+    "palabra": "El dragón dormía dentro de la cueva",
+    "audio": "../../assets/sonidos/juego2nivel3/audio_10.mp3",
+    "opciones": [
+      {
+        "texto": "dragón",
+        "correcto": true
+      },
+      {
+        "texto": "cueva",
+        "correcto": true
+      },
+      {
+        "texto": "dormia",
+        "correcto": false,
+        "textoCorrecto": "dormía"
+      }
+    ]
+  },
+  {
+    "palabra": "La bandera ondeaba sobre el edificio",
+    "audio": "../../assets/sonidos/juego2nivel3/audio_11.mp3",
+    "opciones": [
+      {
+        "texto": "bandera",
+        "correcto": true
+      },
+      {
+        "texto": "edificio",
+        "correcto": true
+      },
+      {
+        "texto": "ondeada",
+        "correcto": false,
+        "textoCorrecto": "ondeaba"
+      }
+    ]
+  },
+  {
+    "palabra": "El reloj marcaba tarde la hora",
+    "audio": "../../assets/sonidos/juego2nivel3/audio_12.mp3",
+    "opciones": [
+      {
+        "texto": "reloj",
+        "correcto": true
+      },
+      {
+        "texto": "marcaba",
+        "correcto": true
+      },
+      {
+        "texto": "trade",
+        "correcto": false,
+        "textoCorrecto": "tarde"
+      }
+    ]
+  },
+  {
+    "palabra": "La piedra rodó por el sendero",
+    "audio": "../../assets/sonidos/juego2nivel3/audio_13.mp3",
+    "opciones": [
+      {
+        "texto": "sendero",
+        "correcto": true
+      },
+      {
+        "texto": "piedra",
+        "correcto": true
+      },
+      {
+        "texto": "rodo",
+        "correcto": false,
+        "textoCorrecto": "rodó"
+      }
+    ]
+  },
+  {
+    "palabra": "El viento empujaba hojas secas",
+    "audio": "../../assets/sonidos/juego2nivel3/audio_14.mp3",
+    "opciones": [
+      {
+        "texto": "viento",
+        "correcto": true
+      },
+      {
+        "texto": "empujaba",
+        "correcto": true
+      },
+      {
+        "texto": "ojas",
+        "correcto": false,
+        "textoCorrecto": "hojas"
+      }
+    ]
+  },
+  {
+    "palabra": "La sirena sonó cerca del puerto",
+    "audio": "../../assets/sonidos/juego2nivel3/audio_15.mp3",
+    "opciones": [
+      {
+        "texto": "puerto",
+        "correcto": true
+      },
+      {
+        "texto": "sonó",
+        "correcto": true
+      },
+      {
+        "texto": "cirena",
+        "correcto": false,
+        "textoCorrecto": "sirena"
+      }
     ]
   }
 ]

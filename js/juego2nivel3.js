@@ -248,7 +248,7 @@ const Game2Nivel3 = (() => {
                 function transitionNext() {
                   if (paused) { transitionTimeout = setTimeout(transitionNext, 100); return; }
                   try { Pet.speak('No te preocupes! Vamos a intentarlo con la siguiente palabra.'); } catch (e) { }
-                  setTimeout(() => { if (paused) { transitionTimeout = setTimeout(transitionNext, 100); return; } nextPalabra(); }, 2000);
+                  setTimeout(() => { if (paused) { transitionTimeout = setTimeout(transitionNext, 100); return; } nextPalabra(); }, 3000);
                 }
                 setTimeout(transitionNext, 600);
               }
@@ -298,7 +298,7 @@ const Game2Nivel3 = (() => {
               fw.style.transform = 'scale(0.7) rotate(-18deg)';
             }
           });
-          setTimeout(() => nextPalabra(), 2200);
+          setTimeout(() => nextPalabra(), 3000);
         }
       };
     }
@@ -312,10 +312,15 @@ const Game2Nivel3 = (() => {
       aciertos++;
       setTimeout(() => { fb.textContent = ''; fb.className = 'j2-feedback'; try { Pet.setIdle(); } catch (e) { } }, 1200);
     } else {
-      fb.textContent = 'Parece que esa palabra sí era correcta, vamos con la siguiente.';
+      // Buscar la palabra incorrecta (la que era la respuesta correcta)
+      const palabraObj = palabras[current];
+      const incorrecta = palabraObj.opciones.find(o => !o.correcto);
+      let textoIncorrecta = incorrecta ? incorrecta.texto : '';
+      let textoCorrecto = incorrecta && incorrecta.textoCorrecto ? incorrecta.textoCorrecto : '';
+      fb.textContent = `El error era: "${textoIncorrecta}". Forma correcta: "${textoCorrecto}".`;
       fb.className = 'j2-feedback incorrecto';
-      try { Pet.setSad(); Pet.speak('Parece que esa palabra sí era correcta, vamos con la siguiente.'); } catch (e) { }
-      setTimeout(() => { fb.textContent = ''; fb.className = 'j2-feedback'; try { Pet.setIdle(); } catch (e) { } }, 2000);
+      try { Pet.setSad(); Pet.speak(`Sigamos intentando.`); } catch (e) { }
+      setTimeout(() => { fb.textContent = ''; fb.className = 'j2-feedback'; try { Pet.setIdle(); } catch (e) { } }, 3000);
     }
   }
   function nextPalabra() {

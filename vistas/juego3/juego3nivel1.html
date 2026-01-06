@@ -9,10 +9,22 @@
     <link rel="stylesheet" href="../../css/vistas/juego1nivel1.css">
 </head>
 <body class="body--juegos">
-    <main style="padding:3rem;">
-        <button class="btn btn-ghost" onclick="location.href='index.html'">← Volver</button>
-        <h1>Juego 3 — Nivel 1</h1>
-        <p>Placeholder: implementar juego 3 aquí.</p>
-    </main>
+        <main id="main-container" style="padding:3rem;">
+                <button class="btn btn-ghost" onclick="location.href='index.html'">← Volver</button>
+        </main>
+         <div id="pixel-container">
+        <div id="pixel-animation"></div>
+        <div id="pixel-dialog">
+            <p id="pixel-text"></p>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+
+        <script type="module">
+            import Juego3Nivel1 from '../../js/juego3nivel1.js';
+            window.addEventListener('DOMContentLoaded', () => {
+                Juego3Nivel1.init();
+            });
+        </script>
 </body>
 </html>
