@@ -40,7 +40,17 @@
             const gameId = 'juego3';
             buttons.forEach(btn => {
                 const lvl = btn.dataset.level;
-                btn.addEventListener('click', () => { if (btn.disabled) return; location.href = `juego3nivel1.html?level=${encodeURIComponent(lvl)}` });
+                btn.addEventListener('click', () => {
+                    if (btn.disabled) return;
+                    // map level -> page
+                    const pageMap = {
+                        'nivel-facil': 'juego3nivel1.html',
+                        'nivel-intermedio': 'juego3nivel2.html',
+                        'nivel-dificil': 'juego3nivel3.html'
+                    };
+                    const page = pageMap[lvl] || 'juego2nivel1.html';
+                    location.href = `${page}?level=${encodeURIComponent(lvl)}`;
+                });
             });
             (async () => { if (buttons[0]) buttons[0].disabled = false; })();
         </script>
