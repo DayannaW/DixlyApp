@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -9,35 +10,54 @@
     <link rel="stylesheet" href="../../css/ui.css">
     <link rel="stylesheet" href="../../css/vistas/index.css">
 </head>
+
 <body class="body--juegos">
     <main class="contenedor-juego-descripcion">
         <button class="btn btn-ghost" onclick="location.href='../../index.php'">← Volver</button>
         <h1>Juego 2 — Memoria verbal</h1>
         <p>Descripción breve del juego 2. Selecciona un nivel para comenzar.</p>
 
-                <section class="niveles">
-                        <h3>Elegir nivel</h3>
-                        <div class="lista-niveles">
-                                <button class="btn btn-primary level-btn" data-level="nivel-facil">Nivel 1</button>
-                        </div>
-                </section>
-                <style>
-                    .level-locked { background:#2b2b2b !important; color:#fff !important; opacity:0.9; cursor:not-allowed; }
-                </style>
-                <script type="module">
-                    import { hasCompletedLevel } from '../../js/util.js';
-                    const buttons = document.querySelectorAll('.level-btn');
-                    const levelOrder = ['nivel-facil','nivel-intermedio','nivel-dificil'];
-                    const gameId = 'juego2';
-                    buttons.forEach(btn=>{
-                        const lvl = btn.dataset.level;
-                        btn.addEventListener('click', ()=>{ if(btn.disabled) return; location.href = `juego2nivel1.html?level=${encodeURIComponent(lvl)}` });
-                    });
-                    (async ()=>{
-                        // only one level now; keep first unlocked
-                        const btn = buttons[0]; if(btn) btn.disabled = false;
-                    })();
-                </script>
+        <section class="niveles">
+            <h3>Elegir nivel</h3>
+            <div class="lista-niveles">
+                <button class="btn btn-primary level-btn" data-level="nivel-facil">Fácil</button>
+                <button class="btn btn-primary level-btn" data-level="nivel-intermedio">Intermedio</button>
+                <button class="btn btn-primary level-btn" data-level="nivel-dificil">Difícil</button>
+            </div>
+        </section>
+        <style>
+            .level-locked {
+                background: #2b2b2b !important;
+                color: #fff !important;
+                opacity: 0.9;
+                cursor: not-allowed;
+            }
+        </style>
+        <script type="module">
+            import { hasCompletedLevel } from '../../js/util.js';
+            const buttons = document.querySelectorAll('.level-btn');
+            const levelOrder = ['nivel-facil', 'nivel-intermedio', 'nivel-dificil'];
+            const gameId = 'juego2';
+            buttons.forEach(btn => {
+                const lvl = btn.dataset.level;
+                btn.addEventListener('click', () => {
+                    if (btn.disabled) return;
+                    // map level -> page
+                    const pageMap = {
+                        'nivel-facil': 'juego2nivel1.html',
+                        'nivel-intermedio': 'juego2nivel2.html',
+                        'nivel-dificil': 'juego2nivel3.html'
+                    };
+                    const page = pageMap[lvl] || 'juego2nivel1.html';
+                    location.href = `${page}?level=${encodeURIComponent(lvl)}`;
+                });
+            });
+            (async () => {
+                // only one level now; keep first unlocked
+                const btn = buttons[0]; if (btn) btn.disabled = false;
+            })();
+        </script>
     </main>
 </body>
+
 </html>
