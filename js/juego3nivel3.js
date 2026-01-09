@@ -10,7 +10,7 @@ sWrong.preload = 'auto';
 import { loadJSON } from './util.js';
 import Pet from './pet.js';
 
-const Juego3Nivel1 = (() => {
+const Juego3Nivel3 = (() => {
   function showInstrucciones() {
     const main = document.getElementById('main-container');
     main.innerHTML = `
@@ -40,7 +40,7 @@ const Juego3Nivel1 = (() => {
     rondaActual = 0;
     aciertos = 0;
     palabrasUsadas = [];
-    const data = await fetch('../../js/data/juego3/juego3nivel1.json').then(r => r.json());
+    const data = await fetch('../../js/data/juego3/juego3nivel3.json').then(r => r.json());
     console.log(data);
     palabrasDisponibles = [...data];
     siguienteRonda();
@@ -194,7 +194,7 @@ const Juego3Nivel1 = (() => {
 
   async function mostrarPalabraSeleccionada(palabraObj) {
     const main = document.getElementById('main-container');
-    const data = await fetch('../../js/data/juego3/juego3nivel1.json').then(r => r.json());
+    const data = await fetch('../../js/data/juego3/juego3nivel3.json').then(r => r.json());
     const palabras = data;
     // Seleccionar distractores
     // 1 de la misma categoría (que no sea la palabra objetivo)
@@ -277,18 +277,7 @@ const Juego3Nivel1 = (() => {
   }
 
   function mostrarResultados() {
-    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel1&score=' + aciertos;
-    // const main = document.getElementById('main-container');
-    // main.innerHTML = `
-    //   <div class=\"result-card\" style=\"max-width:420px; margin:3rem auto; padding:1.5rem; border-radius:12px; box-shadow:var(--sombra-media); background:var(--color-blanco); text-align:center\">
-    //     <h2>¡Juego completado!</h2>
-    //     <p>¡Has terminado el nivel 1 de Ruleta léxica!</p>
-    //     <button id=\"btn-finish\" class=\"btn btn-primary\">Ver resultados finales</button>
-    //   </div>
-    // `;
-    // document.getElementById('btn-finish').onclick = () => {
-    //   window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel1&score=' + aciertos;
-    // };
+    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel3&score=' + aciertos;
   }
 
   async function init() {
@@ -298,4 +287,4 @@ const Juego3Nivel1 = (() => {
   return { init };
 })();
 
-export default Juego3Nivel1;
+export default Juego3Nivel3;

@@ -10,7 +10,7 @@ sWrong.preload = 'auto';
 import { loadJSON } from './util.js';
 import Pet from './pet.js';
 
-const Juego3Nivel1 = (() => {
+const Juego3Nivel2 = (() => {
   function showInstrucciones() {
     const main = document.getElementById('main-container');
     main.innerHTML = `
@@ -40,7 +40,7 @@ const Juego3Nivel1 = (() => {
     rondaActual = 0;
     aciertos = 0;
     palabrasUsadas = [];
-    const data = await fetch('../../js/data/juego3/juego3nivel1.json').then(r => r.json());
+    const data = await fetch('../../js/data/juego3/juego3nivel2.json').then(r => r.json());
     console.log(data);
     palabrasDisponibles = [...data];
     siguienteRonda();
@@ -99,21 +99,21 @@ const Juego3Nivel1 = (() => {
       const gradId = `grad${i}`;
       svgSlices += `
         <defs>
-          <linearGradient id=\"${gradId}\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\"> 
-            <stop offset=\"0%\" stop-color=\"${color1}\" />
-            <stop offset=\"100%\" stop-color=\"${color2}\" />
+          <linearGradient id="${gradId}" x1="0%" y1="0%" x2="100%" y2="100%"> 
+            <stop offset="0%" stop-color="${color1}" />
+            <stop offset="100%" stop-color="${color2}" />
           </linearGradient>
         </defs>
-        <path d=\"M150,150 L${x1},${y1} A140,140 0 ${largeArc},1 ${x2},${y2} Z\" fill=\"url(#${gradId})\" />`;
+        <path d="M150,150 L${x1},${y1} A140,140 0 ${largeArc},1 ${x2},${y2} Z" fill="url(#${gradId})" />`;
       // Separador blanco
       const sepX = 150 + 140 * Math.cos(Math.PI * (endAngle-90)/180);
       const sepY = 150 + 140 * Math.sin(Math.PI * (endAngle-90)/180);
-      svgSeparators += `<line x1=\"150\" y1=\"150\" x2=\"${sepX}\" y2=\"${sepY}\" stroke=\"#fff\" stroke-width=\"4\" />`;
-      // Texto vertical hacia el centro
+      svgSeparators += `<line x1="150" y1="150" x2="${sepX}" y2="${sepY}" stroke="#fff" stroke-width="4" />`;
+      // Emoji en vez de texto
       const tx = 150 + 90 * Math.cos(Math.PI * ((startAngle+endAngle)/2-90)/180);
       const ty = 150 + 90 * Math.sin(Math.PI * ((startAngle+endAngle)/2-90)/180);
       const angleText = ((startAngle+endAngle)/2) + 90;
-      svgTexts += `<text x=\"${tx}\" y=\"${ty}\" text-anchor=\"middle\" alignment-baseline=\"middle\" font-size=\"18\" font-family=\"Lexend,Arial,sans-serif\" fill=\"${isUsed ? '#888' : '#222'}\" transform=\"rotate(${angleText},${tx},${ty})\">${palabrasRuleta[i].texto}</text>`;
+      svgTexts += `<text x="${tx}" y="${ty}" text-anchor="middle" alignment-baseline="middle" font-size="32" font-family="Arial,sans-serif" fill="${isUsed ? '#888' : '#222'}" transform="rotate(${angleText},${tx},${ty})">${palabrasRuleta[i].emoji || '❓'}</text>`;
     }
     main.innerHTML = `
       <div class=\"ruleta-container\" style=\"display:flex;flex-direction:column;align-items:center;gap:2rem;\">
@@ -176,7 +176,7 @@ const Juego3Nivel1 = (() => {
 
   function animarPalabraSeleccionada(palabraObj) {
     const animada = document.getElementById('palabra-animada');
-    animada.textContent = palabraObj.texto;
+    animada.textContent = palabraObj.incompleta || palabraObj.texto;
     animada.style.opacity = '1';
     animada.style.transform = 'scale(1.2) translateY(-40px)';
     // Sonido de aparición
@@ -194,7 +194,7 @@ const Juego3Nivel1 = (() => {
 
   async function mostrarPalabraSeleccionada(palabraObj) {
     const main = document.getElementById('main-container');
-    const data = await fetch('../../js/data/juego3/juego3nivel1.json').then(r => r.json());
+    const data = await fetch('../../js/data/juego3/juego3nivel2.json').then(r => r.json());
     const palabras = data;
     // Seleccionar distractores
     // 1 de la misma categoría (que no sea la palabra objetivo)
@@ -227,10 +227,14 @@ const Juego3Nivel1 = (() => {
     opciones = opciones.sort(() => Math.random() - 0.5);
     main.innerHTML = `
       <div class=\"palabra-seleccionada\" style=\"text-align:center;margin-bottom:2rem;\">
-        <h2 style=\"font-size:2.5rem;letter-spacing:2px;transition:all .7s cubic-bezier(.7,.2,.3,1);\">${palabraObj.texto}</h2>
+        <h2 style=\"font-size:2.5rem;letter-spacing:2px;transition:all .7s cubic-bezier(.7,.2,.3,1);\">${palabraObj.incompleta || palabraObj.texto}</h2>
       </div>
       <div class=\"imagenes-opciones\" style=\"display:flex;flex-wrap:wrap;gap:2rem;justify-content:center;\">
-        ${opciones.map((op,i) => `<div class=\"img-opcion\" data-palabra=\"${op.id}\" style=\"cursor:pointer;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px #0002;transition:box-shadow .2s;\"><img src=\"../../assets/imagenes/juego3/${op.imagen}\" alt=\"${op.texto}\" style=\"width:140px;height:140px;object-fit:contain;display:block;\"></div>`).join('')}
+        ${opciones.map((op,i) => `
+          <div class=\"img-opcion\" data-palabra=\"${op.id}\" style=\"cursor:pointer;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px #0002;transition:box-shadow .2s;\">
+            <img src=\"../../assets/imagenes/juego3/${op.imagen}\" alt=\"${op.texto}\" style=\"width:140px;height:140px;object-fit:contain;display:block;\">
+          </div>
+        `).join('')}
       </div>
       <div id=\"feedback-j3\" style=\"text-align:center;font-size:1.3rem;margin-top:2.5rem;min-height:2.5rem;\"></div>
     `;
@@ -277,18 +281,7 @@ const Juego3Nivel1 = (() => {
   }
 
   function mostrarResultados() {
-    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel1&score=' + aciertos;
-    // const main = document.getElementById('main-container');
-    // main.innerHTML = `
-    //   <div class=\"result-card\" style=\"max-width:420px; margin:3rem auto; padding:1.5rem; border-radius:12px; box-shadow:var(--sombra-media); background:var(--color-blanco); text-align:center\">
-    //     <h2>¡Juego completado!</h2>
-    //     <p>¡Has terminado el nivel 1 de Ruleta léxica!</p>
-    //     <button id=\"btn-finish\" class=\"btn btn-primary\">Ver resultados finales</button>
-    //   </div>
-    // `;
-    // document.getElementById('btn-finish').onclick = () => {
-    //   window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel1&score=' + aciertos;
-    // };
+    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel2&score=' + aciertos;
   }
 
   async function init() {
@@ -298,4 +291,4 @@ const Juego3Nivel1 = (() => {
   return { init };
 })();
 
-export default Juego3Nivel1;
+export default Juego3Nivel2;

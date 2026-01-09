@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Juego 3 — Nivel 3</title>
+    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/ui.css">
+    <link rel="stylesheet" href="../../css/vistas/juego1nivel1.css">
+</head>
+<body class="body--juegos">
+        <main id="main-container" style="padding:3rem;">
+                <button class="btn btn-ghost" onclick="location.href='index.html'">← Volver</button>
+        </main>
+         <div id="pixel-container">
+        <div id="pixel-animation"></div>
+        <div id="pixel-dialog">
+            <p id="pixel-text"></p>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+
+        <script type="module">
+            import Juego3Nivel3 from '../../js/juego3nivel3.js';
+            window.addEventListener('DOMContentLoaded', () => {
+                Juego3Nivel3.init();
+            });
+        </script>
+</body>
+</html>

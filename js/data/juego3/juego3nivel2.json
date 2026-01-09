@@ -1,0 +1,17 @@
+[
+    { "id": "arbol", "texto": "árbol", "incompleta": "ár__l", "emoji": "🩷", "categoria": "lugar", "imagen": "../../../assets/imagenes/juego3/arbol.jpg" },
+    { "id": "puente", "texto": "puente", "incompleta": "p___te", "emoji": "🚩", "categoria": "lugar", "imagen": "../../../assets/imagenes/juego3/puente.jpg" },
+    { "id": "bosque", "texto": "bosque", "incompleta": "bos___", "emoji": "🛎️", "categoria": "lugar", "imagen": "../../../assets/imagenes/juego3/bosque.jpg" },
+    { "id": "camino", "texto": "camino", "incompleta": "ca__no", "emoji": "🧸", "categoria": "lugar", "imagen": "../../../assets/imagenes/juego3/camino.jpg" },
+    
+    { "id": "cofre", "texto": "cofre", "incompleta": "co___", "emoji": "🎀", "categoria": "objeto_entorno", "imagen": "../../../assets/imagenes/juego3/cofre.jpg" },
+    { "id": "cebra", "texto": "cebra", "incompleta": "c__ra", "emoji": "🎈", "categoria": "objeto_entorno", "imagen": "../../../assets/imagenes/juego3/cebra.jpeg" },
+    { "id": "ancla", "texto": "ancla", "incompleta": "an___", "emoji": "🎁", "categoria": "objeto_entorno", "imagen": "../../../assets/imagenes/juego3/ancla.jpeg" },
+    
+    { "id": "clavo", "texto": "clavo", "incompleta": "___vo", "emoji": "🎉", "categoria": "objeto_personal", "imagen": "../../../assets/imagenes/juego3/clavo.jpg" },
+    { "id": "jarro", "texto": "jarro", "incompleta": "jar___", "emoji": "🛍️", "categoria": "objeto_personal", "imagen": "../../../assets/imagenes/juego3/jarro.jpg" },
+    { "id": "plato", "texto": "plato", "incompleta": "___to", "emoji": "✉️", "categoria": "objeto_personal", "imagen": "../../../assets/imagenes/juego3/plato.jpg" },
+    { "id": "teclado", "texto": "teclado", "incompleta": "te___do", "emoji": "🔍", "categoria": "objeto_personal", "imagen": "../../../assets/imagenes/juego3/teclado.jpg" },
+    
+    { "id": "barco", "texto": "barco", "incompleta": "ba__o", "emoji": "🗿", "categoria": "transporte", "imagen": "../../../assets/imagenes/juego3/barco.jpg" }
+]
