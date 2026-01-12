@@ -1,17 +1,93 @@
 [
-    { "id": "arbol", "texto": "árbol", "categoria": "lugar", "imagen": "../../../assets/imagenes/juego3/arbol.jpg" },
-    { "id": "puente", "texto": "puente", "categoria": "lugar", "imagen": "../../../assets/imagenes/juego3/puente.jpg" },
-    { "id": "bosque", "texto": "bosque", "categoria": "lugar", "imagen": "../../../assets/imagenes/juego3/bosque.jpg" },
-    { "id": "camino", "texto": "camino", "categoria": "lugar", "imagen": "../../../assets/imagenes/juego3/camino.jpg" },
-   
-    { "id": "escalera", "texto": "escalera", "categoria": "objeto_entorno", "imagen": "../../../assets/imagenes/juego3/escalera.jpg" },
-    { "id": "ventana", "texto": "ventana", "categoria": "objeto_entorno", "imagen": "../../../assets/imagenes/juego3/ventana.jpg" },
-    { "id": "puerta", "texto": "puerta", "categoria": "objeto_entorno", "imagen": "../../../assets/imagenes/juego3/puerta.jpg" },
-   
-    { "id": "sombrero", "texto": "sombrero", "categoria": "objeto_personal", "imagen": "../../../assets/imagenes/juego3/sombrero.jpg" },
-    { "id": "llave", "texto": "llave", "categoria": "objeto_personal", "imagen": "../../../assets/imagenes/juego3/llave.jpg" },
-    { "id": "reloj", "texto": "reloj", "categoria": "objeto_personal", "imagen": "../../../assets/imagenes/juego3/reloj.jpg" },
-    { "id": "gorra", "texto": "gorra", "categoria": "objeto_personal", "imagen": "../../../assets/imagenes/juego3/gorra.jpg" },
-   
-    { "id": "barco", "texto": "barco", "categoria": "transporte", "imagen": "../../../assets/imagenes/juego3/barco.jpg" }
-]
+    {
+      "palabra": "vela",
+      "emoji": "🎀",
+      "oracion": "La vela brilla sin hacer ruido",
+      "sentidoCorrecto": "fuego",
+      "imagenesClave": [
+        { "id": "vela_fuego", "correcta": true, "imagen": "../../assets/imagenes/juego3/vela_fuego.jpg" },
+        { "id": "vela_barco", "correcta": false, "imagen": "../../assets/imagenes/juego3/barco.jpg" }
+      ],
+      "categoriaDistractores": "objetos"
+    },
+    {
+      "palabra": "vela",
+      "emoji": "🎈",
+      "oracion": "Una buena vela cruza todos los océanos",
+      "sentidoCorrecto": "barco",
+      "imagenesClave": [
+        { "id": "vela_barco", "correcta": true, "imagen": "../../assets/imagenes/juego3/barco.jpg" },
+        { "id": "vela_fuego", "correcta": false, "imagen": "../../assets/imagenes/juego3/vela_fuego.jpg" }
+      ],
+      "categoriaDistractores": "mar"
+    },
+
+    {
+      "palabra": "hoja",
+      "emoji": "🎁",
+      "oracion": "En otoño la hoja aprende a soltar",
+      "sentidoCorrecto": "hoja_arbol",
+      "imagenesClave": [
+        { "id": "hoja_arbol", "correcta": true, "imagen": "../../assets/imagenes/juego3/hoja_arbol.jpg" },
+        { "id": "hoja_papel", "correcta": false, "imagen": "../../assets/imagenes/juego3/hoja_papel.jpg" }
+      ],
+      "categoriaDistractores": "naturaleza"
+    },
+    {
+      "palabra": "hoja",
+      "emoji": "🧸",
+      "oracion": "Cada hoja de su diario era una gran aventura",
+      "sentidoCorrecto": "hoja_papel",
+      "imagenesClave": [
+        { "id": "hoja_papel", "correcta": true, "imagen": "../../assets/imagenes/juego3/hoja_papel.jpg" },
+        { "id": "hoja_arbol", "correcta": false, "imagen": "../../assets/imagenes/juego3/hoja_arbol.jpg" }
+      ],
+      "categoriaDistractores": "escritura"
+    },
+
+    {
+      "palabra": "llama",
+      "emoji": "🚩",
+      "oracion": "La llama no se apagaba con el viento",
+      "sentidoCorrecto": "llama_fuego",
+      "imagenesClave": [
+        { "id": "llama_fuego", "correcta": true, "imagen": "../../assets/imagenes/juego3/llama_fuego.jpg" },
+        { "id": "llama_animal", "correcta": false, "imagen": "../../assets/imagenes/juego3/llama_animal.jpg" }
+      ],
+      "categoriaDistractores": "naturaleza"
+    },
+    {
+      "palabra": "llama",
+      "emoji": "🎉",
+      "oracion": "La llama va tranquila por la montaña",
+      "sentidoCorrecto": "llama_animal",
+      "imagenesClave": [
+        { "id": "llama_animal", "correcta": true, "imagen": "../../assets/imagenes/juego3/llama_animal.jpg" },
+        { "id": "llama_fuego", "correcta": false, "imagen": "../../assets/imagenes/juego3/llama_fuego.jpg" }
+      ],
+      "categoriaDistractores": "montaña"
+    },
+
+    {
+      "palabra": "cola",
+      "emoji": "🔍",
+      "oracion": "Movía la cola por la alegría de ver a su dueño",
+      "sentidoCorrecto": "cola_animal",
+      "imagenesClave": [
+        { "id": "cola_animal", "correcta": true, "imagen": "../../assets/imagenes/juego3/cola_animal.jpg" },
+        { "id": "cola_fila", "correcta": false, "imagen": "../../assets/imagenes/juego3/cola_fila.jpg" }
+      ],
+      "categoriaDistractores": "animales"
+    },
+    {
+      "palabra": "cola",
+      "emoji": "✉️",
+      "oracion": "Quiero comprar en el bar pero la cola me hará demorar",
+      "sentidoCorrecto": "cola_fila",
+      "imagenesClave": [
+        { "id": "cola_fila", "correcta": true, "imagen": "../../assets/imagenes/juego3/cola_fila.jpg" },
+        { "id": "cola_animal", "correcta": false, "imagen": "../../assets/imagenes/juego3/cola_animal.jpg" }
+      ],
+      "categoriaDistractores": "ciudad"
+    }
+  ]

@@ -72,7 +72,18 @@ const Game2Nivel3 = (() => {
       if (!countdownSound.paused) { countdownSound.pause(); pausedCountdownSound = true; } else { pausedCountdownSound = false; }
       if (!yaSound.paused) { yaSound.pause(); pausedYaSound = true; } else { pausedYaSound = false; }
     };
-    pauseOverlay.onclick = () => {
+    // Agregar botones al overlay de pausa
+    pauseOverlay.innerHTML = `
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+        <div style="font-size: 2.2rem; margin-bottom: 2rem;">En pausa</div>
+        <button id="reanudarBtn" style="font-size: 1.3rem; padding: 0.7rem 2.2rem; margin-bottom: 1.2rem; border-radius: 1.5rem; border: none; background: #4caf50; color: white; cursor: pointer;">Reanudar</button>
+        <button id="volverMenuBtn" style="font-size: 1.1rem; padding: 0.6rem 2rem; border-radius: 1.5rem; border: none; background: #f44336; color: white; cursor: pointer;">Salir del juego</button>
+      </div>
+    `;
+    const reanudarBtn = pauseOverlay.querySelector('#reanudarBtn');
+    const volverMenuBtn = pauseOverlay.querySelector('#volverMenuBtn');
+    reanudarBtn.onclick = (e) => {
+      e.stopPropagation();
       if (paused) {
         paused = false;
         pauseOverlay.style.display = 'none';
@@ -95,6 +106,14 @@ const Game2Nivel3 = (() => {
         resumeCallbacks.forEach(fn => fn());
         resumeCallbacks = [];
       }
+    };
+    volverMenuBtn.onclick = (e) => {
+      e.stopPropagation();
+      window.location.href = 'index.html';
+    };
+    // Evitar que el overlay reanude el juego al hacer click fuera de los botones
+    pauseOverlay.onclick = (e) => {
+      e.stopPropagation();
     };
     // Cuenta regresiva animada con sonido
     const countdown = document.getElementById('countdown');
@@ -343,7 +362,7 @@ const Game2Nivel3 = (() => {
     `;
     setTimeout(() => { try { Pet.setHappy(); Pet.speak('¡Has detectado todos los errores!'); } catch (e) { } }, 400);
     document.getElementById('btn-finish').onclick = () => {
-      window.location.href = '../resultados.html?game=juego2&level=nivel3&score=' + aciertos;
+      window.location.href = '../resultados.html?game=juego2&level=nivel-dificil&score=' + aciertos;
     };
   }
 

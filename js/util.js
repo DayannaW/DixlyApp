@@ -50,26 +50,28 @@ export function addLevelCompletion(gameId, level) {
     const p = _read();
     if (!p.perGame[gameId]) p.perGame[gameId] = { score: 0, levels: {} };
 
-    if (p.perGame[gameId].levels[level]) {
-        // ya completado, no duplicar puntos
-        return false;
-    }
-
-    // sumar puntos
-    p.perGame[gameId].levels[level] = { completedAt: Date.now() };
-    p.perGame[gameId].score = (p.perGame[gameId].score || 0) + points;
-    p.total = (p.total || 0) + points;
-
-    // Si es el primer nivel, otorgar insignia "primer-paso"
     let badgesAdded = [];
-    if (level === 'nivel-facil') {
-        if (!p.perGame[gameId].badges) p.perGame[gameId].badges = {};
-        if (!p.perGame[gameId].badges['primer-paso']) {
-            p.perGame[gameId].badges['primer-paso'] = { earnedAt: Date.now(), name: 'Primer paso', desc: 'Completaste el primer nivel' };
-            badgesAdded.push('primer-paso');
+    if (!p.perGame[gameId].badges) p.perGame[gameId].badges = {};
+    let alreadyCompleted = !!p.perGame[gameId].levels[level];
+    if (!alreadyCompleted) {
+        // sumar puntos solo si no estaba completado
+        p.perGame[gameId].levels[level] = { completedAt: Date.now() };
+        p.perGame[gameId].score = (p.perGame[gameId].score || 0) + points;
+        p.total = (p.total || 0) + points;
+    }
+    // Si es el primer nivel, otorgar insignia "primer-paso"
+    if (level === 'nivel-facil' && !p.perGame[gameId].badges['primer-paso']) {
+        p.perGame[gameId].badges['primer-paso'] = { earnedAt: Date.now(), name: 'Primer paso', desc: 'Completaste el primer nivel' };
+        badgesAdded.push('primer-paso');
+    }
+    // Lógica para más insignias: si se pasa un objeto extra con condiciones
+    if (arguments.length > 2 && typeof arguments[2] === 'object') {
+        const badgeConditions = arguments[2];
+        if (badgeConditions['lector-atento'] && !p.perGame[gameId].badges['lector-atento']) {
+            p.perGame[gameId].badges['lector-atento'] = { earnedAt: Date.now(), name: 'Lector atento', desc: 'Completaste todas las rondas correctamente al primer intento' };
+            badgesAdded.push('lector-atento');
         }
     }
-
     _write(p);
     return { added: true, badges: badgesAdded };
 }

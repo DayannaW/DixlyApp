@@ -1,0 +1,10 @@
+{
+  "primer-paso": {
+    "name": "Primer paso",
+    "desc": "Completaste el primer nivel"
+  },
+  "lector-atento": {
+    "name": "Lector atento",
+    "desc": "Completaste todas las rondas correctamente al primer intento"
+  }
+}

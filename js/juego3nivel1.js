@@ -52,6 +52,8 @@ const Juego3Nivel1 = (() => {
       return;
     }
     const main = document.getElementById('main-container');
+    // Botón salir arriba a la derecha
+    let salirBtnHtml = `<button id="btn-salir-j3" style="position:absolute;top:18px;right:18px;z-index:2000;font-size:1.1rem;padding:0.5rem 1.4rem;border-radius:1.5rem;border:none;background:#f44336;color:white;cursor:pointer;">Salir</button>`;
     // Mostrar siempre las 12 palabras en la ruleta, usadas en gris
     let palabrasRuleta = [];
     if (palabrasDisponibles.length + palabrasUsadas.length < 12) {
@@ -116,6 +118,7 @@ const Juego3Nivel1 = (() => {
       svgTexts += `<text x=\"${tx}\" y=\"${ty}\" text-anchor=\"middle\" alignment-baseline=\"middle\" font-size=\"18\" font-family=\"Lexend,Arial,sans-serif\" fill=\"${isUsed ? '#888' : '#222'}\" transform=\"rotate(${angleText},${tx},${ty})\">${palabrasRuleta[i].texto}</text>`;
     }
     main.innerHTML = `
+      ${salirBtnHtml}
       <div class=\"ruleta-container\" style=\"display:flex;flex-direction:column;align-items:center;gap:2rem;\">
         <div style=\"width:340px;height:340px;position:relative;\">
           <svg id=\"ruleta-svg\" width=\"320\" height=\"320\" viewBox=\"0 0 300 300\" style=\"filter:drop-shadow(0 6px 18px #0003);transform:rotate(0deg);transition:transform 3s cubic-bezier(.17,.67,.83,.67);\">
@@ -135,6 +138,13 @@ const Juego3Nivel1 = (() => {
       </div>
       <div id=\"palabra-animada\" style=\"position:absolute;left:0;right:0;top:40px;text-align:center;z-index:10;pointer-events:none;opacity:0;transition:all .7s cubic-bezier(.7,.2,.3,1);font-size:3.2rem;font-weight:700;letter-spacing:2px;color:#234;\"></div>
     `;
+    // Acción del botón salir
+    const btnSalir = document.getElementById('btn-salir-j3');
+    if (btnSalir) {
+      btnSalir.onclick = () => {
+        window.location.href = 'index.html';
+      };
+    }
     const btnGirar = document.getElementById('btn-girar');
     let girado = false;
     btnGirar.onclick = () => {
@@ -277,7 +287,7 @@ const Juego3Nivel1 = (() => {
   }
 
   function mostrarResultados() {
-    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel1&score=' + aciertos;
+    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel-facil&score=' + aciertos;
     // const main = document.getElementById('main-container');
     // main.innerHTML = `
     //   <div class=\"result-card\" style=\"max-width:420px; margin:3rem auto; padding:1.5rem; border-radius:12px; box-shadow:var(--sombra-media); background:var(--color-blanco); text-align:center\">

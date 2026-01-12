@@ -12,7 +12,9 @@ const sWrong = new Audio("../../assets/sonidos/wrong.mp3");
 
 
 const Game1 = (() => {
-
+    // Contadores de aciertos y de intentos
+    let aciertos = 0;
+    let intentos = 0;
     let currentLevel = 'nivel-facil';
     let stories = [];
     let currentStoryIndex = 0;
@@ -22,6 +24,57 @@ const Game1 = (() => {
     const bgAudio = new Audio("../../assets/sonidos/juego1-fondo.mp3");
     bgAudio.loop = true;
     bgAudio.volume = 0.35;
+
+    // Pantalla de instrucciones
+    function showInstrucciones() {
+        // Crear overlay modal igual que en nivel 2
+        const overlay = document.createElement('div');
+        overlay.className = 'instructions-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.background = 'rgba(0,0,0,0.35)';
+        overlay.style.zIndex = '9999';
+        overlay.style.display = 'flex';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+
+        const card = document.createElement('div');
+        card.className = 'instructions-card';
+        card.style.background = '#fff';
+        card.style.padding = '2.5rem 2.5rem 2rem 2.5rem';
+        card.style.borderRadius = '18px';
+        card.style.boxShadow = '0 4px 32px #0002';
+        card.style.fontSize = '1.2rem';
+        card.style.maxWidth = '420px';
+        card.style.textAlign = 'center';
+
+        card.innerHTML = `
+            <h2 style="margin-bottom:1.2rem;">El fragmento perdido</h2>
+            <p style="margin-bottom:2.2rem;">Arrastra la palabra correcta al espacio en blanco para completar la historia.<br><br>
+            Observa la imagen y el contexto para elegir la opción adecuada.<br><br>
+            ¡Pon a prueba tu comprensión y diviértete!</p>
+            <button id="start-btn" class="btn btn-primary" style="font-size:1.1rem;padding:0.7rem 2.2rem;border-radius:1.5rem;">Comenzar</button>
+        `;
+        overlay.appendChild(card);
+        document.body.appendChild(overlay);
+        try {
+            Pet.init();
+            Pet.setIdle();
+            if (Pet.hideDialog) Pet.hideDialog();
+            const pc = document.getElementById('pixel-container'); if (pc) pc.style.zIndex = '10000';
+            const dialog = document.getElementById('pixel-dialog'); if (dialog) dialog.style.display = 'none';
+        } catch (e) { }
+        const startBtn = document.getElementById('start-btn');
+        if (startBtn) startBtn.onclick = () => {
+            overlay.remove();
+            const pc = document.getElementById('pixel-container'); if (pc) pc.style.zIndex = '';
+            const dialog = document.getElementById('pixel-dialog'); if (dialog) dialog.style.display = '';
+            renderStory();
+        };
+    }
 
     // ----------------------------
     // MODEL
@@ -47,6 +100,12 @@ const Game1 = (() => {
     // Nueva versión de renderStory con soporte para una opción draggable
     function renderStory() {
         const storyData = getCurrentStory();
+
+        // Si es la primera historia, reiniciar contadores
+        if (currentStoryIndex === 0) {
+            aciertos = 0;
+            intentos = 0;
+        }
 
         // 1. Colocar título
         const title = document.getElementById("title");
@@ -138,6 +197,15 @@ const Game1 = (() => {
             sDrop.currentTime = 0;
             sDrop.play();
 
+            // Contar intento
+            intentos++;
+            // Guardar intentos en localStorage para resultados.html
+            try {
+                if (currentLevel === 'nivel-facil') {
+                    localStorage.setItem('juego1_nivel-facil_intentos', intentos);
+                }
+            } catch (e) {}
+
             if (opcion.correcto) {
                 // Correcto
                 dropZone.textContent = opcion.texto;
@@ -155,32 +223,29 @@ const Game1 = (() => {
 
                 showFeedback(true);
 
+                // Contar acierto
+                aciertos++;
+
                 setTimeout(() => {
                     if (nextStory()) {
                         renderStory();
                     } else {
-                        // Intentar añadir la finalización y detectar si se otorgó insignia
-                        let badgeParam = '';
+                        // Insignia "lector atento": todos los aciertos al primer intento
+                        let badgeParams = '';
+                        let badgeConditions = {};
+                        if (aciertos === intentos && aciertos === stories.length) {
+                            badgeConditions['lector-atento'] = true;
+                        }
                         try {
-                            const res = addLevelCompletion('juego1', currentLevel);
-                            console.log('addLevelCompletion result:', res);
+                            const res = addLevelCompletion('juego1', currentLevel, badgeConditions);
                             if (res && res.badges && res.badges.length) {
-                                console.log('Badge earned:', res.badges[0]);
-                                badgeParam = `&badge=${encodeURIComponent(res.badges[0])}`;
+                                badgeParams = res.badges.map(b => `badge=${encodeURIComponent(b)}`).join('&');
+                                badgeParams = badgeParams ? ('&' + badgeParams) : '';
                             }
                         } catch (e) {
-                            // fallo al escribir progreso, continuamos intentando comprobar si ya existe la insignia
+                            // fallo al escribir progreso, ignorar
                         }
-
-                        try {
-                            if (!badgeParam && hasBadge('juego1','primer-paso')) badgeParam = '&badge=primer-paso';
-                            console.log('Existing badge check, badgeParam:', badgeParam);
-                        } catch (e) {
-                            console.error('Error checking existing badges:', e);
-                            // ignorar
-                        }
-
-                        window.location.href = `../resultados.html?game=juego1&level=${encodeURIComponent(currentLevel)}` + badgeParam;
+                        window.location.href = `../resultados.html?game=juego1&level=${encodeURIComponent(currentLevel)}&aciertos=${aciertos}&intentos=${intentos}` + badgeParams;
                     }
                 }, 1600);
 
@@ -196,6 +261,7 @@ const Game1 = (() => {
                 sWrong.play();
 
                 showFeedback(false);
+                // No acierto, pero sí cuenta como intento (ya sumado arriba)
             }
         });
 
@@ -250,11 +316,6 @@ const Game1 = (() => {
                     } catch (e) {
                         // ignorar
                     }
-
-                    try {
-                        if (!badgeParam && hasBadge('juego1','primer-paso')) badgeParam = '&badge=primer-paso';
-                    } catch (e) {}
-
                     window.location.href = `../resultados.html?game=juego1&level=${encodeURIComponent(currentLevel)}` + badgeParam;
                 }
             }, 800);
@@ -281,7 +342,7 @@ const Game1 = (() => {
         try { Pet.init(); } catch (e) {}
         initSoundButton();
         //bgAudio.play();
-        renderStory();
+        showInstrucciones();
     }
 
     return { init };

@@ -13,6 +13,8 @@ const Game2 = (() => {
       const j = Math.floor(Math.random() * (i + 1));
       [palabras[i], palabras[j]] = [palabras[j], palabras[i]];
     }
+    // Limitar a 10 palabras
+    palabras = palabras.slice(0, 10);
     current = 0;
     aciertos = 0;
   }
@@ -80,34 +82,53 @@ const Game2 = (() => {
       if (!countdownSound.paused) { countdownSound.pause(); pausedCountdownSound = true; } else { pausedCountdownSound = false; }
       if (!yaSound.paused) { yaSound.pause(); pausedYaSound = true; } else { pausedYaSound = false; }
     };
-    pauseOverlay.onclick = () => {
+    // Crear botones para el overlay de pausa
+    pauseOverlay.innerHTML = `
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+        <div style="font-size: 2.2rem; margin-bottom: 2rem;">En pausa</div>
+        <button id="reanudarBtn" style="font-size: 1.3rem; padding: 0.7rem 2.2rem; margin-bottom: 1.2rem; border-radius: 1.5rem; border: none; background: #4caf50; color: white; cursor: pointer;">Reanudar</button>
+        <button id="volverMenuBtn" style="font-size: 1.1rem; padding: 0.6rem 2rem; border-radius: 1.5rem; border: none; background: #f44336; color: white; cursor: pointer;">Salir del juego</button>
+      </div>
+    `;
+    // Obtener referencias a los botones
+    const reanudarBtn = pauseOverlay.querySelector('#reanudarBtn');
+    const volverMenuBtn = pauseOverlay.querySelector('#volverMenuBtn');
+
+    // Solo el botón Reanudar reanuda el juego
+    reanudarBtn.onclick = (e) => {
+      e.stopPropagation();
       if (paused) {
         paused = false;
         pauseOverlay.style.display = 'none';
         // Reanudar audios activos
         if (window._activeAudio) {
-          // Si estaba marcado para reanudar, limpiar flag
           if (window._activeAudio._shouldResume) {
             window._activeAudio._shouldResume = false;
           }
-          // Si está pausado, intentar reproducir
           if (window._activeAudio.paused) {
             setTimeout(() => {
               try { window._activeAudio.play().catch(() => { }); } catch (e) { }
             }, 0);
           }
         }
-        // Reanudar sonidos de cuenta regresiva si estaban pausados
         if (pausedCountdownSound && countdownSound.paused) {
           setTimeout(() => { try { countdownSound.play().catch(()=>{}); } catch(e){} }, 0);
         }
         if (pausedYaSound && yaSound.paused) {
           setTimeout(() => { try { yaSound.play().catch(()=>{}); } catch(e){} }, 0);
         }
-        // Reanudar callbacks
         resumeCallbacks.forEach(fn => fn());
         resumeCallbacks = [];
       }
+    };
+    // Botón para volver al menú principal
+    volverMenuBtn.onclick = (e) => {
+      e.stopPropagation();
+      window.location.href = 'index.html';
+    };
+    // Evitar que el overlay reanude el juego al hacer click fuera de los botones
+    pauseOverlay.onclick = (e) => {
+      e.stopPropagation();
     };
     // Cuenta regresiva animada con sonido
     const countdown = document.getElementById('countdown');
@@ -268,10 +289,12 @@ const Game2 = (() => {
                 let transitionTimeout;
                 function transitionNext() {
                   if (paused) { transitionTimeout = setTimeout(transitionNext, 120); return; }
-                  try { Pet.speak('¡No te preocupes! Vamos a intentarlo con la siguiente palabra.'); } catch (e) { }
-                  setTimeout(() => { if (paused) { transitionTimeout = setTimeout(transitionNext, 120); return; } nextPalabra(); }, 2000);
+                  // Mostrar feedback con la palabra correcta
+                  const palabraCorrecta = palabraObj.opciones.find(o => o.correcto).texto;
+                  showJ2Feedback(false, palabraCorrecta);
+                  setTimeout(() => { if (paused) { transitionTimeout = setTimeout(transitionNext, 120); return; } nextPalabra(); }, 4200);
                 }
-                setTimeout(transitionNext, 700);
+                setTimeout(transitionNext, 2700); // espera antes de mostrar feedback
               }
             }
           }
@@ -299,6 +322,8 @@ const Game2 = (() => {
         dropBox.classList.remove('drop-hover');
         const idx = parseInt(e.dataTransfer.getData('text/plain'));
         const op = palabraObj.opciones[idx];
+        const palabraCorrecta = palabraObj.opciones.find(o => o.correcto).texto;
+
         if (!op) return;
         // Desactivar drag de todas las palabras al responder
         const allWords = fallArea.querySelectorAll('.fall-word');
@@ -308,12 +333,12 @@ const Game2 = (() => {
           correctSound.currentTime = 0; correctSound.play();
           dropBox.textContent = op.texto;
           dropBox.classList.add('drop-correct');
-          showJ2Feedback(true);
-          setTimeout(() => nextPalabra(), 1400);
+          showJ2Feedback(true, palabraCorrecta);
+          setTimeout(() => nextPalabra(), 3400);
         } else {
           wrongSound.currentTime = 0; wrongSound.play();
           dropBox.classList.add('drop-wrong');
-          showJ2Feedback(false);
+          showJ2Feedback(false, palabraCorrecta);
           // animación de desarmar
           const fallWords = document.querySelectorAll('.fall-word');
           fallWords.forEach(fw => {
@@ -323,24 +348,24 @@ const Game2 = (() => {
               fw.style.transform = 'scale(0.7) rotate(-18deg)';
             }
           });
-          setTimeout(() => nextPalabra(), 2200);
+          setTimeout(() => nextPalabra(), 4200);
         }
       };
     }
   }
-  function showJ2Feedback(correcto) {
+  function showJ2Feedback(correcto, palabraCorrecta) {
     const fb = document.getElementById('j2-feedback');
     if (correcto) {
       fb.textContent = '¡Este sonido está en su lugar!';
       fb.className = 'j2-feedback correcto';
       try { Pet.setHappy(); Pet.speak('¡Este sonido está en su lugar!'); } catch (e) { }
       aciertos++;
-      setTimeout(() => { fb.textContent = ''; fb.className = 'j2-feedback'; try { Pet.setIdle(); } catch (e) { } }, 1200);
-    } else {
-      fb.textContent = 'Parece que no es la palabra que escuchaste, vamos con la siguiente.';
+      setTimeout(() => { fb.textContent = ''; fb.className = 'j2-feedback'; try { Pet.setIdle(); } catch (e) { } }, 3200);
+    } else { 
+      fb.textContent = 'Parece que no es la palabra que escuchaste, la palabra era ' + palabraCorrecta.toUpperCase() + '.';
       fb.className = 'j2-feedback incorrecto';
-      try { Pet.setSad(); Pet.speak('Parece que no es la palabra que escuchaste, vamos con la siguiente.'); } catch (e) { }
-      setTimeout(() => { fb.textContent = ''; fb.className = 'j2-feedback'; try { Pet.setIdle(); } catch (e) { } }, 2000);
+      try { Pet.setSad(); Pet.speak('La palabra correcta era ' + palabraCorrecta); } catch (e) { }
+      setTimeout(() => { fb.textContent = ''; fb.className = 'j2-feedback'; try { Pet.setIdle(); } catch (e) { } }, 4000);
     }
   }
   function nextPalabra() {
@@ -387,7 +412,7 @@ const Game2 = (() => {
         p = p ? JSON.parse(p) : { perGame: {}, total: 0 };
         total = p.total || 0;
       } catch(e){}
-      window.location.href = '../resultados.html?game=juego2&level=nivel1&score=' + aciertos + '&total=' + total;
+      window.location.href = '../resultados.html?game=juego2&level=nivel-facil&score=' + aciertos + '&total=' + total;
     };
   }
 

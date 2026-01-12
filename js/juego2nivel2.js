@@ -153,6 +153,14 @@ const Game2Nivel2 = (() => {
             faseActual = 'cuentaRegresiva';
         pauseBtn.onclick = () => {
             paused = true;
+            // Insertar botones en el overlay de pausa
+            pauseOverlay.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+                    <div style="font-size: 2.2rem; margin-bottom: 2rem;">En pausa</div>
+                    <button id="reanudarBtn" style="font-size: 1.3rem; padding: 0.7rem 2.2rem; margin-bottom: 1.2rem; border-radius: 1.5rem; border: none; background: #4caf50; color: white; cursor: pointer;">Reanudar</button>
+                    <button id="volverMenuBtn" style="font-size: 1.1rem; padding: 0.6rem 2rem; border-radius: 1.5rem; border: none; background: #f44336; color: white; cursor: pointer;">Salir del juego</button>
+                </div>
+            `;
             pauseOverlay.style.display = 'flex';
             // Pausar audios activos según la fase
             if (faseActual === 'cuentaRegresiva') {
@@ -165,23 +173,39 @@ const Game2Nivel2 = (() => {
             // NO limpiar timeouts de cuenta regresiva ni de caída de palabras para permitir reanudar correctamente
             // Limpiar timeouts de reproducción de palabras
             palabraSecuenciaTimeouts.forEach(t => clearTimeout(t));
+            // Botones funcionales
+            const reanudarBtn = pauseOverlay.querySelector('#reanudarBtn');
+            const volverMenuBtn = pauseOverlay.querySelector('#volverMenuBtn');
+            reanudarBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (paused) {
+                    paused = false;
+                    pauseOverlay.style.display = 'none';
+                    // Reanudar audios activos según la fase
+                    if (faseActual === 'cuentaRegresiva') {
+                        if (activeCountdownAudio && activeCountdownAudio.paused) activeCountdownAudio.play().catch(()=>{});
+                        if (activeYaAudio && activeYaAudio.paused) activeYaAudio.play().catch(()=>{});
+                    }
+                    if (faseActual === 'palabras') {
+                        if (activeWordAudio && activeWordAudio.paused) activeWordAudio.play().catch(()=>{});
+                    }
+                    resumeCallbacks.forEach(fn => fn());
+                    resumeCallbacks = [];
+                }
+            };
+            volverMenuBtn.onclick = (e) => {
+                e.stopPropagation();
+                window.location.href = 'index.html';
+            };
+            // Evitar que el overlay reanude el juego al hacer click fuera de los botones
+            pauseOverlay.onclick = (e) => {
+                e.stopPropagation();
+            };
         };
         pauseOverlay.onclick = () => {
-            if (paused) {
-                paused = false;
-                pauseOverlay.style.display = 'none';
-                // Reanudar audios activos según la fase
-                if (faseActual === 'cuentaRegresiva') {
-                    if (activeCountdownAudio && activeCountdownAudio.paused) activeCountdownAudio.play().catch(()=>{});
-                    if (activeYaAudio && activeYaAudio.paused) activeYaAudio.play().catch(()=>{});
-                }
-                if (faseActual === 'palabras') {
-                    if (activeWordAudio && activeWordAudio.paused) activeWordAudio.play().catch(()=>{});
-                }
-                // Solo reanudar callbacks pendientes, NO volver a llamar a startFallingWords ni reproducirPalabrasSecuencia
-                resumeCallbacks.forEach(fn => fn());
-                resumeCallbacks = [];
-            }
+            // No hacer nada, solo evitar propagación
+            // El reanudar solo ocurre con el botón
+            return false;
         };
         setTimeout(() => { try { Pet.speak('Escucha con atención.'); } catch (e) { } }, 400);
         // Cuenta regresiva antes de reproducir audio

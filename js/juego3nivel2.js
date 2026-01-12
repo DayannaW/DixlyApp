@@ -115,7 +115,9 @@ const Juego3Nivel2 = (() => {
       const angleText = ((startAngle+endAngle)/2) + 90;
       svgTexts += `<text x="${tx}" y="${ty}" text-anchor="middle" alignment-baseline="middle" font-size="32" font-family="Arial,sans-serif" fill="${isUsed ? '#888' : '#222'}" transform="rotate(${angleText},${tx},${ty})">${palabrasRuleta[i].emoji || '❓'}</text>`;
     }
+    let salirBtnHtml = `<button id=\"btn-salir-j3\" style=\"position:absolute;top:18px;right:18px;z-index:2000;font-size:1.1rem;padding:0.5rem 1.4rem;border-radius:1.5rem;border:none;background:#f44336;color:white;cursor:pointer;\">Salir<\/button>`;
     main.innerHTML = `
+      ${salirBtnHtml}
       <div class=\"ruleta-container\" style=\"display:flex;flex-direction:column;align-items:center;gap:2rem;\">
         <div style=\"width:340px;height:340px;position:relative;\">
           <svg id=\"ruleta-svg\" width=\"320\" height=\"320\" viewBox=\"0 0 300 300\" style=\"filter:drop-shadow(0 6px 18px #0003);transform:rotate(0deg);transition:transform 3s cubic-bezier(.17,.67,.83,.67);\">
@@ -135,6 +137,13 @@ const Juego3Nivel2 = (() => {
       </div>
       <div id=\"palabra-animada\" style=\"position:absolute;left:0;right:0;top:40px;text-align:center;z-index:10;pointer-events:none;opacity:0;transition:all .7s cubic-bezier(.7,.2,.3,1);font-size:3.2rem;font-weight:700;letter-spacing:2px;color:#234;\"></div>
     `;
+    // Acción del botón salir
+    const btnSalir = document.getElementById('btn-salir-j3');
+    if (btnSalir) {
+      btnSalir.onclick = () => {
+        window.location.href = 'index.html';
+      };
+    }
     const btnGirar = document.getElementById('btn-girar');
     let girado = false;
     btnGirar.onclick = () => {
@@ -281,7 +290,7 @@ const Juego3Nivel2 = (() => {
   }
 
   function mostrarResultados() {
-    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel2&score=' + aciertos;
+    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel-intermedio&score=' + aciertos;
   }
 
   async function init() {

@@ -108,7 +108,7 @@ const Game1_2 = (() => {
       <button id="start-btn" class="btn btn-primary">
         Entendido
       </button>
-`;
+    `;
 
 
     overlay.appendChild(card);

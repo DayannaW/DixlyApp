@@ -17,32 +17,36 @@
 <body class="body--juegos">
   <main>
     <section class="result-card">
-      <h1>Resultados</h1>
-      <p id="summary">Cargando...</p>
 
-      <!-- Barra de progreso centrada arriba -->
-      <div id="progress-center" style="text-align:center; margin:12px 0 18px 0;">
-        <div style="max-width:560px; margin:0 auto;">
-          <div id="progress-bar" style="height:18px; background:#eef3ff; border-radius:10px; overflow:hidden; position:relative;">
-            <div id="progress-fill" style="height:100%; width:0%; background:linear-gradient(90deg,#3b82f6,#6c8cff); transition:width 500ms ease;"></div>
-          </div>
-          <div style="margin-top:8px; font-size:0.95rem; color:var(--color-primario);"> <span id="progress-percent">0%</span> — <small id="total-score-text">0 pts</small></div>
+      <h1>Misión completada</h1>
+      <p id="summary">Esto fue lo que lograste</p>
+
+
+
+      <div id="score-section" style="margin: 2.2rem 0 1.2rem 0; display: flex; flex-wrap: wrap; gap: 1.2rem; justify-content: center;">
+        <div class="score-box" style="min-width: 160px; max-width: 220px;">
+          <strong>Aciertos</strong>
+          <div id="aciertos-score" style="font-size:2.2rem; font-weight:700; margin:0.5rem 0;">0</div>
         </div>
-      </div>
-
-      <div class="scores">
-        <div class="score-box">
+        <div class="score-box" id="attempts-row-box" style="min-width: 160px; max-width: 220px; display:none;">
+          <div id="attempts-row" style="font-size:1.1rem; color:#555; margin-bottom:0.5rem;"></div>
+        </div>
+        <div class="score-box" style="min-width: 160px; max-width: 220px;">
           <strong>Puntos en este juego</strong>
-          <div id="game-score">0</div>
+          <div id="game-score" style="font-size:2.2rem; font-weight:700; margin:0.5rem 0;">0</div>
         </div>
-
-        <div class="score-box">
-          <strong>Puntos del nivel</strong>
-          <div id="level-points">0</div>
+        <div class="score-box" style="min-width: 160px; max-width: 220px; background:#eaf6e7;">
+          <strong>Puntos acumulados</strong>
+          <div id="total-game-score" style="font-size:1.5rem; font-weight:600; margin:0.3rem 0;">0</div>
         </div>
+        <div style="flex-basis:100%;height:0;"></div>
       </div>
 
-      <div class="actions">
+      <div class="actions" id="badges-action-row" style="display:none;">
+        <button id="btn-badges" class="btn btn-warning">Recoger insignias</button>
+      </div>
+
+      <div class="actions" style="margin-top:0.5rem;">
         <button id="btn-repeat" class="btn btn-primary">Repetir nivel</button>
         <button id="btn-next" class="btn btn-success">Siguiente nivel</button>
         <button id="btn-menu" class="btn btn-secondary">Volver al menú</button>
@@ -53,15 +57,23 @@
 
   <script type="module">
     import { getTotalScore, getGameScore, getLevelPoints, hasCompletedLevel, getBadge } from '../js/util.js';
+    let BADGES_DICT = {};
+    async function loadBadgesDict() {
+      try {
+        const resp = await fetch('../js/data/badges.json');
+        BADGES_DICT = await resp.json();
+      } catch (e) { BADGES_DICT = {}; }
+    }
 
     const params = new URLSearchParams(location.search);
     const game = params.get('game');
     const level = params.get('level');
 
-    const totalScoreEl = document.getElementById('total-score');
+    const aciertosScoreEl = document.getElementById('aciertos-score');
     const gameScoreEl = document.getElementById('game-score');
-    const levelPointsEl = document.getElementById('level-points');
     const summary = document.getElementById('summary');
+    const attemptsRow = document.getElementById('attempts-row');
+    const totalGameScoreEl = document.getElementById('total-game-score');
 
     const btnRepeat = document.getElementById('btn-repeat');
     const btnNext = document.getElementById('btn-next');
@@ -108,44 +120,121 @@
 
     // populate scores and progress bar
     const total = getTotalScore();
-    const progressFill = document.getElementById('progress-fill');
-    const progressPercent = document.getElementById('progress-percent');
-    const totalScoreText = document.getElementById('total-score-text');
+    //const progressFill = document.getElementById('progress-fill');
+    //const progressPercent = document.getElementById('progress-percent');
+    const totalScoreText = document.getElementById('total-game-score');
 
     // assume 3 games * 60 points (10+20+30) as maximum
     const MAX_GAMES = 3;
     const maxPoints = MAX_GAMES * (10 + 20 + 30); // 180
     const pct = Math.min(100, Math.round((total / maxPoints) * 100));
-    progressFill.style.width = pct + '%';
-    progressPercent.textContent = pct + '%';
+    //progressFill.style.width = pct + '%';
+    //  progressPercent.textContent = pct + '%';
     totalScoreText.textContent = total + ' pts';
 
     // si hay insignia en query, mostrar modal
-    const badgeParam = params.get('badge');
-    if (badgeParam && game) {
-      const badge = getBadge(game, badgeParam);
-      if (badge) {
-        badgeTitle.textContent = badge.name || 'Insignia';
-        badgeDesc.textContent = badge.desc || 'Has recibido una insignia';
-        badgeModal.style.visibility = 'visible';
-        const closeBtn = document.getElementById('badge-close');
-        closeBtn.addEventListener('click', () => { badgeModal.style.visibility = 'hidden'; });
-      }
+    // Mostrar todas las insignias ganadas (pueden venir varios parámetros 'badge')
+    const badgeParams = [];
+    for (const [key, value] of params.entries()) {
+      if (key === 'badge') badgeParams.push(value);
+    }
+    // Cargar el diccionario de insignias y luego mostrar el botón/modal si corresponde
+    await loadBadgesDict();
+    const badgesActionRow = document.getElementById('badges-action-row');
+    const btnBadges = document.getElementById('btn-badges');
+    if (badgeParams.length) {
+      badgesActionRow.style.display = 'flex';
+      btnBadges.addEventListener('click', () => {
+        let badgeHtml = '';
+        badgeParams.forEach(badgeId => {
+          const meta = BADGES_DICT[badgeId];
+          if (meta) {
+            badgeHtml += `<div style='margin-bottom:1.2em;'><strong>${meta.name}</strong><br><span>${meta.desc}</span></div>`;
+          }
+        });
+        if (badgeHtml) {
+          badgeTitle.textContent = '¡Insignias ganadas!';
+          badgeDesc.innerHTML = badgeHtml;
+          badgeModal.style.visibility = 'visible';
+          const closeBtn = document.getElementById('badge-close');
+          closeBtn.addEventListener('click', () => { badgeModal.style.visibility = 'hidden'; });
+        }
+      });
+    } else {
+      badgesActionRow.style.display = 'none';
     }
 
+
+
+
+    // Puntos obtenidos en este juego
     const gScore = game ? getGameScore(game) : 0;
     gameScoreEl.textContent = gScore;
 
-    const lvlPts = level ? getLevelPoints(level) : 0;
-    levelPointsEl.textContent = lvlPts;
+    // Aciertos: para juego1 nivel-facil, buscar en localStorage; para otros juegos, puedes adaptar la lógica
 
-    if (game && level) {
-      summary.textContent = `Has completado el nivel ${level.replace('nivel-','')} de ${game}.`;
+    // Leer aciertos e intentos de la URL si existen
+    let aciertos = 0;
+    let intentos = 0;
+    if (game === 'juego1' && level === 'nivel-facil') {
+      try {
+        aciertos = parseInt(params.get('aciertos') || '0', 10);
+        intentos = parseInt(params.get('intentos') || '0', 10);
+      } catch (e) {}
+    }
+    if (aciertosScoreEl) aciertosScoreEl.textContent = aciertos;
+    // Mostrar intentos si corresponde
+    const attemptsRowBox = document.getElementById('attempts-row-box');
+    if (game === 'juego1' && level === 'nivel-facil') {
+      attemptsRowBox.style.display = 'block';
+      // Priorizar el valor de la URL, si no existe usar localStorage
+      let shownAttempts = intentos;
+      if (!shownAttempts) {
+        try {
+          const key = `juego1_nivel-facil_intentos`;
+          shownAttempts = parseInt(localStorage.getItem(key) || '0', 10);
+        } catch (e) {}
+      }
+      attemptsRow.textContent = `Intentos realizados: ${shownAttempts}`;
     } else {
-      summary.textContent = 'Progreso guardado.';
+      attemptsRowBox.style.display = 'none';
     }
 
-    // buttons
+    // Puntos acumulados en todo el juego
+    let totalGameScore = 0;
+    try {
+      if (game) {
+        // Sumar todos los niveles de este juego
+        const levels = ['nivel-facil','nivel-intermedio','nivel-dificil'];
+        totalGameScore = levels.reduce((acc, lvl) => acc + (getLevelPoints ? getLevelPoints(lvl, game) : 0), 0);
+      }
+    } catch (e) {}
+    if (totalGameScoreEl) totalGameScoreEl.textContent = totalGameScore;
+
+    // Mostrar intentos solo para juego1 nivel-facil
+    if (game === 'juego1' && level === 'nivel-facil') {
+      console.log('Mostrando intentos para juego1 nivel-facil');
+      console.log(game +" nivel "+ level);
+      // Buscar intentos en localStorage o similar (ajusta según tu lógica)
+      let attempts = 0;
+      try {
+        const key = `juego1_nivel-facil_intentos`;
+        attempts = parseInt(localStorage.getItem(key) || '0', 10);
+      } catch (e) {}
+      attemptsRow.style.display = 'block';
+      attemptsRow.textContent = `Intentos realizados: ${attempts}`;
+    } else {
+      attemptsRow.style.display = 'none';
+    }
+
+
+    // Botón recoger insignias
+    //const btnBadges = document.getElementById('btn-badges');
+    //if (btnBadges) btnBadges.addEventListener('click', () => {
+      // Mostrar modal de insignias si hay, o redirigir a sección de insignias
+    //  badgeModal.style.visibility = 'visible';
+    //});
+
     btnMenu.addEventListener('click', () => { location.href = '../index.php'; });
 
     btnRepeat.addEventListener('click', () => {
