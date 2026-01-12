@@ -19,6 +19,8 @@ const Game1 = (() => {
     let stories = [];
     let currentStoryIndex = 0;
     let feedbackTimeout = null;
+    // Tracking de intentos por historia para insignias especiales
+    let storyAttempts = [];
 
     // --- Sonido de fondo ---
     const bgAudio = new Audio("../../assets/sonidos/juego1-fondo.mp3");
@@ -105,6 +107,7 @@ const Game1 = (() => {
         if (currentStoryIndex === 0) {
             aciertos = 0;
             intentos = 0;
+            storyAttempts = [];
         }
 
         // 1. Colocar título
@@ -206,6 +209,13 @@ const Game1 = (() => {
                 }
             } catch (e) {}
 
+            // Tracking de intentos por historia
+            if (!storyAttempts[currentStoryIndex]) {
+                storyAttempts[currentStoryIndex] = 1;
+            } else {
+                storyAttempts[currentStoryIndex]++;
+            }
+
             if (opcion.correcto) {
                 // Correcto
                 dropZone.textContent = opcion.texto;
@@ -230,11 +240,16 @@ const Game1 = (() => {
                     if (nextStory()) {
                         renderStory();
                     } else {
-                        // Insignia "lector atento": todos los aciertos al primer intento
+                        // Insignias especiales
                         let badgeParams = '';
                         let badgeConditions = {};
+                        // Lector atento: todos los aciertos al primer intento
                         if (aciertos === intentos && aciertos === stories.length) {
                             badgeConditions['lector-atento'] = true;
+                        }
+                        // Cazador de pistas: al menos una historia con exactamente 2 intentos (1 error y luego acierto)
+                        if (storyAttempts.some(attempts => attempts === 2)) {
+                            badgeConditions['cazador-pistas'] = true;
                         }
                         try {
                             const res = addLevelCompletion('juego1', currentLevel, badgeConditions);

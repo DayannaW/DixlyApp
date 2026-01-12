@@ -144,24 +144,23 @@
     const btnBadges = document.getElementById('btn-badges');
     if (badgeParams.length) {
       badgesActionRow.style.display = 'flex';
+      // Ocultar los otros botones si hay insignias
+      btnRepeat.style.display = 'none';
+      btnNext.style.display = 'none';
+      btnMenu.style.display = 'none';
       btnBadges.addEventListener('click', () => {
-        let badgeHtml = '';
+        // Redirigir a la pantalla de insignias
+        let url = '../vistas/insignias.html';
         badgeParams.forEach(badgeId => {
-          const meta = BADGES_DICT[badgeId];
-          if (meta) {
-            badgeHtml += `<div style='margin-bottom:1.2em;'><strong>${meta.name}</strong><br><span>${meta.desc}</span></div>`;
-          }
+          url += (url.includes('?') ? '&' : '?') + 'badge=' + encodeURIComponent(badgeId);
         });
-        if (badgeHtml) {
-          badgeTitle.textContent = '¡Insignias ganadas!';
-          badgeDesc.innerHTML = badgeHtml;
-          badgeModal.style.visibility = 'visible';
-          const closeBtn = document.getElementById('badge-close');
-          closeBtn.addEventListener('click', () => { badgeModal.style.visibility = 'hidden'; });
-        }
+        window.location.href = url;
       });
     } else {
       badgesActionRow.style.display = 'none';
+      btnRepeat.style.display = '';
+      btnNext.style.display = '';
+      btnMenu.style.display = '';
     }
 
 

@@ -71,6 +71,10 @@ export function addLevelCompletion(gameId, level) {
             p.perGame[gameId].badges['lector-atento'] = { earnedAt: Date.now(), name: 'Lector atento', desc: 'Completaste todas las rondas correctamente al primer intento' };
             badgesAdded.push('lector-atento');
         }
+        if (badgeConditions['cazador-pistas'] && !p.perGame[gameId].badges['cazador-pistas']) {
+            p.perGame[gameId].badges['cazador-pistas'] = { earnedAt: Date.now(), name: 'Cazador de pistas', desc: 'Elegiste la opción correcta después de un solo error en una historia' };
+            badgesAdded.push('cazador-pistas');
+        }
     }
     _write(p);
     return { added: true, badges: badgesAdded };

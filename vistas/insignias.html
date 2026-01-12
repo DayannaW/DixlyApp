@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Insignias obtenidas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/ui.css">
+    <style>
+        .insignia-card.mini {
+            position: static;
+            left: unset;
+            transform: scale(0.45);
+            opacity: 1;
+            min-width: 90px;
+            max-width: 120px;
+            min-height: 90px;
+            max-height: 140px;
+            padding: 0.5rem 0.5rem 0.3rem 0.5rem;
+            margin-bottom: 0;
+            margin-top: 0;
+            margin-left: 0;
+            margin-right: 0;
+            box-shadow: 0 2px 12px #0002;
+            transition: all 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+            display: block !important;
+        }
+        .insignia-card.mini .insignia-title {
+            font-size: 0.85rem;
+        }
+        .insignia-card.mini .insignia-desc {
+            font-size: 0.75rem;
+        }
+
+        .insignias-fila {
+            width: 100vw;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            gap: 1.2rem;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: -20px;
+            margin-bottom: 10px;
+            min-height: 120px;
+            pointer-events: none;
+        }
+
+        body {
+            background: #f7f7fa;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cofre-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .cofre {
+            width: 100%;
+            height: 100%;
+            background: url('../assets/imagenes/cofre.png') no-repeat center/contain;
+            animation: shakeCofre 1.2s infinite ease-in-out;
+            cursor: pointer;
+        }
+
+        @keyframes shakeCofre {
+            0% {
+                transform: translateY(0) rotate(-2deg);
+            }
+
+            50% {
+                transform: translateY(-10px) rotate(2deg);
+            }
+
+            100% {
+                transform: translateY(0) rotate(-2deg);
+            }
+        }
+
+        .insignia-card {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, 40px) scale(0.7);
+            opacity: 0;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 32px #0002;
+            padding: 1.5rem 2rem 1.2rem 2rem;
+            min-width: 260px;
+            text-align: center;
+            z-index: 10;
+            transition: all 0.7s cubic-bezier(.68, -0.55, .27, 1.55);
+        }
+
+        .insignia-card.visible {
+            opacity: 1;
+            transform: translate(-50%, -180px) scale(1);
+        }
+
+        .insignia-img {
+            width: 72px;
+            height: 72px;
+            margin-bottom: 1rem;
+        }
+
+        .insignia-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .insignia-desc {
+            font-size: 1rem;
+            color: #444;
+            margin-bottom: 1.2rem;
+        }
+
+        .btn-recoger {
+            background: #ffd700;
+            color: #222;
+            border: none;
+            border-radius: 1.2rem;
+            padding: 0.7rem 2.2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #0001;
+            transition: background 0.2s;
+        }
+
+        .btn-recoger:hover {
+            background: #ffe066;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cofre-container">
+        <div class="cofre" id="cofre"></div>
+        <div class="insignia-card" id="insignia-card" style="display:none;"></div>
+    </div>
+    <div class="insignias-fila" id="insignias-fila"></div>
+
+    <div class="actions" id="insignias-actions"
+        style="display:none; margin-top:2.5rem; justify-content:center; gap:1rem;">
+        <button id="btn-repeat" class="btn btn-primary">Repetir nivel</button>
+        <button id="btn-next" class="btn btn-success">Siguiente nivel</button>
+        <button id="btn-menu" class="btn btn-secondary">Volver al menú</button>
+    </div>
+    <script src="../js/insignias.js"></script>
+</body>
+
+</html>

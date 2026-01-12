@@ -6,5 +6,9 @@
   "lector-atento": {
     "name": "Lector atento",
     "desc": "Completaste todas las rondas correctamente al primer intento"
+  },
+  "cazador-pistas": {
+    "name": "Cazador de pistas",
+    "desc": "Elegiste la opción correcta después de solo un error en una historia"
   }
 }
