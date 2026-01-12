@@ -149,8 +149,10 @@
       btnNext.style.display = 'none';
       btnMenu.style.display = 'none';
       btnBadges.addEventListener('click', () => {
-        // Redirigir a la pantalla de insignias
+        // Redirigir a la pantalla de insignias, agregando game y level
         let url = '../vistas/insignias.html';
+        if (game) url += (url.includes('?') ? '&' : '?') + 'game=' + encodeURIComponent(game);
+        if (level) url += (url.includes('?') ? '&' : '?') + 'level=' + encodeURIComponent(level);
         badgeParams.forEach(badgeId => {
           url += (url.includes('?') ? '&' : '?') + 'badge=' + encodeURIComponent(badgeId);
         });

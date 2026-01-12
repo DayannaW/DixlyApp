@@ -10,5 +10,9 @@
   "cazador-pistas": {
     "name": "Cazador de pistas",
     "desc": "Elegiste la opción correcta después de solo un error en una historia"
+  },
+  "lector-paciente": {
+    "name": "Lector paciente",
+    "desc": "Esperaste al menos 10 segundos antes de responder en una historia."
   }
 }

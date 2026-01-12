@@ -60,6 +60,13 @@ function showBadge(index) {
                 <div class="insignia-title">${badge.title}</div>
                 <div class="insignia-desc">${badge.desc}</div>
             `;
+            // Calcular desplazamiento horizontal para animación inclinada
+                const total = badges.length;
+                const center = (total - 1) / 2;
+                // Usar un desplazamiento mayor para que el efecto sea más notorio
+                let offset = (current - center) * 180; // separa las tarjetas al inicio
+            miniCard.style.setProperty('--card-x-inicial', offset + 'px');
+            miniCard.style.setProperty('--card-x-final', '0px');
             fila.appendChild(miniCard);
             miniInsignias.push(miniCard);
             // Animación de aparición
@@ -83,7 +90,9 @@ function showBadge(index) {
                                 el.classList.add('entra-cofre');
                             }, i * 200);
                         });
+                        // Después de la animación, ocultar la fila
                         setTimeout(() => {
+                            fila.style.minHeight = '0px';
                             fila.innerHTML = '';
                             // Mostrar mensaje final y botones
                             card.innerHTML = '<div style="font-size:1.2rem;padding:2rem;">¡Has recogido todas tus insignias!</div>';
@@ -102,6 +111,6 @@ cofre.onclick = async function() {
     if (badges.length === 0) {
         const badgeIds = getBadgesFromURL();
         badges = await loadBadgeInfo(badgeIds);
-        showBadge(0);
+        setTimeout(() => showBadge(0), 500); // Retardo de 0.5 segundos
     }
 };

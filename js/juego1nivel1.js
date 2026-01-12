@@ -21,6 +21,8 @@ const Game1 = (() => {
     let feedbackTimeout = null;
     // Tracking de intentos por historia para insignias especiales
     let storyAttempts = [];
+    // Tracking de tiempo de espera para insignia "Lector paciente"
+    let storyStartTimes = [];
 
     // --- Sonido de fondo ---
     const bgAudio = new Audio("../../assets/sonidos/juego1-fondo.mp3");
@@ -108,7 +110,11 @@ const Game1 = (() => {
             aciertos = 0;
             intentos = 0;
             storyAttempts = [];
+            storyStartTimes = [];
         }
+        // Guardar el tiempo de inicio de la historia actual
+        storyStartTimes[currentStoryIndex] = Date.now();
+        console.log('Historia iniciada en ms:', storyStartTimes[currentStoryIndex]);
 
         // 1. Colocar título
         const title = document.getElementById("title");
@@ -215,6 +221,15 @@ const Game1 = (() => {
             } else {
                 storyAttempts[currentStoryIndex]++;
             }
+            // Tracking de tiempo de espera para insignia "Lector paciente"
+            let waitedMs = Date.now() - (storyStartTimes[currentStoryIndex] || Date.now());
+            console.log('Tiempo esperado en ms:', waitedMs);
+            if (!window.__lectorPacienteFlags) window.__lectorPacienteFlags = [];
+            if (waitedMs > 10000) {
+                window.__lectorPacienteFlags[currentStoryIndex] = true;
+            } else {
+                window.__lectorPacienteFlags[currentStoryIndex] = false;
+            }
 
             if (opcion.correcto) {
                 // Correcto
@@ -250,6 +265,10 @@ const Game1 = (() => {
                         // Cazador de pistas: al menos una historia con exactamente 2 intentos (1 error y luego acierto)
                         if (storyAttempts.some(attempts => attempts === 2)) {
                             badgeConditions['cazador-pistas'] = true;
+                        }
+                        // Lector paciente: al menos una historia con espera > 10s antes de responder
+                        if (window.__lectorPacienteFlags && window.__lectorPacienteFlags.some(v => v)) {
+                            badgeConditions['lector-paciente'] = true;
                         }
                         try {
                             const res = addLevelCompletion('juego1', currentLevel, badgeConditions);
