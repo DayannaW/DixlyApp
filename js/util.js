@@ -64,6 +64,23 @@ export function addLevelCompletion(gameId, level) {
         p.perGame[gameId].badges['primer-paso'] = { earnedAt: Date.now(), name: 'Primer paso', desc: 'Completaste el primer nivel' };
         badgesAdded.push('primer-paso');
     }
+    // Si es el nivel intermedio, otorgar insignia "arquitecto-historia"
+    if (level === 'nivel-intermedio' && !p.perGame[gameId].badges['arquitecto-historia']) {
+        p.perGame[gameId].badges['arquitecto-historia'] = { earnedAt: Date.now(), name: 'Arquitecto de la historia', desc: 'Completaste el nivel intermedio ordenando todas las historias correctamente.' };
+        badgesAdded.push('arquitecto-historia');
+    }
+    // Si es el nivel intermedio y badgeConditions['reorganizador-experto'], otorgar insignia
+    if (level === 'nivel-intermedio' && arguments.length > 2 && typeof arguments[2] === 'object') {
+        const badgeConditions = arguments[2];
+        if (badgeConditions['reorganizador-experto'] && !p.perGame[gameId].badges['reorganizador-experto']) {
+            p.perGame[gameId].badges['reorganizador-experto'] = { earnedAt: Date.now(), name: 'Reorganizador experto', desc: 'Lograste el orden correcto después de al menos un intento fallido.' };
+            badgesAdded.push('reorganizador-experto');
+        }
+        if (badgeConditions['oido-narrativo'] && !p.perGame[gameId].badges['oido-narrativo']) {
+            p.perGame[gameId].badges['oido-narrativo'] = { earnedAt: Date.now(), name: 'Oído narrativo', desc: 'En una ronda, solo necesitaste reproducir el audio una vez para ordenar correctamente.' };
+            badgesAdded.push('oido-narrativo');
+        }
+    }
     // Lógica para más insignias: si se pasa un objeto extra con condiciones
     if (arguments.length > 2 && typeof arguments[2] === 'object') {
         const badgeConditions = arguments[2];
@@ -74,6 +91,10 @@ export function addLevelCompletion(gameId, level) {
         if (badgeConditions['cazador-pistas'] && !p.perGame[gameId].badges['cazador-pistas']) {
             p.perGame[gameId].badges['cazador-pistas'] = { earnedAt: Date.now(), name: 'Cazador de pistas', desc: 'Elegiste la opción correcta después de un solo error en una historia' };
             badgesAdded.push('cazador-pistas');
+        }
+        if (badgeConditions['lector-paciente'] && !p.perGame[gameId].badges['lector-paciente']) {
+            p.perGame[gameId].badges['lector-paciente'] = { earnedAt: Date.now(), name: 'Lector paciente', desc: 'Esperaste más de 10 segundos antes de responder en al menos una historia' };
+            badgesAdded.push('lector-paciente');
         }
     }
     _write(p);

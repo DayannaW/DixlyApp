@@ -12,6 +12,29 @@ const sWrong = new Audio("../../assets/sonidos/wrong.mp3");
 
 
 const Game1 = (() => {
+        // Crear botón salir en la esquina superior derecha
+        function createExitButton() {
+            if (document.getElementById('btn-salir-j1')) return;
+            const btn = document.createElement('button');
+            btn.id = 'btn-salir-j1';
+            btn.textContent = 'Salir';
+            btn.className = 'btn btn-exit';
+            btn.style.position = 'absolute';
+            btn.style.top = '18px';
+            btn.style.right = '18px';
+            btn.style.zIndex = '1001';
+            btn.style.fontSize = '1.1rem';
+            btn.style.padding = '0.5rem 1.4rem';
+            btn.style.borderRadius = '1.5rem';
+            btn.style.border = 'none';
+            btn.style.background = '#f44336';
+            btn.style.color = 'white';
+            btn.style.cursor = 'pointer';
+            btn.onclick = () => {
+                window.location.href = '../index.php';
+            };
+            document.body.appendChild(btn);
+        }
     // Contadores de aciertos y de intentos
     let aciertos = 0;
     let intentos = 0;
@@ -225,7 +248,9 @@ const Game1 = (() => {
             let waitedMs = Date.now() - (storyStartTimes[currentStoryIndex] || Date.now());
             console.log('Tiempo esperado en ms:', waitedMs);
             if (!window.__lectorPacienteFlags) window.__lectorPacienteFlags = [];
+            console.log('waitedMs:', waitedMs);
             if (waitedMs > 10000) {
+                console.log('Lector paciente activado para historia', currentStoryIndex);
                 window.__lectorPacienteFlags[currentStoryIndex] = true;
             } else {
                 window.__lectorPacienteFlags[currentStoryIndex] = false;
@@ -268,10 +293,13 @@ const Game1 = (() => {
                         }
                         // Lector paciente: al menos una historia con espera > 10s antes de responder
                         if (window.__lectorPacienteFlags && window.__lectorPacienteFlags.some(v => v)) {
+                            console.log('Otorgando insignia lector paciente');
                             badgeConditions['lector-paciente'] = true;
                         }
                         try {
+                            console.log('badgeConditions:', badgeConditions);
                             const res = addLevelCompletion('juego1', currentLevel, badgeConditions);
+                            
                             if (res && res.badges && res.badges.length) {
                                 badgeParams = res.badges.map(b => `badge=${encodeURIComponent(b)}`).join('&');
                                 badgeParams = badgeParams ? ('&' + badgeParams) : '';
@@ -373,7 +401,17 @@ const Game1 = (() => {
 
     async function init(level = 'nivel-facil') {
         await loadStories(level);
+        createExitButton();
         try { Pet.init(); } catch (e) {}
+        // Mover el botón de sonido abajo
+        const soundBtn = document.getElementById('toggle-sound');
+        if (soundBtn) {
+            soundBtn.style.position = 'fixed';
+            soundBtn.style.bottom = '18px';
+            soundBtn.style.right = '18px';
+            soundBtn.style.top = '';
+            soundBtn.style.zIndex = '1001';
+        }
         initSoundButton();
         //bgAudio.play();
         showInstrucciones();

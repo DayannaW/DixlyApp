@@ -2,11 +2,64 @@ import { loadJSON, addLevelCompletion, hasBadge } from './util.js';
 import Pet from './pet.js';
 
 const Game1_2 = (() => {
+      // Botón de pausa/reanudar audio
+        // Botón único para reproducir, pausar y reanudar audio
+        function createAudioControlButton() {
+          if (document.getElementById('btn-audio-control')) return document.getElementById('btn-audio-control');
+          const btn = document.createElement('button');
+          btn.id = 'btn-audio-control';
+          btn.textContent = '▶️ Reproducir audio';
+          btn.className = 'btn btn-audio';
+          btn.style.display = 'block';
+          btn.style.margin = '18px auto 0 auto';
+          btn.style.fontSize = '1.1rem';
+          btn.style.padding = '0.5rem 1.4rem';
+          btn.style.borderRadius = '1.5rem';
+          btn.style.border = 'none';
+          btn.style.background = '#1976d2';
+          btn.style.color = 'white';
+          btn.style.cursor = 'pointer';
+          btn.disabled = false;
+          // Insertar debajo de la imagen de la historia
+          const imgArea = document.getElementById('img-area');
+          if (imgArea && imgArea.parentNode) {
+            imgArea.parentNode.insertBefore(btn, imgArea.nextSibling);
+          } else {
+            document.body.appendChild(btn);
+          }
+          return btn;
+        }
+    // Crear botón salir en la esquina superior derecha
+    function createExitButton() {
+      if (document.getElementById('btn-salir-j2')) return;
+      const btn = document.createElement('button');
+      btn.id = 'btn-salir-j2';
+      btn.textContent = 'Salir';
+      btn.className = 'btn btn-exit';
+      btn.style.position = 'absolute';
+      btn.style.top = '18px';
+      btn.style.right = '18px';
+      btn.style.zIndex = '1001';
+      btn.style.fontSize = '1.1rem';
+      btn.style.padding = '0.5rem 1.4rem';
+      btn.style.borderRadius = '1.5rem';
+      btn.style.border = 'none';
+      btn.style.background = '#f44336';
+      btn.style.color = 'white';
+      btn.style.cursor = 'pointer';
+      btn.onclick = () => {
+        window.location.href = '../juego1/index.html';
+      };
+      document.body.appendChild(btn);
+    }
   let currentLevel = 'nivel-intermedio';
   let stories = [];
   let currentStoryIndex = 0;
 
   let audioEl = null;
+    let audioBtn = null;
+    let audioSrcActual = null;
+    let audioState = 'idle'; // 'idle', 'playing', 'paused', 'ended'
   let playCount = 0;
   let initialPlayLimit = 2;
   const extraPlaysAfterReview = 1;
@@ -46,6 +99,38 @@ const Game1_2 = (() => {
     if (audioEl) { audioEl.pause(); audioEl = null; }
     audioEl = new Audio(src);
     audioEl.preload = 'auto';
+    if (!audioBtn) audioBtn = document.getElementById('btn-audio-control');
+    if (audioBtn) {
+      audioBtn.disabled = false;
+      audioBtn.textContent = '▶️ Reproducir audio';
+      audioState = 'idle';
+      audioBtn.onclick = () => {
+        if (!audioEl) return;
+        if (audioState === 'idle' || audioState === 'ended') {
+          audioEl.currentTime = 0;
+          audioEl.play();
+        } else if (audioState === 'playing') {
+          audioEl.pause();
+        } else if (audioState === 'paused') {
+          audioEl.play();
+        }
+      };
+    }
+    audioEl.addEventListener('play', () => {
+      audioState = 'playing';
+      if (audioBtn) audioBtn.textContent = '⏸️ Pausar audio';
+    });
+    audioEl.addEventListener('pause', () => {
+      if (audioEl.currentTime < audioEl.duration) {
+        audioState = 'paused';
+        if (audioBtn) audioBtn.textContent = '▶️ Reanudar audio';
+      }
+    });
+    audioEl.addEventListener('ended', () => {
+      audioState = 'ended';
+      if (audioBtn) audioBtn.textContent = '▶️ Reproducir audio';
+      updatePlayUI();
+    });
     audioEl.addEventListener('ended', () => {
       updatePlayUI();
       // after playback, prepare fragments; if this was the second allowed play, reveal automatically
@@ -248,6 +333,10 @@ const Game1_2 = (() => {
     pb.insertBefore(b, aNext);
   }
 
+  // Tracking de intentos fallidos antes de lograr el orden correcto
+  let failedReviewCount = 0;
+  // Tracking para 'Oído narrativo': si en alguna ronda se ordenó correctamente con solo 1 reproducción
+  let oidoNarrativoAchieved = false;
   function reviewPlacement() {
     const story = getCurrentStory();
     const container = document.getElementById('opciones'); if (!container || !story) return;
@@ -267,19 +356,28 @@ const Game1_2 = (() => {
     updatePlayUI();
 
     if (allCorrect) {
+      // Si solo se reprodujo el audio una vez en esta ronda, marcar logro
+      if (playCount === 1) {
+        oidoNarrativoAchieved = true;
+      }
       setTimeout(() => {
         if (nextStory()) {
           fragmentsShown = false; initialPlayLimit = 2; playCount = 0; renderNextStory();
         } else {
           let badgeParam = '';
+          let badgeConditions = {};
+          if (failedReviewCount > 0) badgeConditions['reorganizador-experto'] = true;
+          if (oidoNarrativoAchieved) badgeConditions['oido-narrativo'] = true;
           try {
-            const res = addLevelCompletion('juego1', currentLevel);
-            if (res && res.badges && res.badges.length) badgeParam = `&badge=${encodeURIComponent(res.badges[0])}`;
+            const res = addLevelCompletion('juego1', currentLevel, badgeConditions);
+            if (res && res.badges && res.badges.length) badgeParam = res.badges.map(b => `badge=${encodeURIComponent(b)}`).join('&');
+            badgeParam = badgeParam ? ('&' + badgeParam) : '';
           } catch (e) { }
           window.location.href = `../resultados.html?game=juego1&level=${encodeURIComponent(currentLevel)}` + badgeParam;
         }
       }, 900);
     } else {
+      failedReviewCount++;
       try { const txt = 'Algunas frases todavía están en desorden. Reordénalas y vuelve a revisar.'; Pet.speak(txt); } catch (e) { }
     }
   }
@@ -345,6 +443,10 @@ const Game1_2 = (() => {
 
   async function init(level = 'nivel-intermedio') {
     await loadStories(level);
+    createExitButton();
+    audioBtn = createAudioControlButton();
+    failedReviewCount = 0;
+    oidoNarrativoAchieved = false;
     try { Pet.init(); Pet.setIdle(); } catch (e) { }
     initControls();
     showInstructions();

@@ -14,5 +14,17 @@
   "lector-paciente": {
     "name": "Lector paciente",
     "desc": "Esperaste al menos 10 segundos antes de responder en una historia."
+  },
+  "arquitecto-historia": {
+    "name": "Arquitecto de la historia",
+    "desc": "Completaste el nivel intermedio ordenando todas las historias correctamente."
+  },
+  "reorganizador-experto": {
+    "name": "Reorganizador experto",
+    "desc": "Lograste el orden correcto después de al menos un intento fallido."
   }
-}
+      },
+      "oido-narrativo": {
+        "name": "Oído narrativo",
+        "description": "En una ronda, solo necesitaste reproducir el audio una vez para ordenar correctamente."
+      }
