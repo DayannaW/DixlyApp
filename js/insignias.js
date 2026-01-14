@@ -43,33 +43,40 @@ function showBadge(index) {
     card.innerHTML = `
         <img class="insignia-img" src="${badge.img}" alt="${badge.title}">
         <div class="insignia-title">${badge.title}</div>
-        <div class="insignia-desc">${badge.desc}</div>
         <button class="btn-recoger" id="btn-recoger">Recoger</button>
     `;
     card.style.display = 'block';
     setTimeout(() => card.classList.add('visible'), 100);
+    // Pixel dice la descripción
+    try { window.Pet && window.Pet.speak(badge.desc); } catch(e) {}
     document.getElementById('btn-recoger').onclick = () => {
         card.classList.remove('visible');
         setTimeout(() => {
             card.style.display = 'none';
-            // Crear tarjeta completa y animarla a la fila
+            // Crear tarjeta miniatura con giro
             const miniCard = document.createElement('div');
             miniCard.className = 'insignia-card mini';
             miniCard.innerHTML = `
-                <img class="insignia-img" src="${badge.img}" alt="${badge.title}">
-                <div class="insignia-title">${badge.title}</div>
-                <div class="insignia-desc">${badge.desc}</div>
+                <div class="insignia-inner">
+                    <div class="insignia-front">
+                        <img class="insignia-img" src="${badge.img}" alt="${badge.title}">
+                        <div class="insignia-title">${badge.title}</div>
+                    </div>
+                    <div class="insignia-back">${badge.desc}</div>
+                </div>
             `;
+            // Lógica de giro al hacer clic
+            miniCard.onclick = function() {
+                miniCard.classList.toggle('flipped');
+            };
             // Calcular desplazamiento horizontal para animación inclinada
-                const total = badges.length;
-                const center = (total - 1) / 2;
-                // Usar un desplazamiento mayor para que el efecto sea más notorio
-                let offset = (current - center) * 180; // separa las tarjetas al inicio
+            const total = badges.length;
+            const center = (total - 1) / 2;
+            let offset = (current - center) * 180;
             miniCard.style.setProperty('--card-x-inicial', offset + 'px');
             miniCard.style.setProperty('--card-x-final', '0px');
             fila.appendChild(miniCard);
             miniInsignias.push(miniCard);
-            // Animación de aparición
             miniCard.style.transform = 'translateY(-60px) scale(1.1)';
             miniCard.style.opacity = '0';
             setTimeout(() => {
@@ -80,7 +87,6 @@ function showBadge(index) {
             if (badges[current]) {
                 setTimeout(() => showBadge(current), 600);
             } else {
-                // Animación final: cofre sube y las insignias entran
                 setTimeout(() => {
                     cofre.classList.remove('bajada');
                     cofre.classList.add('subida');
@@ -90,11 +96,9 @@ function showBadge(index) {
                                 el.classList.add('entra-cofre');
                             }, i * 200);
                         });
-                        // Después de la animación, ocultar la fila
                         setTimeout(() => {
                             fila.style.minHeight = '0px';
                             fila.innerHTML = '';
-                            // Mostrar mensaje final y botones
                             card.innerHTML = '<div style="font-size:1.2rem;padding:2rem;">¡Has recogido todas tus insignias!</div>';
                             card.style.display = 'block';
                             card.classList.add('visible');

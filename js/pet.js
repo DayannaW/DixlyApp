@@ -4,12 +4,23 @@ const Pet = (() => {
     let instances = {};
     let dialogTimeout = null;
 
-    const ANIMS = {
-        idle: '../../assets/animaciones/pixel.json',
-        happy: '../../assets/animaciones/pixel.json',
-        sad: '../../assets/animaciones/pixel.json',
-        talk: '../../assets/animaciones/pixel.json'
+    let animBasePath = '../../assets/animaciones/';
+    let ANIMS = {
+        idle: animBasePath + 'pixel.json',
+        happy: animBasePath + 'pixel.json',
+        sad: animBasePath + 'pixel.json',
+        talk: animBasePath + 'pixel.json'
     };
+
+    function setAnimPath(basePath) {
+        animBasePath = basePath;
+        ANIMS = {
+            idle: animBasePath + 'pixel.json',
+            happy: animBasePath + 'pixel.json',
+            sad: animBasePath + 'pixel.json',
+            talk: animBasePath + 'pixel.json'
+        };
+    }
 
     function createContainer(id) {
         const c = document.createElement('div');
@@ -21,15 +32,12 @@ const Pet = (() => {
 
     function load() {
         const root = document.getElementById('pixel-animation');
- 
-        if (!root || typeof lottie === 'undefined') return;    
-   
+        if (!root || typeof lottie === 'undefined') return;
         // create containers for each anim
         Object.keys(ANIMS).forEach(key => {
             const cont = createContainer('pet-' + key);
             root.appendChild(cont);
             containers[key] = cont;
-
             instances[key] = lottie.loadAnimation({
                 container: cont,
                 renderer: 'svg',
@@ -37,7 +45,6 @@ const Pet = (() => {
                 autoplay: true,
                 path: ANIMS[key]
             });
-
             // ensure play paused until shown
             instances[key].stop();
         });
@@ -91,7 +98,7 @@ const Pet = (() => {
     function setSad() { show('sad'); }
     function setIdle() { show('idle'); }
 
-    return { init, speak, setHappy, setSad, setIdle };
+    return { init, speak, setHappy, setSad, setIdle, setAnimPath };
 })();
 
 export default Pet;

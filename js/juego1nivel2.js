@@ -337,6 +337,9 @@ const Game1_2 = (() => {
   let failedReviewCount = 0;
   // Tracking para 'Oído narrativo': si en alguna ronda se ordenó correctamente con solo 1 reproducción
   let oidoNarrativoAchieved = false;
+  // Contadores de aciertos e intentos
+  let aciertos = 0;
+  let intentos = 0;
   function reviewPlacement() {
     const story = getCurrentStory();
     const container = document.getElementById('opciones'); if (!container || !story) return;
@@ -352,6 +355,8 @@ const Game1_2 = (() => {
       }
     });
 
+    // Cada vez que el usuario presiona revisar, cuenta como intento
+    intentos++;
     // Do not increase initialPlayLimit on review; just refresh UI
     updatePlayUI();
 
@@ -360,6 +365,7 @@ const Game1_2 = (() => {
       if (playCount === 1) {
         oidoNarrativoAchieved = true;
       }
+      aciertos++;
       setTimeout(() => {
         if (nextStory()) {
           fragmentsShown = false; initialPlayLimit = 2; playCount = 0; renderNextStory();
@@ -373,7 +379,7 @@ const Game1_2 = (() => {
             if (res && res.badges && res.badges.length) badgeParam = res.badges.map(b => `badge=${encodeURIComponent(b)}`).join('&');
             badgeParam = badgeParam ? ('&' + badgeParam) : '';
           } catch (e) { }
-          window.location.href = `../resultados.html?game=juego1&level=${encodeURIComponent(currentLevel)}` + badgeParam;
+          window.location.href = `../resultados.html?game=juego1&level=${encodeURIComponent(currentLevel)}&aciertos=${aciertos}&intentos=${intentos}` + badgeParam;
         }
       }, 900);
     } else {
@@ -447,6 +453,8 @@ const Game1_2 = (() => {
     audioBtn = createAudioControlButton();
     failedReviewCount = 0;
     oidoNarrativoAchieved = false;
+    aciertos = 0;
+    intentos = 0;
     try { Pet.init(); Pet.setIdle(); } catch (e) { }
     initControls();
     showInstructions();

@@ -181,6 +181,10 @@
 </head>
 
 <body>
+    <div id="pixel-animation" style="position:fixed;right:24px;bottom:24px;z-index:20;width:120px;height:120px;pointer-events:none;"></div>
+    <div id="pixel-dialog" class="pixel-dialog" style="position:fixed;left:110px;bottom:54px;z-index:1000;min-width:180px;max-width:320px;background:#fff;border-radius:14px;box-shadow:0 2px 16px #0002;padding:1.1rem 1.2rem;font-size:1.05rem;color:#333;display:none;">
+        <span id="pixel-text"></span>
+    </div>
     <div class="cofre-container">
         <div class="cofre" id="cofre"></div>
         <div class="insignia-card" id="insignia-card" style="display:none;"></div>
@@ -193,6 +197,14 @@
         <button id="btn-next" class="btn btn-success">Siguiente nivel</button>
         <button id="btn-menu" class="btn btn-secondary">Volver al menú</button>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+    <script type="module">
+        import Pet from '../js/pet.js';
+        window.Pet = Pet;
+        Pet.setAnimPath('../assets/animaciones/');
+        Pet.init();
+    </script>
     <script src="../js/insignias.js"></script>
     <script src="../js/cofre_animacion.js"></script>
     <script>
