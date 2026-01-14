@@ -1,4 +1,11 @@
 // Este script gestiona la animación y el flujo de revelado de insignias
+// Ahora como módulo ES6
+import Pet from './pet.js';
+
+window.Pet = Pet;
+Pet.setAnimPath('../assets/animaciones/');
+Pet.init();
+Pet.setIdle();
 
 // Simulación: obtener insignias desde la URL (badge=...&badge=...)
 function getBadgesFromURL() {
@@ -37,6 +44,7 @@ function showBadge(index) {
     const badge = badges[index];
     // Animar cofre al iniciar la primera insignia
     if (!cofreAnimado) {
+        console.log("animar cofre");
         cofre.classList.add('mini', 'bajada');
         cofreAnimado = true;
     }
@@ -46,10 +54,32 @@ function showBadge(index) {
         <button class="btn-recoger" id="btn-recoger">Recoger</button>
     `;
     card.style.display = 'block';
-    setTimeout(() => card.classList.add('visible'), 100);
-    // Pixel dice la descripción
-    try { window.Pet && window.Pet.speak(badge.desc); } catch(e) {}
+    var speaking = true;
+    let pixelDialogTimeout = null;
+    setTimeout(() => {
+        card.classList.add('visible');
+        function speakLoop() {
+            if (!speaking) return;
+            if (badge.desc) {
+                try {
+                    Pet.speak(badge.desc);
+                    // Guardar el timeout de diálogo para poder cancelarlo
+                    const dur = (typeof Pet.calcSpeakDuration === 'function') ? Pet.calcSpeakDuration(badge.desc) : 2000;
+                    pixelDialogTimeout = setTimeout(speakLoop, dur + 300);
+                } catch(e) {
+                    pixelDialogTimeout = setTimeout(speakLoop, 2000);
+                }
+            }
+        }
+        speaking = true;
+        speakLoop();
+    }, 100);
     document.getElementById('btn-recoger').onclick = () => {
+        speaking = false;
+        if (pixelDialogTimeout) clearTimeout(pixelDialogTimeout);
+        // Ocultar el cuadro de diálogo de Pixel inmediatamente
+        const dialog = document.getElementById('pixel-dialog');
+        if (dialog) dialog.classList.remove('visible');
         card.classList.remove('visible');
         setTimeout(() => {
             card.style.display = 'none';
@@ -62,7 +92,6 @@ function showBadge(index) {
                         <img class="insignia-img" src="${badge.img}" alt="${badge.title}">
                         <div class="insignia-title">${badge.title}</div>
                     </div>
-                    <div class="insignia-back">${badge.desc}</div>
                 </div>
             `;
             // Lógica de giro al hacer clic
@@ -111,10 +140,10 @@ function showBadge(index) {
     };
 }
 
-cofre.onclick = async function() {
+cofre.addEventListener('cofreMitadAbierto', async function() {
     if (badges.length === 0) {
         const badgeIds = getBadgesFromURL();
         badges = await loadBadgeInfo(badgeIds);
-        setTimeout(() => showBadge(0), 500); // Retardo de 0.5 segundos
+        showBadge(0); // Adelantado aún más, sin retardo
     }
-};
+});
