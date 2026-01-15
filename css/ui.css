@@ -88,3 +88,21 @@
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
+
+/* Corrección para el recuadro de intentos en resultados.html */
+#attempts-row-box {
+  min-width: 160px;
+  max-width: 220px;
+  display: block !important;
+  background: #f4f6fb;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  margin: 0;
+}
+#attempts-row {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+  min-height: 1.2em;
+  display: block;
+}

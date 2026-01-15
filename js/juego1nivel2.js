@@ -214,6 +214,10 @@ const Game1_2 = (() => {
     });
   }
 
+    // Track time before review for 'mirada atenta'
+    let rondaStartTime = null;
+    let miradaAtentaAchieved = false;
+
   function startAudioPhase() {
     const story = getCurrentStory();
     if (!story) return;
@@ -240,6 +244,10 @@ const Game1_2 = (() => {
     const titleEl = document.getElementById('title'); if (titleEl) titleEl.textContent = story.titulo;
     const img = document.getElementById('story-img'); if (img) { img.src = story.img; img.alt = story.titulo; }
     const container = document.getElementById('opciones'); if (!container) return; container.innerHTML = '';
+
+    // Start timer for 'mirada atenta' when fragments are shown
+    rondaStartTime = Date.now();
+    console.log("Ronda start time:", rondaStartTime);
 
     const correctOrder = (story._fragments && story._fragments.slice()) || story.fragments.slice();
     const shuffled = shuffle(correctOrder.slice());
@@ -341,6 +349,13 @@ const Game1_2 = (() => {
   let aciertos = 0;
   let intentos = 0;
   function reviewPlacement() {
+      // Check time before review for 'mirada atenta'
+      console.log("Ronda start time at reviewPlacement:", rondaStartTime);
+      if (rondaStartTime) {
+        const delay = (Date.now() - rondaStartTime) / 1000;
+        console.log("Delay before review (s):", delay);
+        if (delay > 10) miradaAtentaAchieved = true;
+      }
     const story = getCurrentStory();
     const container = document.getElementById('opciones'); if (!container || !story) return;
     const items = [...container.querySelectorAll('.fragment-item')];
@@ -374,6 +389,7 @@ const Game1_2 = (() => {
           let badgeConditions = {};
           if (failedReviewCount > 0) badgeConditions['reorganizador-experto'] = true;
           if (oidoNarrativoAchieved) badgeConditions['oido-narrativo'] = true;
+            if (miradaAtentaAchieved) badgeConditions['mirada-atenta'] = true;
           try {
             const res = addLevelCompletion('juego1', currentLevel, badgeConditions);
             if (res && res.badges && res.badges.length) badgeParam = res.badges.map(b => `badge=${encodeURIComponent(b)}`).join('&');

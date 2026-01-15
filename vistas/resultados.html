@@ -177,22 +177,23 @@
     // Leer aciertos e intentos de la URL si existen
     let aciertos = 0;
     let intentos = 0;
-    if (game === 'juego1' && level === 'nivel-facil') {
+    // Mostrar aciertos para todos los niveles
+    try {
+      aciertos = parseInt(params.get('aciertos') || '0', 10);
+    } catch (e) {}
+    if (aciertosScoreEl) aciertosScoreEl.textContent = aciertos;
+    // Mostrar intentos solo para juego1 nivel-facil o nivel-intermedio
+    const attemptsRowBox = document.getElementById('attempts-row-box');
+    if (game === 'juego1' && (level === 'nivel-facil' || level === 'nivel-intermedio')) {
       try {
-        aciertos = parseInt(params.get('aciertos') || '0', 10);
         intentos = parseInt(params.get('intentos') || '0', 10);
       } catch (e) {}
-    }
-    if (aciertosScoreEl) aciertosScoreEl.textContent = aciertos;
-    // Mostrar intentos si corresponde
-    const attemptsRowBox = document.getElementById('attempts-row-box');
-    if (game === 'juego1' && level === 'nivel-facil') {
       attemptsRowBox.style.display = 'block';
       // Priorizar el valor de la URL, si no existe usar localStorage
       let shownAttempts = intentos;
       if (!shownAttempts) {
         try {
-          const key = `juego1_nivel-facil_intentos`;
+          const key = `juego1_${level}_intentos`;
           shownAttempts = parseInt(localStorage.getItem(key) || '0', 10);
         } catch (e) {}
       }

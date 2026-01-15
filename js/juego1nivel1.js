@@ -31,7 +31,7 @@ const Game1 = (() => {
             btn.style.color = 'white';
             btn.style.cursor = 'pointer';
             btn.onclick = () => {
-                window.location.href = '../index.php';
+                window.location.href = '../juego1/index.html';
             };
             document.body.appendChild(btn);
         }
@@ -387,7 +387,20 @@ const Game1 = (() => {
     // control de sonido
     function initSoundButton() {
         const btn = document.getElementById("toggle-sound");
-
+        // Corrige el estilo para evitar que ocupe todo el ancho/alto
+        btn.style.width = '48px';
+        btn.style.height = '48px';
+        btn.style.borderRadius = '50%';
+        btn.style.display = 'inline-flex';
+        btn.style.alignItems = 'center';
+        btn.style.justifyContent = 'center';
+        btn.style.fontSize = '1.5rem';
+        btn.style.background = '#1976d2';
+        btn.style.color = 'white';
+        btn.style.border = 'none';
+        btn.style.boxShadow = '0 2px 8px #0002';
+        btn.style.cursor = 'pointer';
+        btn.style.margin = '0';
         btn.addEventListener("click", () => {
             if (bgAudio.paused) {
                 bgAudio.play();
@@ -403,13 +416,14 @@ const Game1 = (() => {
         await loadStories(level);
         createExitButton();
         try { Pet.init(); } catch (e) {}
-        // Mover el botón de sonido abajo
+        // Mover el botón de sonido a la esquina superior izquierda
         const soundBtn = document.getElementById('toggle-sound');
         if (soundBtn) {
             soundBtn.style.position = 'fixed';
-            soundBtn.style.bottom = '18px';
-            soundBtn.style.right = '18px';
-            soundBtn.style.top = '';
+            soundBtn.style.top = '18px';
+            soundBtn.style.left = '18px';
+            soundBtn.style.bottom = '';
+            soundBtn.style.right = '';
             soundBtn.style.zIndex = '1001';
         }
         initSoundButton();
