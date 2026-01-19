@@ -80,6 +80,11 @@ export function addLevelCompletion(gameId, level) {
             p.perGame[gameId].badges['oido-narrativo'] = { earnedAt: Date.now(), name: 'Oído narrativo', desc: 'En una ronda, solo necesitaste reproducir el audio una vez para ordenar correctamente.' };
             badgesAdded.push('oido-narrativo');
         }
+        // NUEVO: Mirada atenta
+        if (badgeConditions['mirada-atenta'] && !p.perGame[gameId].badges['mirada-atenta']) {
+            p.perGame[gameId].badges['mirada-atenta'] = { earnedAt: Date.now(), name: 'Mirada atenta', desc: 'Te tomaste un tiempo prudente para ordenar la historia.' };
+            badgesAdded.push('mirada-atenta');
+        }
     }
     // Lógica para más insignias: si se pasa un objeto extra con condiciones
     if (arguments.length > 2 && typeof arguments[2] === 'object') {
@@ -95,6 +100,16 @@ export function addLevelCompletion(gameId, level) {
         if (badgeConditions['lector-paciente'] && !p.perGame[gameId].badges['lector-paciente']) {
             p.perGame[gameId].badges['lector-paciente'] = { earnedAt: Date.now(), name: 'Lector paciente', desc: 'Esperaste más de 10 segundos antes de responder en al menos una historia' };
             badgesAdded.push('lector-paciente');
+        }
+        // NUEVO: Arquitecto del sentido
+        if (badgeConditions['arquitecto-sentido'] && !p.perGame[gameId].badges['arquitecto-sentido']) {
+            p.perGame[gameId].badges['arquitecto-sentido'] = { earnedAt: Date.now(), name: 'Arquitecto del sentido', desc: 'Lograste que cada parte encajara y la historia tuviera sentido de principio a fin.' };
+            badgesAdded.push('arquitecto-sentido');
+        }
+        // NUEVO: Pensador valiente
+        if (badgeConditions['pensador-valiente'] && !p.perGame[gameId].badges['pensador-valiente']) {
+            p.perGame[gameId].badges['pensador-valiente'] = { earnedAt: Date.now(), name: 'Pensador valiente', desc: 'Te atreviste a volver a intentar y buscar una mejor solución.' };
+            badgesAdded.push('pensador-valiente');
         }
     }
     _write(p);

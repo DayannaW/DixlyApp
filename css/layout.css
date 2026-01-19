@@ -22,7 +22,7 @@ html, body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: var(--color-fondo-juegos);
+    background: var(--bg-panel);
 }
 
 

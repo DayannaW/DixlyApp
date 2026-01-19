@@ -1,21 +1,7 @@
 /* =============================
    VARIABLES DE COLOR Y TIPOGRAFÍA
    ============================= */
-:root {
-    --color-fondo-juegos:#F5F7FA; 
-    --color-fondo-inicio:#FCFFFC;
-    --color-primario: #4A90E2;
-    --color-secundario: #7BB6F1;
-    --color-correcto: #4CAF50;
-    --color-incorrecto: #E74C3C;
-    --color-texto: #2C3E50;
-    --color-blanco: #FFFFFF;
 
-    --fuente-principal: 'Lexend', sans-serif;
-
-    --sombra-suave: 0 4px 10px rgba(0, 0, 0, 0.08);
-    --sombra-media: 0 6px 14px rgba(0, 0, 0, 0.12);
-}
 
 /* =============================
    RESETEO Y BASE GLOBAL

@@ -68,6 +68,7 @@
     const params = new URLSearchParams(location.search);
     const game = params.get('game');
     const level = params.get('level');
+    console.log('Resultados para juego: nivel:|'+level+"|");
 
     const aciertosScoreEl = document.getElementById('aciertos-score');
     const gameScoreEl = document.getElementById('game-score');
@@ -106,7 +107,7 @@
 
     function resolveGamePath(gameId, lvl) {
       // Map known games to their level page structure
-      if (!gameId) return '../index.php';
+      if (!gameId) return '../index.html';
       if (gameId === 'juego1') {
         if (lvl === 'nivel-facil') return `./juego1/juego1nivel1.html?level=nivel-facil`;
         if (lvl === 'nivel-intermedio') return `./juego1/juego1nivel2.html?level=nivel-intermedio`;
@@ -115,7 +116,7 @@
       }
       if (gameId === 'juego2') return `./juego2/juego2nivel1.html?level=${encodeURIComponent(lvl)}`;
       if (gameId === 'juego3') return `./juego3/juego3nivel1.html?level=${encodeURIComponent(lvl)}`;
-      return '../index.php';
+      return '../index.html';
     }
 
     // populate scores and progress bar
@@ -184,7 +185,9 @@
     if (aciertosScoreEl) aciertosScoreEl.textContent = aciertos;
     // Mostrar intentos solo para juego1 nivel-facil o nivel-intermedio
     const attemptsRowBox = document.getElementById('attempts-row-box');
+    console.log('Verificando si mostrar intentos para', game, level);
     if (game === 'juego1' && (level === 'nivel-facil' || level === 'nivel-intermedio')) {
+      console.log('Mostrando intentos para', game, level);
       try {
         intentos = parseInt(params.get('intentos') || '0', 10);
       } catch (e) {}
@@ -214,7 +217,7 @@
     if (totalGameScoreEl) totalGameScoreEl.textContent = totalGameScore;
 
     // Mostrar intentos solo para juego1 nivel-facil
-    if (game === 'juego1' && level === 'nivel-facil') {
+    if (game === 'juego1' && level === 'nivel-facil' || level === 'nivel-intermedio') {
       console.log('Mostrando intentos para juego1 nivel-facil');
       console.log(game +" nivel "+ level);
       // Buscar intentos en localStorage o similar (ajusta según tu lógica)
@@ -237,7 +240,7 @@
     //  badgeModal.style.visibility = 'visible';
     //});
 
-    btnMenu.addEventListener('click', () => { location.href = '../index.php'; });
+    btnMenu.addEventListener('click', () => { location.href = '../index.html'; });
 
     btnRepeat.addEventListener('click', () => {
       const path = resolveGamePath(game, level || 'nivel-facil');

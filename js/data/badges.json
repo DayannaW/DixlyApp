@@ -31,11 +31,13 @@
   },
   "oido-narrativo": {
     "name": "Oído narrativo",
-    "desc": "En una ronda, solo necesitaste reproducir el audio una vez para ordenar correctamente."
+    "desc": "En una ronda, solo necesitaste reproducir el audio una vez para ordenar correctamente.",
+    "level": "nivel-intermedio"
   },
   "mirada-atenta": {
     "name": "Mirada atenta",
-    "desc": "Te tomaste un tiempo prudente para ordenar la historia."
+    "desc": "Te tomaste un tiempo prudente para ordenar la historia.",
+    "level": "nivel-intermedio"
   }
-  }
+  
 }

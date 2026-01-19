@@ -6,7 +6,7 @@ const FILES_TO_CACHE = [
 
   // Inicio/
   'inicio.html',
-  'index.php',
+  'index.html',
 
   // Manifest
   'manifest.json',

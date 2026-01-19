@@ -4,15 +4,28 @@
 
 /* VARIABLES */
 :root {
-    /* Colores */
-    --color-fondo-inicio: #FCFFFC;
-    --color-fondo-juegos: #F5F7FA;
-    --color-primario: #4A90E2;
-    --color-secundario: #7BB6F1;
-    --color-correcto: #4CAF50;
-    --color-incorrecto: #E74C3C;
-    --color-texto: #2C3E50;
-    --color-blanco: #FFFFFF;
+
+
+    --bg-main: #F1E9DA;
+    --bg-panel: #E2D4BE;
+    --bg-card: #FEFCFB; /* beige claro, limpio, juvenil */
+
+
+    --text-main: #1F1F1F;
+    --text-secondary: #4B4B4B;
+
+    --accent-ui: #3F6E8C;
+    --accent-ui-hover: #335C75;
+
+    --cta: #C86B3C;
+    --cta-hover: #B35E34;
+
+    --bg-soft: #F7F1E6;
+    --border-soft: #D3C7B4;
+
+    --success: #4E9F78;
+    --warning: #C5A13C;
+    --error: #A94444;
 
     /* Tipografía */
     --fuente-principal: 'Lexend', sans-serif;
@@ -42,7 +55,7 @@
 /* BODY GENERAL */
 body {
     font-family: var(--fuente-principal);
-    color: var(--color-texto);
+    color: var(--text-secondary);
     justify-content: center;
     text-align: center;
     padding: 20px;

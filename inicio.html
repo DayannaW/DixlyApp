@@ -2,45 +2,258 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DixlyApp - Inicio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DixlyApp</title>
     <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/ui.css">
-    <link rel="stylesheet" href="css/vistas/inicio.css">
+    <style>
 
-    <!-- Manifest de la PWA -->
-    <link rel="manifest" href="manifest.json">
-    <!--<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet"> -->
 
-    <!-- Colores para PWA -->
-    <meta name="theme-color" content="#4a90e2" />
+        body {
+            background: linear-gradient(180deg,
+                    var(--bg-main) 0%,
+                    var(--bg-panel) 70%);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Lexend', Arial, sans-serif;
+            color: var(--color-text-main);
+            overflow-x: hidden;
+        }
 
-    <!-- Íconos opcionales -->
-    <link rel="icon" type="image/png" href="assets/iconos/iconApp.png" />
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 2.5rem;
+            background: linear-gradient(180deg,
+                    var(--bg-main) 0%,
+                    var(--bg-panel) 70%);
+            border-radius: 18px;
+            box-shadow: 0 4px 32px var(--accent-ui-hover)22;
+            padding: 2.5rem 1.5rem;
+        }
 
+        .logo-3d {
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            margin-bottom: 0.5rem;
+            font-family: 'Lexend', Arial, sans-serif;
+            text-align: center;
+            background: var(--cta);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+
+        .start-btn {
+            background: var(--accent-ui-hover);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            padding: 0.8rem 2.5rem;
+            box-shadow: 0 4px 16px #1a0c2b44;
+            cursor: pointer;
+            margin: 1.2rem 0;
+            transition: transform 0.18s;
+            display: none;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.08);
+            background: #2C4F63;
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 12px;
+            background: var(--bg-panel);
+            border-radius: 3px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            margin-top: 0.5rem;
+            position: relative;
+            font-family: system-ui;
+        }
+
+        .loading-fill {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg,
+                    var(--cta) 0%,
+                    var(--cta-hover) 70%);
+            border-radius: 3px;
+            transition: width 1.2s cubic-bezier(.4, 0, .2, 1);
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .loading-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 0;
+            left: 0;
+            font-size: 0.6rem;
+            line-height: 12px;
+            z-index: 2;
+            color: var(--text-main);
+            text-shadow: none;
+            font-weight: 500;
+        }
+
+        .loading-info {
+            width: 100%;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            opacity: 1;
+            transition: opacity 0.3s;
+            letter-spacing: 0.01em;
+            font-family: system-ui;
+            color: var(--text-secondary);
+            text-shadow: none;
+        }
+
+        /* CSS para la imagen de pixel */
+        .pixel-img {
+            position: fixed;
+            left: 8vw;
+            bottom: 4vw;
+            width: 104px;
+            height: auto;
+            z-index: 10;
+            pointer-events: none;
+            opacity: 0.95;
+            background: #fff8;
+            border-radius: 12px;
+        }
+    </style>
 </head>
 
-<body class="body--inicio">
-
-    <!-- Contenedor del título -->
-    <div class="app-title">
-        <h1>Dixly App</h1>
+<body>
+    <div class="container">
+        <div class="logo-3d" id="logo-3d">DixlyApp</div>
+        <button class="start-btn" id="start-btn">START</button>
+        <div class="loading-bar">
+            <div class="loading-fill" id="loading-fill"></div>
+            <div class="loading-text" id="loading-text">0%</div>
+        </div>
+        <div class="loading-info" id="loading-info"></div>
     </div>
+    <img style="display: none;" src="assets/imagenes/pixel.png" alt="Pixel" class="pixel-img">
+    <script>
+        // Animación de la barra de carga mejorada
+        let progress = 0;
+        const fill = document.getElementById('loading-fill');
+        const text = document.getElementById('loading-text');
+        const info = document.getElementById('loading-info');
 
-    <div class="gif-container">
-        <!-- Tu GIF -->
-        <img src="assets/imagenes/coheteBienvenida.gif" alt="Animación de bienvenida">
-    </div>
+        // Pasos y mensajes
+        const loadingSteps = [
+            { percent: 0, message: 'Preparando archivos…', minDuration: 1000 },
+            { percent: 20, message: 'Analizando configuraciones…', minDuration: 1200 },
+            { percent: 35, message: 'Inicializando componentes…', minDuration: 1200 },
+            { percent: 50, message: 'Configurando a píxel', minDuration: 2200, pause: true },
+            { percent: 70, message: 'Casi listo…', minDuration: 1200 },
+            { percent: 100, message: '¡Listo!', minDuration: 600 }
+        ];
 
-    <button class="btn-start" onclick="location.href='index.php'">
-        Empezar
-    </button>
+        function setInfoMessage(msg) {
+            info.textContent = msg;
+            info.style.opacity = 1;
+        }
 
-    <!-- Registro del Service Worker -->
-    <script src="js/pwa.js"></script>
+        function fadeInfoMessage(newMsg, cb) {
+            info.style.transition = 'opacity 0.3s';
+            info.style.opacity = 0;
+            setTimeout(() => {
+                setInfoMessage(newMsg);
+                if (cb) cb();
+            }, 320);
+        }
 
+        function animateLoading() {
+            progress = 0;
+            fill.style.width = '0%';
+            text.textContent = '0%';
+            let stepIdx = 0;
+            let paused = false;
+            const startBtn = document.getElementById('start-btn');
+
+            setInfoMessage(loadingSteps[0].message);
+
+            function nextStep() {
+                if (stepIdx >= loadingSteps.length - 1) return;
+                const current = loadingSteps[stepIdx];
+                const next = loadingSteps[stepIdx + 1];
+                let start = current.percent;
+                let end = next.percent;
+                let duration = next.minDuration;
+                let startTime = Date.now();
+
+                function update() {
+                    if (paused) return;
+                    let elapsed = Date.now() - startTime;
+                    let percent = Math.min(
+                        start + ((end - start) * (elapsed / duration)),
+                        end
+                    );
+                    progress = percent;
+                    fill.style.width = percent + '%';
+                    text.textContent = Math.floor(percent) + '%';
+
+                    if (percent < end) {
+                        requestAnimationFrame(update);
+                    } else {
+                        // Mensaje siguiente
+                        stepIdx++;
+                        if (next.pause) {
+                            paused = true;
+                            fadeInfoMessage(next.message, () => {
+                                // Pausa especial en 50%
+                                fill.style.width = '50%';
+                                text.textContent = '50%';
+                                setTimeout(() => {
+                                    paused = false;
+                                    stepIdx++;
+                                    fadeInfoMessage(loadingSteps[stepIdx].message, () => {
+                                        nextStep();
+                                    });
+                                }, next.minDuration);
+                            });
+                        } else {
+                            fadeInfoMessage(next.message, () => {
+                                nextStep();
+                            });
+                        }
+                        // Mostrar el botón solo al finalizar la barra
+                        if (end === 100) {
+                            setTimeout(() => {
+                                startBtn.style.display = 'inline-block';
+                            }, 350); // Pequeño retardo para suavidad
+                        }
+                    }
+                }
+                update();
+            }
+            nextStep();
+        }
+
+        animateLoading();
+        document.getElementById('start-btn').onclick = function () {
+            window.location.href = 'index.html';
+        };
+
+    </script>
 </body>
 
 </html>

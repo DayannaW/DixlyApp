@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleccionar Juego | DixlyApp</title>
+
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Estilos globales -->
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/ui.css">
+    <link rel="stylesheet" href="css/vistas/index.css">
+
+
+    <!-- Colores PWA -->
+    <meta name="theme-color" content="#4a90e2">
+
+    <!-- Iconos -->
+    <link rel="icon" href="asset/iconos/icon-192.png" type="image/png">
+
+</head>
+
+<body class="body--juegos">
+
+    <h1 class="hero-title">DixlyApp</h1>
+    <!-- Card Overlay Layout -->
+    <div class="card-overlay">
+        <h2 class="card-overlay-title">Elige un desafío</h2>
+        <div class="cards-vertical">
+            <!-- Card 1 -->
+            <div class="game-card">
+                <img src="img/juego1.jpg" alt="Juego de textos" class="game-image">
+
+                <div class="game-content">
+                    <div class="game-title">Aventura Entre Palabras</div>
+
+                    <div class="game-description">
+                        Reconstruye historias identificando palabras clave.
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-fill" style="width: 65%"></div>
+                    </div>
+
+                    <button class="play-btn">Jugar</button>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="game-card">
+                <img src="img/juego1.jpg" alt="Juego de textos" class="game-image">
+
+                <div class="game-content">
+                    <div class="game-title">Memoria Verbal</div>
+
+                    <div class="game-description">
+                        Entrena fonemas comunes.
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-fill" style="width: 35%"></div>
+                    </div>
+
+                    <button class="play-btn">Jugar</button>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="game-card">
+                <img src="img/juego1.jpg" alt="Juego de textos" class="game-image">
+
+                <div class="game-content">
+                    <div class="game-title">Asociacion Visual</div>
+
+                    <div class="game-description">
+                        Relaciona palabra e imagen.
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-fill" style="width: 95%"></div>
+                    </div>
+
+                    <button class="play-btn">Jugar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <div class="nav-item active">
+            <div class="nav-icon">🎮</div>
+            <span>Juegos</span>
+        </div>
+
+        <div class="nav-item">
+            <div class="nav-icon">🏅</div>
+            <span>Insignias</span>
+        </div>
+    </nav>
+
+
+    <!-- Scripts globales -->
+    <script type="module" src="js/util.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/pwa.js"></script>
+
+    <!-- Registro del service worker (extra por seguridad) -->
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("service-worker.js")
+                .then(() => console.log("Service Worker activo"))
+                .catch(err => console.error("Error al registrar SW", err));
+        }
+    </script>
+
+    <script>
+        // Selección de juegos por botón
+        const playButtons = document.querySelectorAll('.play-btn');
+        const gameRoutes = [
+            'vistas/juego1/index.html',
+            'vistas/juego2/index.html',
+            'vistas/juego3/index.html'
+        ];
+        playButtons.forEach((btn, idx) => {
+            btn.onclick = () => {
+                window.location.href = gameRoutes[idx];
+            };
+        });
+    </script>
+
+</body>
+
+</html>

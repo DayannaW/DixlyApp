@@ -6,6 +6,7 @@ const Game1_3 = (() => {
   let currentStory = 0;
   let score = 0;
   let userEndings = [];
+  let pensadorValienteAchieved = false;
 
   async function loadStories() {
     stories = await loadJSON('../../js/data/juego1/nivel-dificil.json');
@@ -276,6 +277,7 @@ const Game1_3 = (() => {
       } catch (e) {}
     }, 400);
     document.getElementById('btn-retry').onclick = () => {
+      pensadorValienteAchieved = true;
       showFragmentSelection();
     };
     document.getElementById('btn-next-story').onclick = () => {
@@ -295,8 +297,12 @@ const Game1_3 = (() => {
   function showFinalResults() {
     const main = document.getElementById('main-container');
     const total = userEndings.reduce((sum, e) => sum + (e ? e.puntos : 0), 0);
-    // Guardar progreso con el puntaje real
-    try { addLevelCompletion('juego1', 'nivel-dificil', total); } catch (e) {}
+    // Verificar insignias
+    let arquitectoSentido = userEndings.some(e => e && e.puntos === 3);
+    let badgeConditions = {};
+    if (arquitectoSentido) badgeConditions['arquitecto-sentido'] = true;
+    if (pensadorValienteAchieved) badgeConditions['pensador-valiente'] = true;
+    try { addLevelCompletion('juego1', 'nivel-dificil', badgeConditions); } catch (e) {}
     main.innerHTML = `
       <div class="result-card" style="max-width:480px; margin:3rem auto; padding:1.5rem; border-radius:12px; box-shadow:var(--sombra-media); background:var(--color-blanco); text-align:center">
         <h2>¡Nivel difícil completado!</h2>
