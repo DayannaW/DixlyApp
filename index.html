@@ -20,7 +20,7 @@
     <meta name="theme-color" content="#4a90e2">
 
     <!-- Iconos -->
-    <link rel="icon" href="asset/iconos/icon-192.png" type="image/png">
+    <link rel="icon" href="assets/iconos/icon-192.png" type="image/png">
 
 </head>
 
@@ -33,10 +33,10 @@
         <div class="cards-vertical">
             <!-- Card 1 -->
             <div class="game-card">
-                <img src="img/juego1.jpg" alt="Juego de textos" class="game-image">
+                <img src="assets/imagenes/juego1.png" alt="Juego de textos" class="game-image">
 
                 <div class="game-content">
-                    <div class="game-title">Aventura Entre Palabras</div>
+                    <div class="game-title">Fragmentos Perdidos</div>
 
                     <div class="game-description">
                         Reconstruye historias identificando palabras clave.
@@ -52,10 +52,10 @@
 
             <!-- Card 2 -->
             <div class="game-card">
-                <img src="img/juego1.jpg" alt="Juego de textos" class="game-image">
+                <img src="assets/imagenes/juego2.png" alt="Juego de textos" class="game-image">
 
                 <div class="game-content">
-                    <div class="game-title">Memoria Verbal</div>
+                    <div class="game-title">Pulso Fonético</div>
 
                     <div class="game-description">
                         Entrena fonemas comunes.
@@ -71,10 +71,10 @@
 
             <!-- Card 3 -->
             <div class="game-card">
-                <img src="img/juego1.jpg" alt="Juego de textos" class="game-image">
+                <img src="assets/imagenes/juego3.png" alt="Juego de textos" class="game-image">
 
                 <div class="game-content">
-                    <div class="game-title">Asociacion Visual</div>
+                    <div class="game-title">Palabra a la Vista</div>
 
                     <div class="game-description">
                         Relaciona palabra e imagen.
@@ -92,15 +92,14 @@
 
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-nav">
-        <div class="nav-item active">
-            <div class="nav-icon">🎮</div>
+        <button class="nav-item active" onclick="window.location.href='index.html'">
+            <span style="font-size:1.5rem;">🎮</span>
             <span>Juegos</span>
-        </div>
-
-        <div class="nav-item">
-            <div class="nav-icon">🏅</div>
+        </button>
+        <button class="nav-item"  onclick="window.location.href='historicoInsignias.html'">
+            <span style="font-size:1.5rem;">🏅</span>
             <span>Insignias</span>
-        </div>
+        </button>
     </nav>
 
 
@@ -111,16 +110,21 @@
 
     <!-- Registro del service worker (extra por seguridad) -->
     <script>
+        console.log("Hola");
         if ("serviceWorker" in navigator) {
             navigator.serviceWorker.register("service-worker.js")
                 .then(() => console.log("Service Worker activo"))
                 .catch(err => console.error("Error al registrar SW", err));
         }
+        console.log("Hola 2");
     </script>
 
-    <script>
+    <script type="module">
+        console.log("Hola 3");
         // Selección de juegos por botón
         const playButtons = document.querySelectorAll('.play-btn');
+        console.log("Play buttons found:");
+        console.log(playButtons);
         const gameRoutes = [
             'vistas/juego1/index.html',
             'vistas/juego2/index.html',
@@ -128,9 +132,58 @@
         ];
         playButtons.forEach((btn, idx) => {
             btn.onclick = () => {
+                console.log(`Button ${idx} clicked`);
                 window.location.href = gameRoutes[idx];
             };
         });
+
+        // Progreso de juegos (Fragmentos Perdidos, Pulso Fonético, Palabra a la Vista)
+        import { hasCompletedLevel } from './js/util.js';
+        // Juego 1
+        const juego1Levels = ['nivel-facil', 'nivel-intermedio', 'nivel-dificil'];
+        let completed1 = 0;
+        juego1Levels.forEach(lvl => {
+            if (hasCompletedLevel('juego1', lvl)) completed1++;
+        });
+        const totalProgress1 = Math.round((completed1 / juego1Levels.length) * 100);
+        const fragmentosCard = document.querySelectorAll('.game-card')[0];
+        if (fragmentosCard) {
+            const progressFill = fragmentosCard.querySelector('.progress-fill');
+            if (progressFill) {
+                progressFill.style.width = totalProgress1 + '%';
+                progressFill.textContent = totalProgress1 + '%';
+            }
+        }
+        // Juego 2
+        const juego2Levels = ['nivel1', 'nivel-intermedio', 'nivel3'];
+        let completed2 = 0;
+        juego2Levels.forEach(lvl => {
+            if (hasCompletedLevel('juego2', lvl)) completed2++;
+        });
+        const totalProgress2 = Math.round((completed2 / juego2Levels.length) * 100);
+        const pulsoCard = document.querySelectorAll('.game-card')[1];
+        if (pulsoCard) {
+            const progressFill = pulsoCard.querySelector('.progress-fill');
+            if (progressFill) {
+                progressFill.style.width = totalProgress2 + '%';
+                progressFill.textContent = totalProgress2 + '%';
+            }
+        }
+        // Juego 3
+        const juego3Levels = ['juego3nivel1', 'juego3nivel2', 'juego3nivel3'];
+        let completed3 = 0;
+        juego3Levels.forEach(lvl => {
+            if (hasCompletedLevel('juego3', lvl)) completed3++;
+        });
+        const totalProgress3 = Math.round((completed3 / juego3Levels.length) * 100);
+        const palabraCard = document.querySelectorAll('.game-card')[2];
+        if (palabraCard) {
+            const progressFill = palabraCard.querySelector('.progress-fill');
+            if (progressFill) {
+                progressFill.style.width = totalProgress3 + '%';
+                progressFill.textContent = totalProgress3 + '%';
+            }
+        }
     </script>
 
 </body>
