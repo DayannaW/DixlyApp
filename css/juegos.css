@@ -102,14 +102,29 @@ p {
    ANIMACIONES SUAVES
    ============================= */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes pop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .feedback-active {
@@ -197,7 +212,7 @@ p {
 .loader {
     width: 45px;
     height: 45px;
-    border: 4px solid rgba(0,0,0,0.1);
+    border: 4px solid rgba(0, 0, 0, 0.1);
     border-top-color: var(--color-primario);
     border-radius: 50%;
     animation: girar 1s linear infinite;
@@ -205,7 +220,9 @@ p {
 }
 
 @keyframes girar {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* MODAL REUTILIZABLE */
@@ -215,7 +232,7 @@ p {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -280,4 +297,63 @@ p {
     width: 0%;
     border-radius: 10px;
     transition: width 0.4s ease;
+}
+
+/* =============================
+   COMPONENTES UI REUTILIZABLES INDEX JUEGOS
+   ============================= */
+
+/* APP BAR */
+.app-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: var(--bg-soft);
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    z-index: 200;
+
+    padding: 0 1.2rem;
+
+    border: none;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.12),
+        0 1px 4px rgba(0, 0, 0, 0.08);
+
+
+}
+
+.app-bar-back {
+    background: none;
+    border: none;
+    color: var(--accent-ui);
+    font-size: 1.7rem;
+    cursor: pointer;
+    margin-right: 1.2rem;
+    font-weight: bold;
+    padding: 0.2rem 0.6rem;
+}
+
+.app-bar-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent-ui);
+    letter-spacing: 0.02em;
+}
+
+/* BARRA DE PROGRESO */
+.progress-container-m {
+    height: 10px;
+    border-radius: 8px;
+    width: 100%;
+    background: var(--bg-panel);
+    overflow: hidden;
+    margin-top: 0.4rem;
 }

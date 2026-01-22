@@ -9,55 +9,123 @@
     <link rel="stylesheet" href="../../css/layout.css">
     <link rel="stylesheet" href="../../css/ui.css">
     <link rel="stylesheet" href="../../css/vistas/index.css">
+    <link rel="stylesheet" href="../../css/indexJuegos.css">
 </head>
 
-<body class="body--juegos">
-    <main class="contenedor-juego-descripcion">
-        <button class="btn btn-ghost" onclick="location.href='../../index.html'">← Volver</button>
-        <h1>Juego 2 — Memoria verbal</h1>
-        <p>Descripción breve del juego 2. Selecciona un nivel para comenzar.</p>
-
-        <section class="niveles">
-            <h3>Elegir nivel</h3>
-            <div class="lista-niveles">
-                <button class="btn btn-primary level-btn" data-level="nivel-facil">Fácil</button>
-                <button class="btn btn-primary level-btn" data-level="nivel-intermedio">Intermedio</button>
-                <button class="btn btn-primary level-btn" data-level="nivel-dificil">Difícil</button>
+<body class="body">
+    <!-- App Bar -->
+    <header class="app-bar">
+        <button class="app-bar-back" onclick="location.href='../../index.html'" aria-label="Volver">
+            ←
+        </button>
+        <span class="app-bar-title">Eco de Sonidos</span>
+    </header>
+    <main class="level-select-container">
+        <div>
+            <h2 class="game-description">Refuerza tu conciencia fonológica, discriminación de fonemas y memoria auditiva</h2>
+        </div>
+        <div class="progress-general">
+            <span>Progreso general</span>
+            <span class="progress-general-value">| <span id="progress-general-num">0%</span></span>
+            <div class="progress-container-m">
+                <div class="progress-fill" id="progress-general-bar" style="width: 95%"></div>
             </div>
+        </div>
+        <section class="levels-list">
+            <!-- Niveles se renderizan por JS -->
         </section>
-        <style>
-            .level-locked {
-                background: #2b2b2b !important;
-                color: #fff !important;
-                opacity: 0.9;
-                cursor: not-allowed;
+    </main>
+  
+    <script type="module">
+        import { hasCompletedLevel } from '../../js/util.js';
+        // Configuración de niveles
+        const levels = [
+            {
+                key: 'nivel-facil',
+                title: 'NIVEL 1',
+                desc: 'Un eco en el ambiente',
+                icon: '🌄'
+            },
+            {
+                key: 'nivel-intermedio',
+                title: 'NIVEL 2',
+                desc: 'Escuchaste eso?',
+                icon: '🌄'
+            },
+            {
+                key: 'nivel-dificil',
+                title: 'NIVEL 3',
+                desc: 'Atento al intruso',
+                icon: '🔍'
             }
-        </style>
-        <script type="module">
-            import { hasCompletedLevel } from '../../js/util.js';
-            const buttons = document.querySelectorAll('.level-btn');
-            const levelOrder = ['nivel-facil', 'nivel-intermedio', 'nivel-dificil'];
-            const gameId = 'juego2';
-            buttons.forEach(btn => {
-                const lvl = btn.dataset.level;
+        ];
+        const levelOrder = levels.map(l => l.key);
+        console.log(levelOrder);
+        const gameId = 'juego2';
+        (async () => {
+            let unlockedLevels = 1;
+            let completedCount = 0;
+            const completedLevels = {};
+            for (let i = 0; i < levelOrder.length; i++) {
+                const key = levelOrder[i];
+                const completed = hasCompletedLevel(gameId, key);
+                completedLevels[key] = completed;
+                if (completed) {
+                    completedCount++;
+                    unlockedLevels = i + 2;
+                }
+            }
+
+            let pendienteHtml = '<span class="circle-check" aria-label="Pendiente"></span>';
+            let completedHtml = '<span class="circle-check completed" aria-label="Completado"></span>';
+            // Renderizar niveles
+            const list = document.querySelector('.levels-list');
+            list.innerHTML = '';
+            levels.forEach((lvl, idx) => {
+                let isLocked = idx >= unlockedLevels;
+                let isCompleted = completedLevels[lvl.key];
+                let isCurrent = !isLocked && !isCompleted;
+                let action = '';
+                if (isLocked) {
+                    action = `<button class='btn btn-locked' disabled><span style='font-size:1.1rem;'>🔒</span> Desbloquea</button>`;
+                } else {
+                    action = `<button class="circle-play" aria-label="Jugar nivel">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M8 6v12l10-6z" />
+  </svg>
+</button>
+        `;
+                }
+                list.innerHTML += `
+                <div class='level-card${isLocked ? ' locked' : ''}${isCompleted ? ' completed' : ''}'>
+                    <div class='level-icon'>${isCompleted ? completedHtml : pendienteHtml}</div>
+                    <div class='level-info'>
+                        <div class='level-title'>${lvl.title}</div>
+                        <div class='level-desc'>${lvl.desc}</div>
+                    </div>
+                    <div class='level-action'>${action}</div>
+                </div>`;
+
+
+            });
+            // Progreso general
+            const totalProgress = Math.round((completedCount / levels.length) * 100);
+            document.getElementById('progress-general-num').textContent = totalProgress + '%';
+            document.getElementById('progress-general-bar').style.width = totalProgress + '%';
+            // Acciones de los botones
+            document.querySelectorAll('.level-card:not(.locked) .circle-play').forEach((btn, idx) => {
                 btn.addEventListener('click', () => {
-                    if (btn.disabled) return;
-                    // map level -> page
                     const pageMap = {
-                        'nivel-facil': 'juego2nivel1.html',
-                        'nivel-intermedio': 'juego2nivel2.html',
-                        'nivel-dificil': 'juego2nivel3.html'
+                        0: 'juego2nivel1.html',
+                        1: 'juego2nivel2.html',
+                        2: 'juego2nivel3.html'
                     };
-                    const page = pageMap[lvl] || 'juego2nivel1.html';
-                    location.href = `${page}?level=${encodeURIComponent(lvl)}`;
+                    const page = pageMap[idx] || 'juego2nivel1.html';
+                    location.href = `${page}?level=${encodeURIComponent(levels[idx].key)}`;
                 });
             });
-            (async () => {
-                // only one level now; keep first unlocked
-                const btn = buttons[0]; if (btn) btn.disabled = false;
-            })();
-        </script>
-    </main>
+        })();
+    </script>
 </body>
 
 </html>
