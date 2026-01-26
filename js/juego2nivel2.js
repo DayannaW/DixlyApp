@@ -1,4 +1,4 @@
-import { loadJSON } from './util.js';
+import { loadJSON, addLevelCompletion } from './util.js';
 import Pet from './pet.js';
 
 const Game2Nivel2 = (() => {
@@ -13,28 +13,96 @@ const Game2Nivel2 = (() => {
             const j = Math.floor(Math.random() * (i + 1));
             [rondas[i], rondas[j]] = [rondas[j], rondas[i]];
         }
+        // Limitar a 10 rondas
+        rondas = rondas.slice(0, 10);
         current = 0;
         aciertos = 0;
     }
 
+    // Pantalla de instrucciones
     function showInstrucciones() {
-        const main = document.getElementById('main-container');
-        main.innerHTML = `
-      <div class="instructions-overlay">
-        <div class="instructions-card">
-          <h2>Nivel Intermedio</h2>
-          <p>Escucharás dos palabras que comparten el mismo fonema problemático.<br><br>
-          Arrastra la palabra correcta a la caja de sonidos.<br><br>
-          En las primeras rondas habrá 3 opciones, luego 4.<br><br>
-          ¡Buena suerte!</p>
-          <button id="start-btn" class="btn btn-primary">Comenzar</button>
-        </div>
-      </div>
-    `;
-        try { Pet.init(); Pet.setIdle(); } catch (e) { }
-        document.getElementById('start-btn').onclick = () => {
+        // Hacer Pixel más grande mientras se muestran las instrucciones
+        const pixelContainer = document.getElementById('pixel-container');
+        if (pixelContainer) pixelContainer.classList.add('pixel-grande');
+        // Crear overlay modal igual que en nivel 2
+        const overlay = document.createElement('div');
+        overlay.className = 'instructions-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.background = 'rgba(0,0,0,0.35)';
+        overlay.style.zIndex = '9999';
+        overlay.style.display = 'flex';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+
+        const card = document.createElement('div');
+        card.className = 'instructions-card';
+        card.style.background = '#fff';
+        card.style.padding = '2.5rem 2.5rem 2rem 2.5rem';
+        card.style.borderRadius = '24px 24px 20px 20px';
+        card.style.boxShadow = '0 4px 32px #0002';
+
+        // Botón X para cerrar
+        const closeBtn = document.createElement('button');
+        closeBtn.innerHTML = '&times;';
+        closeBtn.setAttribute('aria-label', 'Cerrar');
+        closeBtn.className = 'close-btn';
+
+        closeBtn.addEventListener('click', () => {
+            window.location.href = '../juego2/index.html';
+        });
+        // Contenedor relativo para el botón X
+        const cardWrapper = document.createElement('div');
+        cardWrapper.style.position = 'relative';
+        cardWrapper.appendChild(closeBtn);
+        cardWrapper.appendChild(card);
+
+        card.innerHTML = `
+            <h2 style="margin-bottom: 1rem;">Sonidos en Movimiento</h2>
+            <p >Los sonidos ya no esperan.<br>
+                Ahora se mueven.<br><br>
+                Escucha la palabra con atención.<br>
+                Después, varias palabras caerán lentamente frente a ti.<br><br>
+                Algunas se parecen…<br>
+                pero solo una coincide con lo que escuchaste.<br><br>
+                Observa, recuerda y decide en el momento justo.</p>
+            <button id="start-btn" class="instruction-btn">Entiendo</button>
+        `;
+        overlay.appendChild(cardWrapper);
+        document.body.appendChild(overlay);
+        // Mostrar el botón después de 2.5 segundos
+        setTimeout(() => {
+            document.querySelector('.instruction-btn')?.classList.add('visible');
+        }, 5000);
+        try {
+            Pet.init();
+            Pet.setIdle();
+            if (Pet.hideDialog) Pet.hideDialog();
+            const pc = document.getElementById('pixel-container'); if (pc) pc.style.zIndex = '10000';
+            const dialog = document.getElementById('pixel-dialog'); if (dialog) dialog.style.display = 'none';
+        } catch (e) { }
+        const startBtn = document.getElementById('start-btn');
+        if (startBtn) startBtn.onclick = () => {
+            overlay.remove();
+
+            const pc = document.getElementById('pixel-container');
+            if (pc) {
+                pc.style.zIndex = '';
+                pc.classList.remove('pixel-grande'); // Quitar clase al cerrar instrucciones
+            }
+            const dialog = document.getElementById('pixel-dialog'); if (dialog) dialog.style.display = '';
             showJuego();
         };
+        // CSS para pixel-grande
+        const styleId = 'pixel-grande-style';
+        if (!document.getElementById(styleId)) {
+            const style = document.createElement('style');
+            style.id = styleId;
+            document.head.appendChild(style);
+        }
     }
 
     function shuffle(arr) {
@@ -71,15 +139,16 @@ const Game2Nivel2 = (() => {
 
         // Determinar etapa
         let etapa = 'inicio';
-        if (current >= 10) etapa = 'avanzado';
-        else if (current >= 5) etapa = 'medio';
+        // 0-3: inicio, 4-6: medio, 7-9: avanzado
+        if (current >= 7) etapa = 'avanzado';
+        else if (current >= 4) etapa = 'medio';
 
         // Reiniciar responded al mostrar nueva ronda
         // Limpiar timeouts y audios pendientes de la ronda anterior
         palabraSecuenciaTimeouts.forEach(t => clearTimeout(t));
         palabraSecuenciaTimeouts = [];
         if (activeWordAudio) {
-            try { activeWordAudio.pause(); } catch (e) {}
+            try { activeWordAudio.pause(); } catch (e) { }
             activeWordAudio = null;
         }
         let responded = false;
@@ -128,7 +197,7 @@ const Game2Nivel2 = (() => {
         let correctaIdx = opciones.findIndex(o => o.correcta);
 
         // Render UI
-                main.innerHTML = `
+        main.innerHTML = `
             <button id="pause-btn" class="btn btn-pause" style="position:absolute;top:18px;right:18px;z-index:2000;">⏸ Pausa</button>
             <div class="j2-card">
                 <h2>Escucha las palabras</h2>
@@ -142,15 +211,15 @@ const Game2Nivel2 = (() => {
                 <div style="background:#fff;padding:2.5rem 2.5rem 2rem 2.5rem;border-radius:18px;box-shadow:0 4px 32px #0002;font-size:2.2rem;font-weight:700;color:#234;">En pausa</div>
             </div>
         `;
-                // PAUSA
-                const pauseBtn = document.getElementById('pause-btn');
-                const pauseOverlay = document.getElementById('pause-overlay');
-            paused = false;
-            resumeCallbacks = [];
-            let activeCountdownAudio = null;
-            let activeYaAudio = null;
-            let countdownTimeouts = [];
-            faseActual = 'cuentaRegresiva';
+        // PAUSA
+        const pauseBtn = document.getElementById('pause-btn');
+        const pauseOverlay = document.getElementById('pause-overlay');
+        paused = false;
+        resumeCallbacks = [];
+        let activeCountdownAudio = null;
+        let activeYaAudio = null;
+        let countdownTimeouts = [];
+        faseActual = 'cuentaRegresiva';
         pauseBtn.onclick = () => {
             paused = true;
             // Insertar botones en el overlay de pausa
@@ -183,11 +252,11 @@ const Game2Nivel2 = (() => {
                     pauseOverlay.style.display = 'none';
                     // Reanudar audios activos según la fase
                     if (faseActual === 'cuentaRegresiva') {
-                        if (activeCountdownAudio && activeCountdownAudio.paused) activeCountdownAudio.play().catch(()=>{});
-                        if (activeYaAudio && activeYaAudio.paused) activeYaAudio.play().catch(()=>{});
+                        if (activeCountdownAudio && activeCountdownAudio.paused) activeCountdownAudio.play().catch(() => { });
+                        if (activeYaAudio && activeYaAudio.paused) activeYaAudio.play().catch(() => { });
                     }
                     if (faseActual === 'palabras') {
-                        if (activeWordAudio && activeWordAudio.paused) activeWordAudio.play().catch(()=>{});
+                        if (activeWordAudio && activeWordAudio.paused) activeWordAudio.play().catch(() => { });
                     }
                     resumeCallbacks.forEach(fn => fn());
                     resumeCallbacks = [];
@@ -261,16 +330,16 @@ const Game2Nivel2 = (() => {
                                 palabraSecuenciaTimeouts.forEach(t => clearTimeout(t));
                                 palabraSecuenciaTimeouts = [];
                                 if (activeWordAudio) {
-                                    try { activeWordAudio.pause(); } catch (e) {}
+                                    try { activeWordAudio.pause(); } catch (e) { }
                                     activeWordAudio = null;
                                 }
                                 // Limpiar y pausar audios de cuenta regresiva
                                 if (activeCountdownAudio) {
-                                    try { activeCountdownAudio.pause(); } catch (e) {}
+                                    try { activeCountdownAudio.pause(); } catch (e) { }
                                     activeCountdownAudio = null;
                                 }
                                 if (activeYaAudio) {
-                                    try { activeYaAudio.pause(); } catch (e) {}
+                                    try { activeYaAudio.pause(); } catch (e) { }
                                     activeYaAudio = null;
                                 }
                                 // Cambiar fase a caida
@@ -292,9 +361,31 @@ const Game2Nivel2 = (() => {
 
     function reproducirPalabrasSecuencia(palabras, callback) {
         let idx = 0;
+        let fallbackBtn = null;
+        function showFallbackBtn(audio) {
+            if (fallbackBtn) return;
+            const audioArea = document.getElementById('audio-area');
+            audioArea.style.display = 'block';
+            fallbackBtn = document.createElement('button');
+            fallbackBtn.textContent = '🔊 Reproducir sonido';
+            fallbackBtn.className = 'btn btn-audio';
+            fallbackBtn.style.margin = '0.7rem auto 0 auto';
+            fallbackBtn.onclick = () => {
+                audio.currentTime = 0;
+                audio.play().then(() => {
+                    fallbackBtn.style.display = 'none';
+                }).catch(() => {
+                    fallbackBtn.style.display = 'block';
+                });
+            };
+            audioArea.innerHTML = '';
+            audioArea.appendChild(fallbackBtn);
+        }
+        function hideFallbackBtn() {
+            if (fallbackBtn) fallbackBtn.style.display = 'none';
+        }
         function next() {
             if (paused) {
-                // Guardar el avance pendiente para reanudar exactamente aquí
                 resumeCallbacks.push(next);
                 return;
             }
@@ -302,14 +393,12 @@ const Game2Nivel2 = (() => {
                 if (callback) callback();
                 return;
             }
-            // Usar la variable global activeWordAudio
             if (activeWordAudio) {
-                try { activeWordAudio.pause(); } catch (e) {}
+                try { activeWordAudio.pause(); } catch (e) { }
                 activeWordAudio = null;
             }
             activeWordAudio = new Audio(palabras[idx].ruta);
             activeWordAudio.onended = () => {
-                // Si se pausa justo después de terminar la palabra, guardar el avance pendiente
                 const avanzar = () => { idx++; next(); };
                 if (paused) {
                     resumeCallbacks.push(avanzar);
@@ -317,14 +406,13 @@ const Game2Nivel2 = (() => {
                     palabraSecuenciaTimeouts.push(setTimeout(avanzar, 400));
                 }
             };
-            activeWordAudio.play().catch((err) => {
-                const avanzar = () => { idx++; next(); };
-                if (paused) {
-                    resumeCallbacks.push(avanzar);
-                } else {
-                    palabraSecuenciaTimeouts.push(setTimeout(avanzar, 500));
-                }
-            });
+            const playPromise = activeWordAudio.play();
+            if (playPromise && typeof playPromise.then === 'function') {
+                playPromise.catch(err => {
+                    showFallbackBtn(activeWordAudio);
+                });
+                playPromise.then(() => { hideFallbackBtn(); });
+            }
         }
         next();
     }
@@ -387,6 +475,33 @@ const Game2Nivel2 = (() => {
             w.ondragend = () => {
                 w.classList.remove('dragging');
             };
+            // Soporte táctil para móviles: simular drop al tocar la palabra
+            w.addEventListener('touchstart', function(e) {
+                if (w.getAttribute('draggable') === 'false' || fallArea.classList.contains('respondido')) return;
+                e.preventDefault();
+                playSfx('drop.mp3');
+                // Animar la palabra hacia la drop-box
+                const dropBox = document.getElementById('drop-box');
+                const dropRect = dropBox.getBoundingClientRect();
+                const wordRect = w.getBoundingClientRect();
+                const deltaX = dropRect.left + dropRect.width/2 - (wordRect.left + wordRect.width/2);
+                const deltaY = dropRect.top + dropRect.height/2 - (wordRect.top + wordRect.height/2);
+                w.style.transition = 'transform 0.55s cubic-bezier(.4,1.2,.6,1), opacity 0.2s';
+                w.style.zIndex = '10000';
+                w.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(1.15)`;
+                setTimeout(() => {
+                    w.style.opacity = '0';
+                    // Simular drop
+                    handleDrop(i, opciones, correctaIdx, () => {
+                        localResponded = true;
+                        localAutoAdvanceTriggered = true;
+                        if (autoAdvanceTimeout) {
+                            clearTimeout(autoAdvanceTimeout);
+                            autoAdvanceTimeout = null;
+                        }
+                    });
+                }, 550);
+            }, { passive: false });
         });
         // Drop box
         const dropBox = document.getElementById('drop-box');
@@ -416,6 +531,15 @@ const Game2Nivel2 = (() => {
         // Desactivar drag de todas
         const allWords = fallArea.querySelectorAll('.fall-word');
         allWords.forEach(fw => { fw.setAttribute('draggable', 'false'); fw.classList.add('fall-inactiva'); });
+        // Limpiar todos los timeouts de caída y auto avance
+        if (typeof window.fallTimeouts !== 'undefined') {
+            window.fallTimeouts.forEach(t => clearTimeout(t));
+            window.fallTimeouts = [];
+        }
+        if (typeof window.autoAdvanceTimeout !== 'undefined' && window.autoAdvanceTimeout) {
+            clearTimeout(window.autoAdvanceTimeout);
+            window.autoAdvanceTimeout = null;
+        }
         // Evitar doble avance si ya se respondió
         if (typeof onResponded === 'function') onResponded();
         if (palabra.correcta) {
@@ -453,7 +577,19 @@ const Game2Nivel2 = (() => {
         if (current < rondas.length) {
             showJuego();
         } else {
-            showResultados();
+            // Guardar progreso y redirigir a resultados.html
+            try {
+                addLevelCompletion('juego2', 'nivel-intermedio');
+            } catch (e) { }
+            let total = 0;
+            try {
+                const STORAGE_KEY = 'dixly_progress_v1';
+                let p = localStorage.getItem(STORAGE_KEY);
+                p = p ? JSON.parse(p) : { perGame: {}, total: 0 };
+                total = p.total || 0;
+            } catch (e) { }
+            const intentos = rondas.length;
+            window.location.href = `../resultados.html?game=juego2&level=nivel-intermedio&aciertos=${aciertos}&intentos=${intentos}&score=${aciertos}&total=${total}`;
         }
     }
 

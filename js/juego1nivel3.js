@@ -1,6 +1,8 @@
 import { loadJSON, addLevelCompletion } from './util.js';
 import Pet from './pet.js';
 
+const btnSalir = document.createElement('button');
+
 const Game1_3 = (() => {
   let stories = [];
   let currentStory = 0;
@@ -15,30 +17,135 @@ const Game1_3 = (() => {
     userEndings = [];
   }
 
+  // function showInstructions() {
+  //   const main = document.getElementById('main-container');
+  //   main.innerHTML = `
+  //     <div class="instructions-overlay">
+  //       <div class="instructions-card">
+  //         <h2>¡Arma el final de la historia!</h2>
+  //         <p>Lee la historia con atención. Cuando termines, deberás elegir y ordenar tres fragmentos para construir el final más coherente.<br><br>
+  //         Arrastra los fragmentos al espacio vacío. Puedes quitar y cambiar los fragmentos antes de revisar tu respuesta.<br><br>
+  //         ¡Mucha suerte!</p>
+  //         <button id="start-btn" class="btn btn-primary">Comenzar</button>
+  //       </div>
+  //     </div>
+  //   `;
+  //   try { Pet.init(); Pet.setIdle(); } catch (e) {console.log("oc err"+e);}
+  //   const pc = document.getElementById('pixel-container');
+  //   if (pc) pc.style.zIndex = '9999';
+  //   const dialog = document.getElementById('pixel-dialog');
+  //   if (dialog) dialog.style.display = 'none';
+  //   //setTimeout(() => { try { Pet.speak('¡Vamos a armar el final! Lee las instrucciones y presiona Comenzar.'); } catch (e) {} }, 400);
+  //   document.getElementById('start-btn').onclick = () => {
+  //     if (pc) pc.style.zIndex = '';
+  //     if (dialog) dialog.style.display = '';
+  //     showStoryBase();
+  //   };
+  // }
+
+
   function showInstructions() {
-    const main = document.getElementById('main-container');
-    main.innerHTML = `
-      <div class="instructions-overlay">
-        <div class="instructions-card">
-          <h2>¡Arma el final de la historia!</h2>
-          <p>Lee la historia con atención. Cuando termines, deberás elegir y ordenar tres fragmentos para construir el final más coherente.<br><br>
-          Arrastra los fragmentos al espacio vacío. Puedes quitar y cambiar los fragmentos antes de revisar tu respuesta.<br><br>
-          ¡Mucha suerte!</p>
-          <button id="start-btn" class="btn btn-primary">Comenzar</button>
-        </div>
-      </div>
+    const overlay = document.createElement('div');
+    overlay.className = 'instructions-overlay';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.background = 'rgba(0,0,0,0.35)';
+    overlay.style.zIndex = '9999';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+
+    // Card
+    const card = document.createElement('div');
+    card.className = 'instructions-card';
+    card.style.background = '#fff';
+    card.style.padding = '2.5rem 2.5rem 2rem 2.5rem';
+    card.style.borderRadius = '24px 24px 20px 20px';
+    card.style.boxShadow = '0 4px 32px #0002';
+
+    // Botón X para cerrar
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '&times;';
+    closeBtn.setAttribute('aria-label', 'Cerrar');
+    closeBtn.className = 'close-btn';
+
+    closeBtn.addEventListener('click', () => {
+      window.location.href = '../juego1/index.html';
+    });
+    // Contenedor relativo para el botón X
+    const cardWrapper = document.createElement('div');
+    cardWrapper.style.position = 'relative';
+    cardWrapper.appendChild(closeBtn);
+    cardWrapper.appendChild(card);
+
+    card.innerHTML = `
+      <h2 style="margin-bottom: 1rem;">El Final es Tuyo!</h2>
+      <p >
+        Has reunido las piezas.<br>
+        Has ordenado los fragmentos.<br><br>
+
+        Ahora falta lo más difícil:<br>
+        entender la historia lo suficiente como para darle un final.<br><br>
+
+        Lee con calma.<br>
+        Elige el cierre que mejor represente lo que el texto ha construido.<br><br>
+
+        No todos los finales son correctos,<br>
+        pero solo uno encaja de verdad.<br><br>
+      </p>
+      <button id="start-btn" class="instruction-btn">Entiendo</button>
     `;
-    try { Pet.init(); Pet.setIdle(); } catch (e) {console.log("oc err"+e);}
-    const pc = document.getElementById('pixel-container');
-    if (pc) pc.style.zIndex = '9999';
-    const dialog = document.getElementById('pixel-dialog');
-    if (dialog) dialog.style.display = 'none';
-    //setTimeout(() => { try { Pet.speak('¡Vamos a armar el final! Lee las instrucciones y presiona Comenzar.'); } catch (e) {} }, 400);
-    document.getElementById('start-btn').onclick = () => {
-      if (pc) pc.style.zIndex = '';
-      if (dialog) dialog.style.display = '';
+
+    overlay.appendChild(cardWrapper);
+    document.body.appendChild(overlay);
+            // Mostrar el botón después de 2.5 segundos
+    setTimeout(() => {
+            document.querySelector('.instruction-btn')?.classList.add('visible');
+        }, 5000);
+    // Pixel grande y ocultar dialog
+    try {
+      Pet.init();
+      Pet.setIdle();
+      const pc = document.getElementById('pixel-container'); if (pc) pc.style.zIndex = '10000';
+      if (pc) pc.classList.add('pixel-grande');
+      const dialog = document.getElementById('pixel-dialog'); if (dialog) dialog.style.display = 'none';
+    } catch (e) { }
+    const startBtn = document.getElementById('start-btn');
+    if (startBtn) startBtn.addEventListener('click', () => {
+      overlay.remove();
+      btnSalir.style.visibility = 'visible'; // Mostrar botón salir
+      const pc = document.getElementById('pixel-container'); if (pc) { pc.style.zIndex = ''; pc.classList.remove('pixel-grande'); }
+      const dialog = document.getElementById('pixel-dialog'); if (dialog) dialog.style.display = '';
       showStoryBase();
+    });
+  }
+
+
+  // Crear botón salir en la esquina superior derecha
+  function createExitButton() {
+    if (document.getElementById('btn-salir-j2')) return;
+    btnSalir.id = 'btn-salir-j2';
+    btnSalir.textContent = 'Salir';
+    btnSalir.className = 'btn btn-exit';
+    btnSalir.style.position = 'absolute';
+    btnSalir.style.top = '18px';
+    btnSalir.style.right = '18px';
+    btnSalir.style.zIndex = '1001';
+    btnSalir.style.fontSize = '1.1rem';
+    btnSalir.style.padding = '0.5rem 1.4rem';
+    btnSalir.style.borderRadius = '1.5rem';
+    btnSalir.style.border = 'none';
+    btnSalir.style.background = '#f44336';
+    btnSalir.style.color = 'white';
+    btnSalir.style.cursor = 'pointer';
+    btnSalir.style.visibility = 'hidden';
+    btnSalir.onclick = () => {
+      window.location.href = '../juego1/index.html';
     };
+    document.body.appendChild(btnSalir);
   }
 
   function showStoryBase() {
@@ -334,6 +441,7 @@ const Game1_3 = (() => {
 
   async function init() {
     await loadStories();
+    createExitButton();
     showInstructions();
   }
 

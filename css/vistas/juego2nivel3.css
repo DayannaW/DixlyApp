@@ -1,15 +1,16 @@
 /* Pixel en esquina superior izquierda, pequeño y en primer plano */
 #pixel-container {
-  position: fixed;
-  top: 24px;
-  left: 24px;
-  width: 110px;
-  height: 110px;
-  z-index: 4000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  pointer-events: none;
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    width: 140px;
+    max-width: 22vw;
+    z-index: 60;
+    display: flex;
+    flex-direction: column-reverse; /* el diálogo se muestra arriba */
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
 }
 #pixel-animation {
   width: 90px;

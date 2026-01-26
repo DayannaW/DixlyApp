@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Resultados</title>
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/layout.css">
@@ -74,6 +74,7 @@
     const gameScoreEl = document.getElementById('game-score');
     const summary = document.getElementById('summary');
     const attemptsRow = document.getElementById('attempts-row');
+    const attemptsRowBox = document.getElementById('attempts-row-box');
     const totalGameScoreEl = document.getElementById('total-game-score');
 
     const btnRepeat = document.getElementById('btn-repeat');
@@ -114,8 +115,18 @@
         if (lvl === 'nivel-dificil') return `./juego1/juego1nivel3.html?level=nivel-dificil`;
         return `./juego1/juego1nivel1.html?level=nivel-facil`;
       }
-      if (gameId === 'juego2') return `./juego2/juego2nivel1.html?level=${encodeURIComponent(lvl)}`;
-      if (gameId === 'juego3') return `./juego3/juego3nivel1.html?level=${encodeURIComponent(lvl)}`;
+      if (gameId === 'juego2') {
+        if (lvl === 'nivel-facil') return `./juego2/juego2nivel1.html?level=nivel-facil`;
+        if (lvl === 'nivel-intermedio') return `./juego2/juego2nivel2.html?level=nivel-intermedio`;
+        if (lvl === 'nivel-dificil') return `./juego2/juego2nivel3.html?level=nivel-dificil`;
+        return `./juego2/juego2nivel1.html?level=nivel-facil`;
+      };
+      if (gameId === 'juego3') {
+        if (lvl === 'nivel-facil') return `./juego3/juego3nivel1.html?level=nivel-facil`;
+        if (lvl === 'nivel-intermedio') return `./juego3/juego3nivel2.html?level=nivel-intermedio`;
+        if (lvl === 'nivel-dificil') return `./juego3/juego3nivel3.html?level=nivel-dificil`;
+        return `./juego3/juego3nivel1.html?level=nivel-facil`;
+      };
       return '../index.html';
     }
 
@@ -183,36 +194,18 @@
       aciertos = parseInt(params.get('aciertos') || '0', 10);
     } catch (e) {}
     if (aciertosScoreEl) aciertosScoreEl.textContent = aciertos;
-    // Mostrar intentos solo para juego1 nivel-facil o nivel-intermedio
-    const attemptsRowBox = document.getElementById('attempts-row-box');
-    console.log('Verificando si mostrar intentos para', game, level);
-    if (game === 'juego1' && (level === 'nivel-facil' || level === 'nivel-intermedio')) {
-      console.log('Mostrando intentos para', game, level);
-      try {
-        intentos = parseInt(params.get('intentos') || '0', 10);
-      } catch (e) {}
-      attemptsRowBox.style.display = 'block';
-      // Priorizar el valor de la URL, si no existe usar localStorage
-      let shownAttempts = intentos;
-      if (!shownAttempts) {
-        try {
-          const key = `juego1_${level}_intentos`;
-          shownAttempts = parseInt(localStorage.getItem(key) || '0', 10);
-        } catch (e) {}
-      }
-      attemptsRow.textContent = `Intentos realizados: ${shownAttempts}`;
-    } else {
-      attemptsRowBox.style.display = 'none';
-    }
+    // Mostrar intentos para todos los juegos
+    try {
+      intentos = parseInt(params.get('intentos') || '0', 10);
+    } catch (e) {}
+    attemptsRowBox.style.display = 'block';
+    attemptsRow.textContent = `Intentos realizados: ${intentos}`;
 
     // Puntos acumulados en todo el juego
+    // Mostrar el total acumulado de todos los juegos
     let totalGameScore = 0;
     try {
-      if (game) {
-        // Sumar todos los niveles de este juego
-        const levels = ['nivel-facil','nivel-intermedio','nivel-dificil'];
-        totalGameScore = levels.reduce((acc, lvl) => acc + (getLevelPoints ? getLevelPoints(lvl, game) : 0), 0);
-      }
+      totalGameScore = getTotalScore();
     } catch (e) {}
     if (totalGameScoreEl) totalGameScoreEl.textContent = totalGameScore;
 
@@ -247,6 +240,7 @@
       location.href = path;
     });
 
+    console.log('boton next:', btnNext);
     btnNext.addEventListener('click', () => {
       if (!level) return;
       const idx = levelOrder.indexOf(level);

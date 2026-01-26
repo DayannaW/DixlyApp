@@ -2,6 +2,8 @@
 <html lang="es">
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <meta charset="UTF-8">
 
     <title>Juego 1 – Fragmento Perdido (Nivel)</title>
@@ -10,6 +12,7 @@
     <link rel="stylesheet" href="../../css/layout.css">
     <link rel="stylesheet" href="../../css/ui.css">
     <link rel="stylesheet" href="../../css/vistas/juego1nivel1.css">
+    <link rel="stylesheet" href="../../css/instrucciones.css">
 
 </head>
 
@@ -18,19 +21,25 @@
     <!-- Botón de sonido -->
     <button id="toggle-sound" class="btn-sound">🔊</button>
 
-    <div id="container">
+    <!-- Scrim Layer -->
+    <div class="scrim-bg"></div>
 
-
-        <!-- Nueva área para imagen -->
-        <div id="img-area">
-            <img id="story-img" src="" alt="Imagen de la historia">
+    <!-- Card Overlay Layout -->
+    <div class="card-overlay-layout">
+        <div class="card-overlay-content">
+            <div id="container">
+                <!-- Nueva área para imagen -->
+                <div id="img-area">
+                    <img id="story-img" src="" alt="Imagen de la historia">
+                </div>
+                <h2 id="title"></h2>
+                <p id="texto-principal"></p>
+                <div class="separator-line"></div>
+                <div class="helper-text">¿Qué fragmento completa mejor el texto?</div>
+                <div id="opciones"></div>
+                <div id="feedback"></div>
+            </div>
         </div>
-        <h2 id="title"></h2>
-        <p id="texto-principal"></p>
-
-        <div id="opciones"></div>
-
-        <div id="feedback"></div>
     </div>
 
     <div id="pixel-container">
@@ -41,7 +50,6 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
-
 
     <script type="module">
         import Game1 from "../../js/juego1nivel1.js";

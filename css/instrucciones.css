@@ -1,0 +1,154 @@
+.instruction-btn {
+  margin-top: 2rem;
+  align-self: flex-end;
+
+  background:
+    radial-gradient(120% 80% at center top,
+      var(--cta) 0%,
+      var(--cta-hover) 70%);
+
+  color: #fff;
+
+  border: none;
+  border-radius: 10px;
+  padding: 0.4rem 1.3rem;
+
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.16),
+    0 2px 6px rgba(0, 0, 0, 0.11);
+
+  /* 🔽 estado inicial (oculto) */
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+
+  transition:
+    opacity 2s ease,
+    transform 2s ease,
+    background 0.5s ease-in-out;
+}
+
+.instruction-btn.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.close-btn {
+  position: absolute;
+  width: 0.8rem;
+  height: 1.4rem;
+  top: 4%;
+  right: 24%;
+  padding: 8px 12px;
+  color: white;
+  font-size: 1rem;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+
+  /* Fondo con profundidad */
+  background: radial-gradient(circle at center,
+      var(--error) 0%,
+      var(--error) 65%);
+
+  /* Relieve + hundimiento central */
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.7),
+    /* luz arriba */
+    inset 0 -2px 4px rgba(0, 0, 0, 0.18),
+    /* sombra abajo */
+    inset 0 0 4px rgba(0, 0, 0, 0.22),
+    /* centro hundido */
+    0 1px 2px rgba(0, 0, 0, 0.10);
+  /* separación */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+
+}
+
+#pixel-container.pixel-grande {
+  position: fixed;
+  left: 0;
+  right: auto;
+  bottom: 0;
+  transform-origin: left bottom;
+  transform: scale(2);
+  transition: transform 0.3s cubic-bezier(.68, -0.55, .27, 1.55);
+  z-index: 10000 !important;
+}
+
+.instructions-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 70%;
+  height: 60vh;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.instructions-card {
+  background: #fff;
+  padding: 2.5rem 2.5rem 2rem 2.5rem;
+  border-radius: 24px 24px 20px 20px;
+  box-shadow: 0 4px 32px #0002;
+  font-size: 1.2rem;
+  max-width: 80vw;
+  width: 80%;
+  text-align: center;
+}
+
+
+
+
+/**** PANTALLAS PEQUEÑAS ****/
+@media (max-width: 600px) {
+
+  .instruction-btn {
+    font-size: 1rem;
+  }
+
+  .close-btn {
+    top: 3%;
+    right: 12%;
+  }
+
+  #pixel-container.pixel-grande {
+    left: -20px;
+    right: auto;
+    bottom: 0;
+    transform: scale(1.7);
+  }
+
+  .instructions-overlay {
+    width: 90vw;
+    height: 70vh;
+  }
+
+  .instructions-card {
+    padding: 1.2rem 0.7rem 1.2rem 0.7rem;
+    border-radius: 22px;
+    font-size: 0.9rem;
+    max-width: 85vw;
+    width: 95%;
+  }
+}
+
+
+
+
+/* PANTALLAS GRANDES */
+@media (min-width: 601px) {}

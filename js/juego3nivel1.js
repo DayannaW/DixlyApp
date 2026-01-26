@@ -11,22 +11,90 @@ import { loadJSON } from './util.js';
 import Pet from './pet.js';
 
 const Juego3Nivel1 = (() => {
+  // Pantalla de instrucciones
   function showInstrucciones() {
-    const main = document.getElementById('main-container');
-    main.innerHTML = `
-      <div class="instructions-overlay">
-        <div class="instructions-card">
-          <h2>Ruleta léxica</h2>
-          
-          <p>Gira la ruleta y selecciona la imagen que corresponde a la palabra que salga. ¡Mucha suerte!</p>
-          <button id="start-btn" class="btn btn-primary">Empezar</button>
-        </div>
-      </div>
-    `;
-    try { Pet.init(); Pet.setIdle(); Pet.hideDialog && Pet.hideDialog(); } catch (e) { }
-    document.getElementById('start-btn').onclick = () => {
+    // Hacer Pixel más grande mientras se muestran las instrucciones
+    const pixelContainer = document.getElementById('pixel-container');
+    if (pixelContainer) pixelContainer.classList.add('pixel-grande');
+    // Crear overlay modal igual que en nivel 2
+    const overlay = document.createElement('div');
+    overlay.className = 'instructions-overlay';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.background = 'rgba(0,0,0,0.35)';
+    overlay.style.zIndex = '9999';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+
+    const card = document.createElement('div');
+    card.className = 'instructions-card';
+    card.style.background = '#fff';
+    card.style.padding = '2.5rem 2.5rem 2rem 2.5rem';
+    card.style.borderRadius = '24px 24px 20px 20px';
+    card.style.boxShadow = '0 4px 32px #0002';
+
+    // Botón X para cerrar
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '&times;';
+    closeBtn.setAttribute('aria-label', 'Cerrar');
+    closeBtn.className = 'close-btn';
+
+    closeBtn.addEventListener('click', () => {
+      window.location.href = '../juego3/index.html';
+    });
+    // Contenedor relativo para el botón X
+    const cardWrapper = document.createElement('div');
+    cardWrapper.style.position = 'relative';
+    cardWrapper.appendChild(closeBtn);
+    cardWrapper.appendChild(card);
+
+    card.innerHTML = `
+            <h2 style="margin-bottom: 1rem;">Giro y Reconoce</h2>
+            <p >Las palabras no siempre esperan.<br>
+              Algunas aparecen y desaparecen en segundos.<br><br>
+              Haz girar la rueda.<br>
+              Cuando se detenga, aparecerá una palabra.<br><br>
+              Observa las imágenes con calma.<br>
+              Solo una representa correctamente esa palabra.<br><br>
+              Elige sin apresurarte, pero sin dudar demasiado.</p>
+            <button id="start-btn" class="instruction-btn">Entiendo</button>
+        `;
+    overlay.appendChild(cardWrapper);
+    document.body.appendChild(overlay);
+    // Mostrar el botón después de 2.5 segundos
+    setTimeout(() => {
+      document.querySelector('.instruction-btn')?.classList.add('visible');
+    }, 5000);
+    try {
+      Pet.init();
+      Pet.setIdle();
+      if (Pet.hideDialog) Pet.hideDialog();
+      const pc = document.getElementById('pixel-container'); if (pc) pc.style.zIndex = '10000';
+      const dialog = document.getElementById('pixel-dialog'); if (dialog) dialog.style.display = 'none';
+    } catch (e) { }
+    const startBtn = document.getElementById('start-btn');
+    if (startBtn) startBtn.onclick = () => {
+      overlay.remove();
+
+      const pc = document.getElementById('pixel-container');
+      if (pc) {
+        pc.style.zIndex = '';
+        pc.classList.remove('pixel-grande'); // Quitar clase al cerrar instrucciones
+      }
+      const dialog = document.getElementById('pixel-dialog'); if (dialog) dialog.style.display = '';
       showRuleta();
     };
+    // CSS para pixel-grande
+    const styleId = 'pixel-grande-style';
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      document.head.appendChild(style);
+    }
   }
 
 
@@ -69,35 +137,35 @@ const Juego3Nivel1 = (() => {
     }
     // Paleta de colores vivos y divertidos
     const colors = [
-      ['#ff1744','#ff8a65'], // rojo vivo a naranja
-      ['#f50057','#ff80ab'], // rosa fuerte a rosa claro
-      ['#d500f9','#b388ff'], // violeta a lila
-      ['#2979ff','#00e5ff'], // azul fuerte a celeste
-      ['#00e676','#76ff03'], // verde neón a verde lima
-      ['#ffd600','#ffea00'], // amarillo intenso
-      ['#ff9100','#ff3d00'], // naranja a rojo
-      ['#00bfae','#1de9b6'], // turquesa
-      ['#c51162','#f06292'], // magenta
-      ['#64dd17','#aeea00'], // verde limón
-      ['#304ffe','#536dfe'], // azul eléctrico
-      ['#ff6d00','#ffab00']  // naranja fuerte
+      ['#ff1744', '#ff8a65'], // rojo vivo a naranja
+      ['#f50057', '#ff80ab'], // rosa fuerte a rosa claro
+      ['#d500f9', '#b388ff'], // violeta a lila
+      ['#2979ff', '#00e5ff'], // azul fuerte a celeste
+      ['#00e676', '#76ff03'], // verde neón a verde lima
+      ['#ffd600', '#ffea00'], // amarillo intenso
+      ['#ff9100', '#ff3d00'], // naranja a rojo
+      ['#00bfae', '#1de9b6'], // turquesa
+      ['#c51162', '#f06292'], // magenta
+      ['#64dd17', '#aeea00'], // verde limón
+      ['#304ffe', '#536dfe'], // azul eléctrico
+      ['#ff6d00', '#ffab00']  // naranja fuerte
     ];
     const angle = 360 / palabrasRuleta.length;
     let svgSlices = '';
     let svgTexts = '';
     let svgSeparators = '';
-    for(let i=0; i<palabrasRuleta.length; i++){
+    for (let i = 0; i < palabrasRuleta.length; i++) {
       const startAngle = i * angle;
-      const endAngle = (i+1) * angle;
+      const endAngle = (i + 1) * angle;
       const largeArc = angle > 180 ? 1 : 0;
-      const x1 = 150 + 140 * Math.cos(Math.PI * (startAngle-90)/180);
-      const y1 = 150 + 140 * Math.sin(Math.PI * (startAngle-90)/180);
-      const x2 = 150 + 140 * Math.cos(Math.PI * (endAngle-90)/180);
-      const y2 = 150 + 140 * Math.sin(Math.PI * (endAngle-90)/180);
+      const x1 = 150 + 140 * Math.cos(Math.PI * (startAngle - 90) / 180);
+      const y1 = 150 + 140 * Math.sin(Math.PI * (startAngle - 90) / 180);
+      const x2 = 150 + 140 * Math.cos(Math.PI * (endAngle - 90) / 180);
+      const y2 = 150 + 140 * Math.sin(Math.PI * (endAngle - 90) / 180);
       const isUsed = palabrasUsadas.some(p => p.id === palabrasRuleta[i].id);
       // Gradiente lineal para cada segmento
-      const color1 = isUsed ? '#bbb' : colors[i%colors.length][0];
-      const color2 = isUsed ? '#bbb' : colors[i%colors.length][1];
+      const color1 = isUsed ? '#bbb' : colors[i % colors.length][0];
+      const color2 = isUsed ? '#bbb' : colors[i % colors.length][1];
       const gradId = `grad${i}`;
       svgSlices += `
         <defs>
@@ -108,13 +176,13 @@ const Juego3Nivel1 = (() => {
         </defs>
         <path d=\"M150,150 L${x1},${y1} A140,140 0 ${largeArc},1 ${x2},${y2} Z\" fill=\"url(#${gradId})\" />`;
       // Separador blanco
-      const sepX = 150 + 140 * Math.cos(Math.PI * (endAngle-90)/180);
-      const sepY = 150 + 140 * Math.sin(Math.PI * (endAngle-90)/180);
+      const sepX = 150 + 140 * Math.cos(Math.PI * (endAngle - 90) / 180);
+      const sepY = 150 + 140 * Math.sin(Math.PI * (endAngle - 90) / 180);
       svgSeparators += `<line x1=\"150\" y1=\"150\" x2=\"${sepX}\" y2=\"${sepY}\" stroke=\"#fff\" stroke-width=\"4\" />`;
       // Texto vertical hacia el centro
-      const tx = 150 + 90 * Math.cos(Math.PI * ((startAngle+endAngle)/2-90)/180);
-      const ty = 150 + 90 * Math.sin(Math.PI * ((startAngle+endAngle)/2-90)/180);
-      const angleText = ((startAngle+endAngle)/2) + 90;
+      const tx = 150 + 90 * Math.cos(Math.PI * ((startAngle + endAngle) / 2 - 90) / 180);
+      const ty = 150 + 90 * Math.sin(Math.PI * ((startAngle + endAngle) / 2 - 90) / 180);
+      const angleText = ((startAngle + endAngle) / 2) + 90;
       svgTexts += `<text x=\"${tx}\" y=\"${ty}\" text-anchor=\"middle\" alignment-baseline=\"middle\" font-size=\"18\" font-family=\"Lexend,Arial,sans-serif\" fill=\"${isUsed ? '#888' : '#222'}\" transform=\"rotate(${angleText},${tx},${ty})\">${palabrasRuleta[i].texto}</text>`;
     }
     main.innerHTML = `
@@ -155,7 +223,7 @@ const Juego3Nivel1 = (() => {
         sRuleta.currentTime = 0;
         sRuleta.play();
         setTimeout(() => { sRuleta.pause(); sRuleta.currentTime = 0; }, 3200);
-      } catch (e) {}
+      } catch (e) { }
       girarRuleta(palabrasRuleta);
     };
   }
@@ -168,7 +236,7 @@ const Juego3Nivel1 = (() => {
     const seleccion = Math.floor(Math.random() * candidatas.length);
     const palabraSeleccionada = candidatas[seleccion];
     const idx = palabrasRuleta.findIndex(p => p.id === palabraSeleccionada.id);
-    const grados = 360*3 + (360/n)*idx + (360/n)/2; // 3 vueltas + ángulo
+    const grados = 360 * 3 + (360 / n) * idx + (360 / n) / 2; // 3 vueltas + ángulo
     svg.style.transition = 'transform 3s cubic-bezier(.17,.67,.83,.67)';
     svg.style.transform = `rotate(-${grados}deg)`;
     // El sonido ahora se reproduce en el click del botón
@@ -190,7 +258,7 @@ const Juego3Nivel1 = (() => {
     animada.style.opacity = '1';
     animada.style.transform = 'scale(1.2) translateY(-40px)';
     // Sonido de aparición
-    try { sAparecer.currentTime = 0; sAparecer.play(); } catch (e) {}
+    try { sAparecer.currentTime = 0; sAparecer.play(); } catch (e) { }
     // Animar hacia arriba de la ruleta (por encima, top fijo)
     setTimeout(() => {
       animada.style.transform = 'scale(1) translateY(-10px)';
@@ -209,20 +277,20 @@ const Juego3Nivel1 = (() => {
     // Seleccionar distractores
     // 1 de la misma categoría (que no sea la palabra objetivo)
     let mismo = palabras.filter(p => p.categoria === palabraObj.categoria && p.id !== palabraObj.id);
-    let distractorMismo = mismo.length ? mismo[Math.floor(Math.random()*mismo.length)] : null;
+    let distractorMismo = mismo.length ? mismo[Math.floor(Math.random() * mismo.length)] : null;
     // 1 de categoría cercana
     const cercanas = {
-      'lugar': ['objeto_entorno','transporte'],
-      'objeto_entorno': ['lugar','objeto_personal'],
-      'objeto_personal': ['objeto_entorno','transporte'],
-      'transporte': ['lugar','objeto_personal']
+      'lugar': ['objeto_entorno', 'transporte'],
+      'objeto_entorno': ['lugar', 'objeto_personal'],
+      'objeto_personal': ['objeto_entorno', 'transporte'],
+      'transporte': ['lugar', 'objeto_personal']
     };
     let catCercanas = cercanas[palabraObj.categoria] || [];
     let cerca = palabras.filter(p => catCercanas.includes(p.categoria) && p.id !== palabraObj.id);
-    let distractorCerca = cerca.length ? cerca[Math.floor(Math.random()*cerca.length)] : null;
+    let distractorCerca = cerca.length ? cerca[Math.floor(Math.random() * cerca.length)] : null;
     // 1 de categoría lejana (no igual ni cercana)
     let lejanas = palabras.filter(p => p.categoria !== palabraObj.categoria && !catCercanas.includes(p.categoria) && p.id !== palabraObj.id);
-    let distractorLejana = lejanas.length ? lejanas[Math.floor(Math.random()*lejanas.length)] : null;
+    let distractorLejana = lejanas.length ? lejanas[Math.floor(Math.random() * lejanas.length)] : null;
     // Armar opciones
     let opciones = [palabraObj];
     if (distractorMismo) opciones.push(distractorMismo);
@@ -231,7 +299,7 @@ const Juego3Nivel1 = (() => {
     // Si faltan, rellenar con otros
     while (opciones.length < 4) {
       let extra = palabras.filter(p => !opciones.some(o => o.id === p.id));
-      if (extra.length) opciones.push(extra[Math.floor(Math.random()*extra.length)]);
+      if (extra.length) opciones.push(extra[Math.floor(Math.random() * extra.length)]);
       else break;
     }
     opciones = opciones.sort(() => Math.random() - 0.5);
@@ -240,7 +308,7 @@ const Juego3Nivel1 = (() => {
         <h2 style=\"font-size:2.5rem;letter-spacing:2px;transition:all .7s cubic-bezier(.7,.2,.3,1);\">${palabraObj.texto}</h2>
       </div>
       <div class=\"imagenes-opciones\" style=\"display:flex;flex-wrap:wrap;gap:2rem;justify-content:center;\">
-        ${opciones.map((op,i) => `<div class=\"img-opcion\" data-palabra=\"${op.id}\" style=\"cursor:pointer;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px #0002;transition:box-shadow .2s;\"><img src=\"../../assets/imagenes/juego3/${op.imagen}\" alt=\"${op.texto}\" style=\"width:140px;height:140px;object-fit:contain;display:block;\"></div>`).join('')}
+        ${opciones.map((op, i) => `<div class=\"img-opcion\" data-palabra=\"${op.id}\" style=\"cursor:pointer;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px #0002;transition:box-shadow .2s;\"><img src=\"../../assets/imagenes/juego3/${op.imagen}\" alt=\"${op.texto}\" style=\"width:140px;height:140px;object-fit:contain;display:block;\"></div>`).join('')}
       </div>
       <div id=\"feedback-j3\" style=\"text-align:center;font-size:1.3rem;margin-top:2.5rem;min-height:2.5rem;\"></div>
     `;
@@ -255,7 +323,7 @@ const Juego3Nivel1 = (() => {
     const opciones = document.querySelectorAll('.img-opcion');
     opciones.forEach(d => d.onclick = null); // Desactivar más clics
     if (seleccionada === palabraId) {
-      try { sCorrect.currentTime = 0; sCorrect.play(); } catch (e) {}
+      try { sCorrect.currentTime = 0; sCorrect.play(); } catch (e) { }
       div.style.boxShadow = '0 0 0 4px #2ecc40';
       feedback.textContent = 'Bien hecho, es la imagen correcta';
       feedback.style.color = '#2ecc40';
@@ -267,7 +335,7 @@ const Juego3Nivel1 = (() => {
         siguienteRonda();
       }, 1800);
     } else {
-      try { sWrong.currentTime = 0; sWrong.play(); } catch (e) {}
+      try { sWrong.currentTime = 0; sWrong.play(); } catch (e) { }
       div.style.boxShadow = '0 0 0 4px #e74c3c';
       feedback.textContent = 'Sigue intentándolo';
       feedback.style.color = '#e74c3c';

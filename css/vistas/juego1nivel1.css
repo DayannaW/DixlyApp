@@ -1,3 +1,164 @@
+/* Botón salir fijo como el de audio */
+#btn-salir-j1 {
+    position: fixed;
+    top: 3%;
+    right: 3%;
+    z-index: 1001;
+    font-size: 1.5rem;
+    width: 4%;
+    height: 5%;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    /* Fondo con profundidad */
+    background: radial-gradient(circle at center,
+            var(--error) 0%,
+            var(--error) 65%);
+    /* Relieve + hundimiento central */
+    box-shadow:
+        inset 0 2px 3px rgba(255, 255, 255, 0.7),
+        /* luz arriba */
+        inset 0 -2px 4px rgba(0, 0, 0, 0.18),
+        /* sombra abajo */
+        inset 0 0 4px rgba(0, 0, 0, 0.22),
+        /* centro hundido */
+        0 1px 2px rgba(0, 0, 0, 0.10);
+    /* separación */
+    padding: 0;
+    margin: 0 !important;
+    transition: background 0.2s;
+}
+
+#btn-salir-j1:hover {
+    background: #d32f2f !important;
+}
+
+/* Scrim layer between background and overlay */
+.scrim-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(60, 36, 20, 0.45);
+    /* warm dark, not pure black */
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Separador visual entre texto principal y opciones */
+.separator-line {
+    width: 100%;
+    border-bottom: 1px solid #d0d4db;
+    margin: 2% 0 2% 0;
+    opacity: 0.7;
+}
+
+.helper-text {
+    width: 100%;
+    text-align: center;
+    font-size: 1.08rem;
+    color: var(--acent-ui);
+    margin-bottom: 3.5%;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    font-style: italic;
+}
+
+/* Card Overlay Layout for juego1nivel1 */
+/* Card Overlay Layout for juego1nivel1 - behind image, starts at 50% image height, full width */
+/* Card Overlay Layout for juego1nivel1 - card starts at normal position, image overlaps card */
+.card-overlay-layout {
+    top: 10%;
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 1;
+}
+
+/* Card overlay content: move card further down, don't move image */
+.card-overlay-content {
+    background: rgba(254, 252, 251, 0.90);
+    border-radius: 28px;
+    box-shadow: 0 8px 32px #0002;
+    width: 100vw;
+    max-width: 90%;
+    min-height: 70vh;
+    margin: 5% auto 0 auto;
+    /* push card further down, image stays */
+    padding: 4.5rem 2.5rem 2rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    z-index: 2;
+}
+
+#img-area {
+    position: absolute;
+    top: -14%;
+    /* half image height above card */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 3;
+    pointer-events: none;
+}
+
+#img-area img {
+    position: relative;
+    z-index: 4;
+    width: 60%;
+    max-width: 14%;
+    border-radius: 18px;
+    box-shadow: var(--sombra-media);
+    animation: fadeIn 0.6s ease;
+    background: #fff;
+    pointer-events: auto;
+}
+
+/* Ensure text starts below the image, not behind it */
+#img-area+h2,
+#img-area+p,
+#img-area+div {
+    margin-top: 40px !important;
+}
+
+/* Botón X para cerrar overlay de instrucciones */
+.close-overlay-btn {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    background: var(--color-incorrecto, #f44336);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10002;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px #0002;
+    transition: background 0.2s;
+}
+
+.close-overlay-btn:hover {
+    background: #d32f2f;
+}
+
 /* Copiado de juego1.css y renombrado para nivel1 */
 
 /* =========================================
@@ -11,11 +172,10 @@
 }
 
 #texto-principal {
-     font-size: clamp(1.1rem, 2.4dvw, 1.8rem);
-    margin-bottom: 25px;
+    font-size: 1rem;
+    margin-bottom: 4%;
     text-align: justify;
 }
-
 
 /* OPCIONES */
 #opciones {
@@ -56,24 +216,32 @@
 }
 
 
+@media (max-width: 600px) {
+    .card-overlay-content {
+        top: -5%;
+        padding: 1.2rem 0.7rem 1.2rem 0.7rem;
+        border-radius: 28px 28px 0px 0px;
+        max-width: 100%;
+        min-height: 100%;
+    }
 
-/* CONTENEDOR DE IMAGEN */
-#img-area {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
-    object-fit: contain;
-    height: auto;
+    #img-area img {
+        max-width: 120px;
+    }
+
+    #texto-principal {
+        font-size: 0.8rem;
+    }
+
+    #btn-salir-j1 {
+        font-size: 1.1rem;
+        width: 8%;
+        height: 4%;
+    }
 }
 
-#img-area img {
-    width: 60%;
-    max-width: 260px;
-    border-radius: 18px;
-    box-shadow: var(--sombra-media);
-    animation: fadeIn 0.6s ease;
-}
+
+
 
 /* BOTÓN DE SONIDO */
 .btn-sound {
@@ -97,15 +265,23 @@
 
 /* ANIMACIÓN */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 #container {
     width: 100%;
     max-width: 100%;
     margin: auto;
-    padding: 5vw; /* dinámico en móviles */
+    padding: 4% 4% 0% 4%;
+    /* dinámico en móviles */
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -116,10 +292,13 @@
 
 .blank-space {
     display: inline-block;
-    width: 20%;        /* ajusta según el tamaño que quieras */
-    height: 26px;       /* altura del “hueco” */
+    width: 20%;
+    /* ajusta según el tamaño que quieras */
+    height: 26px;
+    /* altura del “hueco” */
     border-radius: 8px;
-    border: 2px solid #b7b7b7; /* gris suave */
+    border: 2px solid #b7b7b7;
+    /* gris suave */
     background-color: #f8f8f8;
     vertical-align: middle;
 }
@@ -162,26 +341,43 @@
 ========================================= */
 
 .drop-zone {
-    display: inline-block;
-    min-width: 110px;           /* más grande, mejor para dislexia */
-    min-height: 38px;
-    padding: 8px 12px;
-    border: 2px dashed var(--color-secundario);
-    border-radius: 14px;
-    background: rgba(255,255,255,0.55);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 120px;
+    min-height: 42px;
+    padding: 10px 16px;
+
+    border-radius: 16px;
+
+    background: linear-gradient(180deg,
+            #FFFFFF 0%,
+            var(--bg-soft) 100%);
+
+    box-shadow:
+        inset 0 2px 6px rgba(0, 0, 0, 0.10),
+        0 8px 18px rgba(31, 31, 31, 0.08);
+
+    font-size: clamp(1rem, 2.6vw, 1.3rem);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+
+    color: var(--text-secondary);
     vertical-align: middle;
-    font-size: clamp(1rem, 2.6vw, 1.4rem);
-    font-weight: 500;
-    transition: 
-        background 0.25s ease,
-        border-color 0.25s ease,
+
+    transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease,
         transform 0.2s ease;
 }
+
 
 /* Hover visual cuando se está arrastrando encima */
 .drop-zone.hover {
     border-color: var(--color-primario);
-    background: rgba(255,255,255,0.85);
+    background: rgba(255, 255, 255, 0.85);
     transform: scale(1.03);
 }
 
@@ -208,17 +404,26 @@
     max-width: 22vw;
     z-index: 60;
     display: flex;
-    flex-direction: column-reverse; /* el diálogo se muestra arriba */
+    flex-direction: column-reverse;
+    /* el diálogo se muestra arriba */
     align-items: center;
     gap: 6px;
     pointer-events: none;
 }
 
-#pixel-animation { width: 100%; height: 100px; pointer-events: auto; }
-.pet-anim-container { width: 100%; height: 100px; }
+#pixel-animation {
+    width: 100%;
+    height: 100px;
+    pointer-events: auto;
+}
+
+.pet-anim-container {
+    width: 100%;
+    height: 100px;
+}
 
 #pixel-dialog {
-    background: rgba(255,255,255,0.98);
+    background: rgba(255, 255, 255, 0.98);
     border-radius: 12px;
     padding: 8px 10px;
     box-shadow: var(--sombra-media);
@@ -230,13 +435,27 @@
     font-size: 0.95rem;
 }
 
-#pixel-dialog.visible { opacity: 1; transform: translateY(-6px); }
+#pixel-dialog.visible {
+    opacity: 1;
+    transform: translateY(-6px);
+}
 
-#pixel-text { margin: 0; color: var(--color-primario); text-align: center; }
+#pixel-text {
+    margin: 0;
+    color: var(--color-primario);
+    text-align: center;
+}
 
 @media (max-width: 720px) {
-    #pixel-container { width: 120px; bottom: 12px; right: 12px; }
-    #pixel-animation { height: 84px; }
+    #pixel-container {
+        width: 120px;
+        bottom: 12px;
+        right: 12px;
+    }
+
+    #pixel-animation {
+        height: 84px;
+    }
 }
 
 /* Estilos para las opciones arrastrables creadas en JS (.draggable-option) */
@@ -244,39 +463,85 @@
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: center; /* centro el contenido */
-    padding: 12px 14px;
-    padding-left: 64px; /* espacio para la burbuja/icono absoluto */
-    background: linear-gradient(180deg, #ffffff, #f6f9ff);
-    border: 1px solid rgba(18,38,63,0.06);
-    border-radius: 12px;
-    box-shadow: 0 8px 18px rgba(16,24,40,0.06);
+    justify-content: center;
+
+    padding: 14px 18px;
+    /* espacio para icono/burbuja */
+
+    background: linear-gradient(180deg,
+            #FFFFFF 0%,
+            var(--bg-soft) 100%);
+
+    border: none;
+    border-radius: 14px;
+
+    box-shadow:
+        0 10px 24px rgba(31, 31, 31, 0.10),
+        0 2px 6px rgba(31, 31, 31, 0.06);
+
     cursor: grab;
-    font-size: clamp(1rem, 2.6vw, 1.2rem);
-    color: var(--color-primario);
-    transition: transform 0.14s ease, box-shadow 0.14s ease, opacity 0.14s ease;
+
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.4;
+
+    color: var(--text-main);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease;
+
     user-select: none;
-    text-align: center; /* centrar texto */
+    text-align: center;
 }
 
-.draggable-option::before {
-    content: '';
+
+
+.draggable-option:active {
+    cursor: grabbing;
+    transform: scale(0.98);
+    box-shadow:
+        inset 0 3px 6px rgba(0, 0, 0, 0.18);
+}
+
+.draggable-option.is-selected {
+    background: linear-gradient(180deg,
+            var(--bg-panel),
+            var(--bg-soft));
+
+    box-shadow:
+        inset 0 0 0 2px rgba(63, 110, 140, 0.35),
+        0 10px 22px rgba(31, 31, 31, 0.12);
+}
+
+.draggable-option::after {
+    content: "";
     position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, rgba(46,125,246,0.14), rgba(99,102,241,0.12));
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.6);
+    left: 0;
+    top: 10%;
+    width: 4px;
+    height: 80%;
+    border-radius: 4px;
+    background: transparent;
+    transition: background 0.15s ease;
 }
 
-.draggable-option:active { cursor: grabbing; transform: translateY(-2px); }
+.draggable-option.is-selected::after {
+    background: var(--accent-ui);
+}
 
-.draggable-option.hide { opacity: 0.18; transform: scale(0.98); pointer-events: none; }
-.draggable-option.dragging { opacity: 0.85; transform: scale(1.02); box-shadow: 0 14px 26px rgba(16,24,40,0.12); }
 
-.draggable-option:hover { transform: translateY(-4px); box-shadow: 0 12px 22px rgba(16,24,40,0.08); }
 
-.draggable-option[draggable="false"] { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
+.draggable-option:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 14px 32px rgba(31, 31, 31, 0.14),
+        0 4px 10px rgba(31, 31, 31, 0.08);
+}
+
+.draggable-option[draggable="false"] {
+    opacity: 0.55;
+    cursor: not-allowed;
+    box-shadow: none;
+}

@@ -8,31 +8,101 @@ const Game2Nivel3 = (() => {
 
   async function loadPalabras() {
     palabras = await loadJSON('../../js/data/juego2/nivel3.json');
+    // Mezclar
     for (let i = palabras.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [palabras[i], palabras[j]] = [palabras[j], palabras[i]];
     }
+    // Limitar a 10 rondas
+    palabras = palabras.slice(0, 10);
     current = 0;
     aciertos = 0;
   }
 
+  // Pantalla de instrucciones
   function showInstrucciones() {
-    const main = document.getElementById('main-container');
-    main.innerHTML = `
-      <div class="instructions-overlay">
-        <div class="instructions-card">
-          <h2>¡Sonidos perdidos! Nivel 3</h2>
-          <p>Escucha con atención la palabra que suena y arrastra la opción INCORRECTA a la caja de sonidos.<br><br>
-          En cada ronda habrá dos opciones correctas y una incorrecta.<br><br>
-          ¡Buena suerte!</p>
-          <button id="start-btn" class="btn btn-primary">Comenzar</button>
-        </div>
-      </div>
-    `;
-    try { Pet.init(); Pet.setIdle(); Pet.hideDialog && Pet.hideDialog(); } catch (e) { }
-    document.getElementById('start-btn').onclick = () => {
+    // Hacer Pixel más grande mientras se muestran las instrucciones
+    const pixelContainer = document.getElementById('pixel-container');
+    if (pixelContainer) pixelContainer.classList.add('pixel-grande');
+    // Crear overlay modal igual que en nivel 2
+    const overlay = document.createElement('div');
+    overlay.className = 'instructions-overlay';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.background = 'rgba(0,0,0,0.35)';
+    overlay.style.zIndex = '9999';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+
+    const card = document.createElement('div');
+    card.className = 'instructions-card';
+    card.style.background = '#fff';
+    card.style.padding = '2.5rem 2.5rem 2rem 2.5rem';
+    card.style.borderRadius = '24px 24px 20px 20px';
+    card.style.boxShadow = '0 4px 32px #0002';
+
+    // Botón X para cerrar
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '&times;';
+    closeBtn.setAttribute('aria-label', 'Cerrar');
+    closeBtn.className = 'close-btn';
+
+    closeBtn.addEventListener('click', () => {
+      window.location.href = '../juego2/index.html';
+    });
+    // Contenedor relativo para el botón X
+    const cardWrapper = document.createElement('div');
+    cardWrapper.style.position = 'relative';
+    cardWrapper.appendChild(closeBtn);
+    cardWrapper.appendChild(card);
+
+    card.innerHTML = `
+            <h2 style="margin-bottom: 1rem;">Secuencia Sonora</h2>
+            <p >Ahora el reto es mayor.<br><br>
+            Escucharás una secuencia de sonidos.<br>
+            No todos aparecerán después.<br><br>
+            Algunas palabras estarán ahí para confundir,<br>
+            otras para poner a prueba tu memoria.<br><br>
+            Elige solo las palabras que realmente escuchaste<br>
+            y descarta las que no pertenecen al sonido.</p>
+            <button id="start-btn" class="instruction-btn">Entiendo</button>
+        `;
+    overlay.appendChild(cardWrapper);
+    document.body.appendChild(overlay);
+    // Mostrar el botón después de 2.5 segundos
+    setTimeout(() => {
+      document.querySelector('.instruction-btn')?.classList.add('visible');
+    }, 5000);
+    try {
+      Pet.init();
+      Pet.setIdle();
+      if (Pet.hideDialog) Pet.hideDialog();
+      const pc = document.getElementById('pixel-container'); if (pc) pc.style.zIndex = '10000';
+      const dialog = document.getElementById('pixel-dialog'); if (dialog) dialog.style.display = 'none';
+    } catch (e) { }
+    const startBtn = document.getElementById('start-btn');
+    if (startBtn) startBtn.onclick = () => {
+      overlay.remove();
+
+      const pc = document.getElementById('pixel-container');
+      if (pc) {
+        pc.style.zIndex = '';
+        pc.classList.remove('pixel-grande'); // Quitar clase al cerrar instrucciones
+      }
+      const dialog = document.getElementById('pixel-dialog'); if (dialog) dialog.style.display = '';
       showJuego();
     };
+    // CSS para pixel-grande
+    const styleId = 'pixel-grande-style';
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      document.head.appendChild(style);
+    }
   }
 
   function showJuego() {
@@ -98,10 +168,10 @@ const Game2Nivel3 = (() => {
           }
         }
         if (pausedCountdownSound && countdownSound.paused) {
-          setTimeout(() => { try { countdownSound.play().catch(()=>{}); } catch(e){} }, 0);
+          setTimeout(() => { try { countdownSound.play().catch(() => { }); } catch (e) { } }, 0);
         }
         if (pausedYaSound && yaSound.paused) {
-          setTimeout(() => { try { yaSound.play().catch(()=>{}); } catch(e){} }, 0);
+          setTimeout(() => { try { yaSound.play().catch(() => { }); } catch (e) { } }, 0);
         }
         resumeCallbacks.forEach(fn => fn());
         resumeCallbacks = [];
@@ -132,7 +202,7 @@ const Game2Nivel3 = (() => {
       if (count > 0) {
         countdown.textContent = count;
         countdown.style.opacity = '1';
-        try { countdownSound.currentTime = 0; countdownSound.play().catch(() => {}); } catch (e) {}
+        try { countdownSound.currentTime = 0; countdownSound.play().catch(() => { }); } catch (e) { }
       }
       if (count > 1) {
         setTimeout(() => {
@@ -146,7 +216,7 @@ const Game2Nivel3 = (() => {
           if (paused) { resumeCallbacks.push(doCountdown); return; }
           countdown.textContent = '¡Ya!';
           countdown.style.opacity = '1';
-          try { yaSound.currentTime = 0; yaSound.play().catch(() => {}); } catch (e) {}
+          try { yaSound.currentTime = 0; yaSound.play().catch(() => { }); } catch (e) { }
           setTimeout(() => {
             if (paused) { resumeCallbacks.push(doCountdown); return; }
             countdown.style.opacity = '0';

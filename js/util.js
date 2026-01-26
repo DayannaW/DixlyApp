@@ -22,6 +22,7 @@ function _read() {
 }
 
 function _write(obj) {
+    console.log("Guardando progreso:", obj);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
 }
 
@@ -44,12 +45,13 @@ export function hasCompletedLevel(gameId, level) {
 }
 
 export function addLevelCompletion(gameId, level) {
+    console.log(`Agregando nivel completado: ${gameId} - ${level}`);
     const points = LEVEL_POINTS[level] || 0;
     if (!gameId || !level || points <= 0) return false;
 
     const p = _read();
     if (!p.perGame[gameId]) p.perGame[gameId] = { score: 0, levels: {} };
-
+    console.log("Progreso antes de agregar nivel:", p);
     let badgesAdded = [];
     if (!p.perGame[gameId].badges) p.perGame[gameId].badges = {};
     let alreadyCompleted = !!p.perGame[gameId].levels[level];

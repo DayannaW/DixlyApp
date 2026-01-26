@@ -6,35 +6,25 @@ const sDrag = new Audio("../../assets/sonidos/drag.mp3");
 const sDrop = new Audio("../../assets/sonidos/drop.mp3");
 const sCorrect = new Audio("../../assets/sonidos/correct.mp3");
 const sWrong = new Audio("../../assets/sonidos/wrong.mp3");
+const soundBtn = document.getElementById('toggle-sound');
+const btn = document.createElement('button');
 
 // Para evitar retraso al reproducir
 [sDrag, sDrop, sCorrect, sWrong].forEach(s => { s.preload = "auto"; });
 
 
 const Game1 = (() => {
-        // Crear botón salir en la esquina superior derecha
-        function createExitButton() {
-            if (document.getElementById('btn-salir-j1')) return;
-            const btn = document.createElement('button');
-            btn.id = 'btn-salir-j1';
-            btn.textContent = 'Salir';
-            btn.className = 'btn btn-exit';
-            btn.style.position = 'absolute';
-            btn.style.top = '18px';
-            btn.style.right = '18px';
-            btn.style.zIndex = '1001';
-            btn.style.fontSize = '1.1rem';
-            btn.style.padding = '0.5rem 1.4rem';
-            btn.style.borderRadius = '1.5rem';
-            btn.style.border = 'none';
-            btn.style.background = '#f44336';
-            btn.style.color = 'white';
-            btn.style.cursor = 'pointer';
-            btn.onclick = () => {
-                window.location.href = '../juego1/index.html';
-            };
-            document.body.appendChild(btn);
-        }
+    // Crear botón salir en la esquina superior derecha
+    function createExitButton() {
+        if (document.getElementById('btn-salir-j1')) return;
+        btn.id = 'btn-salir-j1';
+        btn.textContent = 'X';
+        btn.style.visibility = 'hidden';
+        btn.onclick = () => {
+            window.location.href = '../juego1/index.html';
+        };
+        document.body.appendChild(btn);
+    }
     // Contadores de aciertos y de intentos
     let aciertos = 0;
     let intentos = 0;
@@ -54,6 +44,12 @@ const Game1 = (() => {
 
     // Pantalla de instrucciones
     function showInstrucciones() {
+        // Hacer Pixel más grande mientras se muestran las instrucciones
+        const pixelContainer = document.getElementById('pixel-container');
+        if (pixelContainer) pixelContainer.classList.add('pixel-grande');
+        // Ocultar el card overlay layout mientras se muestran instrucciones
+        const cardOverlay = document.querySelector('.card-overlay-layout');
+        if (cardOverlay) cardOverlay.style.display = 'none';
         // Crear overlay modal igual que en nivel 2
         const overlay = document.createElement('div');
         overlay.className = 'instructions-overlay';
@@ -72,21 +68,43 @@ const Game1 = (() => {
         card.className = 'instructions-card';
         card.style.background = '#fff';
         card.style.padding = '2.5rem 2.5rem 2rem 2.5rem';
-        card.style.borderRadius = '18px';
+        card.style.borderRadius = '24px 24px 20px 20px';
         card.style.boxShadow = '0 4px 32px #0002';
-        card.style.fontSize = '1.2rem';
-        card.style.maxWidth = '420px';
-        card.style.textAlign = 'center';
+
+        // Botón X para cerrar
+        const closeBtn = document.createElement('button');
+        closeBtn.innerHTML = '&times;';
+        closeBtn.setAttribute('aria-label', 'Cerrar');
+        closeBtn.className = 'close-btn';
+
+        closeBtn.addEventListener('click', () => {
+            window.location.href = '../juego1/index.html';
+        });
+        // Contenedor relativo para el botón X
+        const cardWrapper = document.createElement('div');
+        cardWrapper.style.position = 'relative';
+        cardWrapper.appendChild(closeBtn);
+        cardWrapper.appendChild(card);
 
         card.innerHTML = `
-            <h2 style="margin-bottom:1.2rem;">El fragmento perdido</h2>
-            <p style="margin-bottom:2.2rem;">Arrastra la palabra correcta al espacio en blanco para completar la historia.<br><br>
-            Observa la imagen y el contexto para elegir la opción adecuada.<br><br>
-            ¡Pon a prueba tu comprensión y diviértete!</p>
-            <button id="start-btn" class="btn btn-primary" style="font-size:1.1rem;padding:0.7rem 2.2rem;border-radius:1.5rem;">Comenzar</button>
+            <h2 style="margin-bottom: 1rem;">El Inicio del Relato</h2>
+            <p >Algunas historias han llegado hasta nosotros incompletas.<br><br>
+            Fragmentos aislados...<br>
+            frases sueltas...<br>
+            piezas que no terminan de encajar.<br><br><br>
+            Tu tarea es leer con atención y descubrir qué fragmento falta <br>
+            para que el texto vuelva a tener sentido.<br><br><br>
+            No se trata de leer rápido,<br>
+            sino de leer con intención.<br>
+            Cada palabra cuenta.</p>
+            <button id="start-btn" class="instruction-btn">Entiendo</button>
         `;
-        overlay.appendChild(card);
+        overlay.appendChild(cardWrapper);
         document.body.appendChild(overlay);
+        // Mostrar el botón después de 2.5 segundos
+        setTimeout(() => {
+            document.querySelector('.instruction-btn')?.classList.add('visible');
+        }, 5000);
         try {
             Pet.init();
             Pet.setIdle();
@@ -97,10 +115,26 @@ const Game1 = (() => {
         const startBtn = document.getElementById('start-btn');
         if (startBtn) startBtn.onclick = () => {
             overlay.remove();
-            const pc = document.getElementById('pixel-container'); if (pc) pc.style.zIndex = '';
+            //soundBtn.style.visibility = 'visible'; // Mostrar botón sonido
+            btn.style.visibility = 'visible'; // Mostrar botón salir
+            // Mostrar el card overlay layout al cerrar instrucciones
+            const cardOverlay = document.querySelector('.card-overlay-layout');
+            if (cardOverlay) cardOverlay.style.display = '';
+            const pc = document.getElementById('pixel-container');
+            if (pc) {
+                pc.style.zIndex = '';
+                pc.classList.remove('pixel-grande'); // Quitar clase al cerrar instrucciones
+            }
             const dialog = document.getElementById('pixel-dialog'); if (dialog) dialog.style.display = '';
             renderStory();
         };
+        // CSS para pixel-grande
+        const styleId = 'pixel-grande-style';
+        if (!document.getElementById(styleId)) {
+            const style = document.createElement('style');
+            style.id = styleId;
+            document.head.appendChild(style);
+        }
     }
 
     // ----------------------------
@@ -147,6 +181,11 @@ const Game1 = (() => {
         const img = document.getElementById("story-img");
         img.src = storyData.img;
         img.alt = storyData.titulo;
+        // Poner la imagen como fondo expandido detrás del overlay
+        document.body.style.backgroundImage = `url('${storyData.img}')`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+        document.body.style.backgroundRepeat = 'no-repeat';
 
         // 3. Insertar texto con hueco reemplazando {{espacio}}
         const textoPrincipal = document.getElementById("texto-principal");
@@ -166,6 +205,7 @@ const Game1 = (() => {
 
         storyData.opciones.forEach((op, index) => {
 
+
             const div = document.createElement("div");
             div.classList.add("draggable-option");
             div.textContent = op.texto;
@@ -177,23 +217,118 @@ const Game1 = (() => {
             div.addEventListener("dragstart", (e) => {
                 e.dataTransfer.setData("text/plain", index);
                 setTimeout(() => div.classList.add("hide"), 0);
+                sDrag.currentTime = 0;
+                sDrag.play();
+                setTimeout(() => div.classList.add("dragging"), 0);
             });
 
             div.addEventListener("dragend", () => {
                 div.classList.remove("hide");
+                div.classList.remove("dragging");
+                sDrop.currentTime = 0;
+                sDrop.play();
             });
+
+            // Soporte táctil para móviles: simular drop al tocar la opción
+            div.addEventListener('touchstart', function(e) {
+                if (div.getAttribute('draggable') === 'false') return;
+                e.preventDefault();
+                sDrop.currentTime = 0; sDrop.play();
+                // Animar la opción hacia el drop-zone
+                const dropZone = document.getElementById('drop-zone');
+                const dropRect = dropZone.getBoundingClientRect();
+                const wordRect = div.getBoundingClientRect();
+                const deltaX = dropRect.left + dropRect.width/2 - (wordRect.left + wordRect.width/2);
+                const deltaY = dropRect.top + dropRect.height/2 - (wordRect.top + wordRect.height/2);
+                div.style.transition = 'transform 0.55s cubic-bezier(.4,1.2,.6,1), opacity 0.2s';
+                div.style.zIndex = '10000';
+                div.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(1.15)`;
+                setTimeout(() => {
+                    // Simular drop
+                    // Contar intento
+                    intentos++;
+                    try {
+                        if (currentLevel === 'nivel-facil') {
+                            localStorage.setItem('juego1_nivel-facil_intentos', intentos);
+                        }
+                    } catch (e) { }
+                    if (!storyAttempts[currentStoryIndex]) {
+                        storyAttempts[currentStoryIndex] = 1;
+                    } else {
+                        storyAttempts[currentStoryIndex]++;
+                    }
+                    let waitedMs = Date.now() - (storyStartTimes[currentStoryIndex] || Date.now());
+                    if (!window.__lectorPacienteFlags) window.__lectorPacienteFlags = [];
+                    if (waitedMs > 10000) {
+                        window.__lectorPacienteFlags[currentStoryIndex] = true;
+                    } else {
+                        window.__lectorPacienteFlags[currentStoryIndex] = false;
+                    }
+                    if (op.correcto) {
+                        // Animar la opción hacia el drop-zone y luego ocultarla
+                        div.style.transition = 'transform 0.55s cubic-bezier(.4,1.2,.6,1), opacity 0.2s';
+                        div.style.zIndex = '10000';
+                        div.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(1.15)`;
+                        setTimeout(() => {
+                            div.style.opacity = '0';
+                            // Desactivar drag de todas y marcar inactivas
+                            const allOptions = opcionesContainer.querySelectorAll('.draggable-option');
+                            allOptions.forEach(opt => { opt.setAttribute('draggable', 'false'); opt.classList.add('opcion-inactiva'); });
+                            dropZone.textContent = op.texto;
+                            dropZone.classList.add('drop-correcto');
+                            sCorrect.currentTime = 0;
+                            sCorrect.play();
+                            showFeedback(true);
+                            aciertos++;
+                            setTimeout(() => {
+                                if (nextStory()) {
+                                    renderStory();
+                                } else {
+                                    // Insignias especiales
+                                    let badgeParams = '';
+                                    let badgeConditions = {};
+                                    if (aciertos === intentos && aciertos === stories.length) {
+                                        badgeConditions['lector-atento'] = true;
+                                    }
+                                    if (storyAttempts.some(attempts => attempts === 2)) {
+                                        badgeConditions['cazador-pistas'] = true;
+                                    }
+                                    if (window.__lectorPacienteFlags && window.__lectorPacienteFlags.some(v => v)) {
+                                        badgeConditions['lector-paciente'] = true;
+                                    }
+                                    try {
+                                        const res = addLevelCompletion('juego1', currentLevel, badgeConditions);
+                                        if (res && res.badges && res.badges.length) {
+                                            badgeParams = res.badges.map(b => `badge=${encodeURIComponent(b)}`).join('&');
+                                            badgeParams = badgeParams ? ('&' + badgeParams) : '';
+                                        }
+                                    } catch (e) {}
+                                    window.location.href = `../resultados.html?game=juego1&level=${encodeURIComponent(currentLevel)}&aciertos=${aciertos}&intentos=${intentos}` + badgeParams;
+                                }
+                            }, 1600);
+                        }, 550);
+                    } else {
+                        // Animar de regreso a origen antes de ocultar
+                        dropZone.classList.add('drop-incorrecto');
+                        setTimeout(() => {
+                            dropZone.classList.remove('drop-incorrecto');
+                        }, 1600);
+                        sWrong.currentTime = 0;
+                        sWrong.play();
+                        showFeedback(false);
+                        // Animar de regreso
+                        div.style.transition = 'transform 0.4s cubic-bezier(.4,1.2,.6,1)';
+                        div.style.transform = 'none';
+                        setTimeout(() => {
+                            div.style.opacity = '1';
+                            div.setAttribute('draggable', 'false');
+                            div.classList.add('opcion-inactiva');
+                        }, 400);
+                    }
+                }, 550);
+            }, { passive: false });
 
             opcionesContainer.appendChild(div);
-
-            //sonido dragstart
-            div.addEventListener("dragstart", (e) => {
-                e.dataTransfer.setData("text/plain", index);
-
-                sDrag.currentTime = 0;
-                sDrag.play();
-
-                setTimeout(() => div.classList.add("dragging"), 0);
-            });
         });
 
 
@@ -236,7 +371,7 @@ const Game1 = (() => {
                 if (currentLevel === 'nivel-facil') {
                     localStorage.setItem('juego1_nivel-facil_intentos', intentos);
                 }
-            } catch (e) {}
+            } catch (e) { }
 
             // Tracking de intentos por historia
             if (!storyAttempts[currentStoryIndex]) {
@@ -299,7 +434,7 @@ const Game1 = (() => {
                         try {
                             console.log('badgeConditions:', badgeConditions);
                             const res = addLevelCompletion('juego1', currentLevel, badgeConditions);
-                            
+
                             if (res && res.badges && res.badges.length) {
                                 badgeParams = res.badges.map(b => `badge=${encodeURIComponent(b)}`).join('&');
                                 badgeParams = badgeParams ? ('&' + badgeParams) : '';
@@ -346,13 +481,13 @@ const Game1 = (() => {
                 Pet.setSad();
                 Pet.speak('Intenta otra vez');
             }
-        } catch (e) {}
+        } catch (e) { }
 
         // ocultar feedback después de unos segundos
         feedbackTimeout = setTimeout(() => {
             feedback.textContent = '';
             feedback.className = '';
-            try { Pet.setIdle(); } catch (e) {}
+            try { Pet.setIdle(); } catch (e) { }
         }, 1600);
     }
 
@@ -415,9 +550,9 @@ const Game1 = (() => {
     async function init(level = 'nivel-facil') {
         await loadStories(level);
         createExitButton();
-        try { Pet.init(); } catch (e) {}
+        try { Pet.init(); } catch (e) { }
         // Mover el botón de sonido a la esquina superior izquierda
-        const soundBtn = document.getElementById('toggle-sound');
+
         if (soundBtn) {
             soundBtn.style.position = 'fixed';
             soundBtn.style.top = '18px';
@@ -425,6 +560,7 @@ const Game1 = (() => {
             soundBtn.style.bottom = '';
             soundBtn.style.right = '';
             soundBtn.style.zIndex = '1001';
+            soundBtn.style.visibility = 'hidden';
         }
         initSoundButton();
         //bgAudio.play();

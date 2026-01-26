@@ -1,65 +1,67 @@
 import { loadJSON, addLevelCompletion, hasBadge } from './util.js';
 import Pet from './pet.js';
 
+const btnSalir = document.createElement('button');
+
 const Game1_2 = (() => {
-      // Botón de pausa/reanudar audio
-        // Botón único para reproducir, pausar y reanudar audio
-        function createAudioControlButton() {
-          if (document.getElementById('btn-audio-control')) return document.getElementById('btn-audio-control');
-          const btn = document.createElement('button');
-          btn.id = 'btn-audio-control';
-          btn.textContent = '▶️ Reproducir audio';
-          btn.className = 'btn btn-audio';
-          btn.style.display = 'block';
-          btn.style.margin = '18px auto 0 auto';
-          btn.style.fontSize = '1.1rem';
-          btn.style.padding = '0.5rem 1.4rem';
-          btn.style.borderRadius = '1.5rem';
-          btn.style.border = 'none';
-          btn.style.background = '#1976d2';
-          btn.style.color = 'white';
-          btn.style.cursor = 'pointer';
-          btn.disabled = false;
-          // Insertar debajo de la imagen de la historia
-          const imgArea = document.getElementById('img-area');
-          if (imgArea && imgArea.parentNode) {
-            imgArea.parentNode.insertBefore(btn, imgArea.nextSibling);
-          } else {
-            document.body.appendChild(btn);
-          }
-          return btn;
-        }
-    // Crear botón salir en la esquina superior derecha
-    function createExitButton() {
-      if (document.getElementById('btn-salir-j2')) return;
-      const btn = document.createElement('button');
-      btn.id = 'btn-salir-j2';
-      btn.textContent = 'Salir';
-      btn.className = 'btn btn-exit';
-      btn.style.position = 'absolute';
-      btn.style.top = '18px';
-      btn.style.right = '18px';
-      btn.style.zIndex = '1001';
-      btn.style.fontSize = '1.1rem';
-      btn.style.padding = '0.5rem 1.4rem';
-      btn.style.borderRadius = '1.5rem';
-      btn.style.border = 'none';
-      btn.style.background = '#f44336';
-      btn.style.color = 'white';
-      btn.style.cursor = 'pointer';
-      btn.onclick = () => {
-        window.location.href = '../juego1/index.html';
-      };
+  // Botón de pausa/reanudar audio
+  // Botón único para reproducir, pausar y reanudar audio
+  function createAudioControlButton() {
+    if (document.getElementById('btn-audio-control')) return document.getElementById('btn-audio-control');
+    const btn = document.createElement('button');
+    btn.id = 'btn-audio-control';
+    btn.textContent = '▶️ Reproducir audio';
+    btn.className = 'btn btn-audio';
+    btn.style.display = 'block';
+    btn.style.margin = '18px auto 0 auto';
+    btn.style.fontSize = '1.1rem';
+    btn.style.padding = '0.5rem 1.4rem';
+    btn.style.borderRadius = '1.5rem';
+    btn.style.border = 'none';
+    btn.style.background = '#1976d2';
+    btn.style.color = 'white';
+    btn.style.cursor = 'pointer';
+    btn.disabled = false;
+    // Insertar debajo de la imagen de la historia
+    const imgArea = document.getElementById('img-area');
+    if (imgArea && imgArea.parentNode) {
+      imgArea.parentNode.insertBefore(btn, imgArea.nextSibling);
+    } else {
       document.body.appendChild(btn);
     }
+    return btn;
+  }
+  // Crear botón salir en la esquina superior derecha
+  function createExitButton() {
+    if (document.getElementById('btn-salir-j2')) return;
+    btnSalir.id = 'btn-salir-j2';
+    btnSalir.textContent = 'Salir';
+    btnSalir.className = 'btn btn-exit';
+    btnSalir.style.position = 'absolute';
+    btnSalir.style.top = '18px';
+    btnSalir.style.right = '18px';
+    btnSalir.style.zIndex = '1001';
+    btnSalir.style.fontSize = '1.1rem';
+    btnSalir.style.padding = '0.5rem 1.4rem';
+    btnSalir.style.borderRadius = '1.5rem';
+    btnSalir.style.border = 'none';
+    btnSalir.style.background = '#f44336';
+    btnSalir.style.color = 'white';
+    btnSalir.style.cursor = 'pointer';
+    btnSalir.style.visibility = 'hidden';
+    btnSalir.onclick = () => {
+      window.location.href = '../juego1/index.html';
+    };
+    document.body.appendChild(btnSalir);
+  }
   let currentLevel = 'nivel-intermedio';
   let stories = [];
   let currentStoryIndex = 0;
 
   let audioEl = null;
-    let audioBtn = null;
-    let audioSrcActual = null;
-    let audioState = 'idle'; // 'idle', 'playing', 'paused', 'ended'
+  let audioBtn = null;
+  let audioSrcActual = null;
+  let audioState = 'idle'; // 'idle', 'playing', 'paused', 'ended'
   let playCount = 0;
   let initialPlayLimit = 2;
   const extraPlaysAfterReview = 1;
@@ -165,58 +167,83 @@ const Game1_2 = (() => {
   }
 
   function showInstructions() {
-    const overlay = document.createElement('div'); overlay.className = 'instructions-overlay';
-    const card = document.createElement('div'); card.className = 'instructions-card';
+    const overlay = document.createElement('div');
+    overlay.className = 'instructions-overlay';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.background = 'rgba(0,0,0,0.35)';
+    overlay.style.zIndex = '9999';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+
+    // Card y botón X
+    const card = document.createElement('div');
+    card.className = 'instructions-card';
+    card.style.background = '#fff';
+    card.style.padding = '2.5rem 2.5rem 2rem 2.5rem';
+    card.style.borderRadius = '24px 24px 20px 20px';
+    card.style.boxShadow = '0 4px 32px #0002';
+
+    // Botón X para cerrar
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '&times;';
+    closeBtn.setAttribute('aria-label', 'Cerrar');
+    closeBtn.className = 'close-btn';
+
+    closeBtn.addEventListener('click', () => {
+      window.location.href = '../juego1/index.html';
+    });
+    // Contenedor relativo para el botón X
+    const cardWrapper = document.createElement('div');
+    cardWrapper.style.position = 'relative';
+    cardWrapper.appendChild(closeBtn);
+    cardWrapper.appendChild(card);
+
     card.innerHTML = `
-      <h3>🚨 Rescate de historias 🚨</h3>
-
-      <p style="text-align: justify; line-height: 1.6;">
-
-        Tuve un pequeño accidente en el archivo de relatos y…  
-        las historias quedaron <strong>todas desordenadas</strong>. ¿Me ayudas a arreglarlas?
-        <br><br>
-
-        🎧 <strong>Primero</strong>, escucha con atención el microcuento, puedes reproducirlo <strong>hasta dos veces</strong>.
-        <br><br>
-
-        🧩 <strong>Después</strong>, ordena los fragmentos para que la historia vuelva a tener sentido.
-        <br><br>
-
-        ✅ Cuando creas que está lista, presiona <strong>“Revisar”</strong><br>
-        y yo comprobaré tu respuesta.
-        <br><br>
-
-        Cada historia ordenada me ayuda a recuperar el archivo perdido.<br>
-        <strong>¡Vamos paso a paso, tú puedes!</strong> ✨
+      <h2 style="margin-bottom: 1rem;">Rescate de historias</h2>
+      <p >
+        Algunas historias no solo están incompletas…<br>
+        están desordenadas.<br><br>
+        Las ideas existen, pero han perdido su lugar.<br><br>
+        Tu misión es rescatar la historia, colocando cada fragmento en el orden correcto para que el relato vuelva a fluir.<br><br>
+        Observa las conexiones.<br>
+        Piensa qué sucede primero…<br>
+        y qué debería venir después.<br>
       </p>
-
-      <button id="start-btn" class="btn btn-primary">
-        Entendido
-      </button>
+      <button id="start-btn" class="instruction-btn">Entiendo</button>
     `;
 
-
-    overlay.appendChild(card);
+    overlay.appendChild(cardWrapper);
     document.body.appendChild(overlay);
-    // show pet in front without dialog while instructions overlay is visible
+            // Mostrar el botón después de 2.5 segundos
+        setTimeout(() => {
+            document.querySelector('.instruction-btn')?.classList.add('visible');
+        }, 5000);
+    // Pixel grande y ocultar dialog
     try {
       Pet.init();
       Pet.setIdle();
-      const pc = document.getElementById('pixel-container'); if (pc) pc.style.zIndex = '9999';
+      const pc = document.getElementById('pixel-container'); if (pc) pc.style.zIndex = '10000';
+      if (pc) pc.classList.add('pixel-grande');
       const dialog = document.getElementById('pixel-dialog'); if (dialog) dialog.style.display = 'none';
     } catch (e) { }
     const startBtn = document.getElementById('start-btn');
     if (startBtn) startBtn.addEventListener('click', () => {
       overlay.remove();
-      const pc = document.getElementById('pixel-container'); if (pc) pc.style.zIndex = '';
+      btnSalir.style.visibility = 'visible'; // Mostrar botón salir
+      const pc = document.getElementById('pixel-container'); if (pc) { pc.style.zIndex = ''; pc.classList.remove('pixel-grande'); }
       const dialog = document.getElementById('pixel-dialog'); if (dialog) dialog.style.display = '';
       startAudioPhase();
     });
   }
 
-    // Track time before review for 'mirada atenta'
-    let rondaStartTime = null;
-    let miradaAtentaAchieved = false;
+  // Track time before review for 'mirada atenta'
+  let rondaStartTime = null;
+  let miradaAtentaAchieved = false;
 
   function startAudioPhase() {
     const story = getCurrentStory();
@@ -285,9 +312,9 @@ const Game1_2 = (() => {
           // select this item as source
           selected = item;
           selected.classList.add('selected-swap');
-          try { sDrag.currentTime = 0; sDrag.play().catch(()=>{}); } catch (e) {}
+          try { sDrag.currentTime = 0; sDrag.play().catch(() => { }); } catch (e) { }
           if (!selectionHintShown) {
-            try { Pet.speak('Seleccionado para intercambiar. Elige con cuál cambiar.'); } catch (err) {}
+            try { Pet.speak('Seleccionado para intercambiar. Elige con cuál cambiar.'); } catch (err) { }
             selectionHintShown = true;
           }
           return;
@@ -304,17 +331,17 @@ const Game1_2 = (() => {
           return;
         }
         // play drop sound, highlight target briefly then swap to give visual feedback
-        try { sDrop.currentTime = 0; sDrop.play().catch(()=>{}); } catch (e) {}
-        try { item.classList.add('target-highlight'); } catch (err) {}
+        try { sDrop.currentTime = 0; sDrop.play().catch(() => { }); } catch (e) { }
+        try { item.classList.add('target-highlight'); } catch (err) { }
         const SWAP_DELAY = 300; // ms
         setTimeout(() => {
           swapElements(selected, item);
           // cleanup selection
-          try { selected.classList.remove('selected-swap'); } catch (e) {}
+          try { selected.classList.remove('selected-swap'); } catch (e) { }
           selected = null;
         }, SWAP_DELAY);
         // remove highlight after a bit longer than swap delay
-        setTimeout(() => { try { item.classList.remove('target-highlight'); } catch (e) {} }, SWAP_DELAY + 600);
+        setTimeout(() => { try { item.classList.remove('target-highlight'); } catch (e) { } }, SWAP_DELAY + 600);
       });
     });
   }
@@ -349,13 +376,13 @@ const Game1_2 = (() => {
   let aciertos = 0;
   let intentos = 0;
   function reviewPlacement() {
-      // Check time before review for 'mirada atenta'
-      if (rondaStartTime) {
-        const delay = (Date.now() - rondaStartTime) / 1000;
-        console.log("Delay before review (s):", delay);
-        if (delay > 10) miradaAtentaAchieved = true;
-        console.log("Mirada atenta achieved:", miradaAtentaAchieved);
-      }
+    // Check time before review for 'mirada atenta'
+    if (rondaStartTime) {
+      const delay = (Date.now() - rondaStartTime) / 1000;
+      console.log("Delay before review (s):", delay);
+      if (delay > 10) miradaAtentaAchieved = true;
+      console.log("Mirada atenta achieved:", miradaAtentaAchieved);
+    }
     const story = getCurrentStory();
     const container = document.getElementById('opciones'); if (!container || !story) return;
     const items = [...container.querySelectorAll('.fragment-item')];
@@ -427,13 +454,13 @@ const Game1_2 = (() => {
     // force reflow then show
     requestAnimationFrame(() => overlay.classList.add('show'));
     // pet announces next story
-    try { const announce = `Ahora escucharemos: ${story.titulo || ''}`; Pet.speak(announce); } catch (e) {}
+    try { const announce = `Ahora escucharemos: ${story.titulo || ''}`; Pet.speak(announce); } catch (e) { }
     const delay = (typeof calcSpeakDuration === 'function') ? calcSpeakDuration(`Ahora escucharemos: ${story.titulo || ''}`) + 500 : 1200;
     setTimeout(() => {
       overlay.classList.remove('show'); overlay.classList.add('hide');
       // wait for hide animation to finish, then remove overlay and start audio after 1s
       setTimeout(() => {
-        try { overlay.remove(); } catch (e) {}
+        try { overlay.remove(); } catch (e) { }
         setTimeout(() => { startAudioPhase(); }, 1000);
       }, 300);
     }, delay);

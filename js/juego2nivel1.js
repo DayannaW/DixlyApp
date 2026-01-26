@@ -1,5 +1,6 @@
-import { loadJSON } from './util.js';
+import { loadJSON, addLevelCompletion } from './util.js';
 import Pet from './pet.js';
+
 
 const Game2 = (() => {
   let palabras = [];
@@ -13,40 +14,105 @@ const Game2 = (() => {
       const j = Math.floor(Math.random() * (i + 1));
       [palabras[i], palabras[j]] = [palabras[j], palabras[i]];
     }
-    // Limitar a 10 palabras
-    palabras = palabras.slice(0, 10);
+    // Limitar a 6 palabras
+    palabras = palabras.slice(0, 6);
     current = 0;
     aciertos = 0;
   }
 
+  // Pantalla de instrucciones
   function showInstrucciones() {
-    const main = document.getElementById('main-container');
-    main.innerHTML = `
-      <div class="instructions-overlay">
-        <div class="instructions-card">
-          <h2>¡Sonidos perdidos!</h2>
-          <p>Pixel está recolectando sonidos que se escaparon del archivo de palabras.<br><br>
-          Escucha con atención la palabra que suena y arrastra la opción correcta a la caja de sonidos.<br><br>
-          Cada acierto restaura un sonido. Cada error deforma el sonido.<br><br>
-          ¡Buena suerte!</p>
-          <button id="start-btn" class="btn btn-primary">Comenzar</button>
-        </div>
-      </div>
-    `;
-    try { Pet.init(); Pet.setIdle(); Pet.hideDialog && Pet.hideDialog(); } catch (e) { }
-    // No mostrar globo de diálogo en instrucciones
-    document.getElementById('start-btn').onclick = () => {
+    // Hacer Pixel más grande mientras se muestran las instrucciones
+    const pixelContainer = document.getElementById('pixel-container');
+    if (pixelContainer) pixelContainer.classList.add('pixel-grande');
+    // Crear overlay modal igual que en nivel 2
+    const overlay = document.createElement('div');
+    overlay.className = 'instructions-overlay';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.background = 'rgba(0,0,0,0.35)';
+    overlay.style.zIndex = '9999';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+
+    const card = document.createElement('div');
+    card.className = 'instructions-card';
+    card.style.background = '#fff';
+    card.style.padding = '2.5rem 2.5rem 2rem 2.5rem';
+    card.style.borderRadius = '24px 24px 20px 20px';
+    card.style.boxShadow = '0 4px 32px #0002';
+
+    // Botón X para cerrar
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '&times;';
+    closeBtn.setAttribute('aria-label', 'Cerrar');
+    closeBtn.className = 'close-btn';
+
+    closeBtn.addEventListener('click', () => {
+      window.location.href = '../juego2/index.html';
+    });
+    // Contenedor relativo para el botón X
+    const cardWrapper = document.createElement('div');
+    cardWrapper.style.position = 'relative';
+    cardWrapper.appendChild(closeBtn);
+    cardWrapper.appendChild(card);
+
+    card.innerHTML = `
+            <h2 style="margin-bottom: 1rem;">El Inicio del Relato</h2>
+            <p >No todos los sonidos dicen exactamente lo mismo.<br>
+              A veces una palabra se parece mucho a otra… pero no es la misma.<br><br>
+              En este laboratorio, tu misión es escuchar con atención.<br><br>
+              Oirás una palabra.<br>
+              Luego aparecerán varias opciones.<br><br>
+              Elige la palabra que sí estaba en el audio.<br>
+              Confía en tu oído, no en la prisa.</p>
+            <button id="start-btn" class="instruction-btn">Entiendo</button>
+        `;
+    overlay.appendChild(cardWrapper);
+    document.body.appendChild(overlay);
+    // Mostrar el botón después de 2.5 segundos
+    setTimeout(() => {
+      document.querySelector('.instruction-btn')?.classList.add('visible');
+    }, 5000);
+    try {
+      Pet.init();
+      Pet.setIdle();
+      if (Pet.hideDialog) Pet.hideDialog();
+      const pc = document.getElementById('pixel-container'); if (pc) pc.style.zIndex = '10000';
+      const dialog = document.getElementById('pixel-dialog'); if (dialog) dialog.style.display = 'none';
+    } catch (e) { }
+    const startBtn = document.getElementById('start-btn');
+    if (startBtn) startBtn.onclick = () => {
+      overlay.remove();
+
+      const pc = document.getElementById('pixel-container');
+      if (pc) {
+        pc.style.zIndex = '';
+        pc.classList.remove('pixel-grande'); // Quitar clase al cerrar instrucciones
+      }
+      const dialog = document.getElementById('pixel-dialog'); if (dialog) dialog.style.display = '';
       showJuego();
     };
+    // CSS para pixel-grande
+    const styleId = 'pixel-grande-style';
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      document.head.appendChild(style);
+    }
   }
 
   function showJuego() {
-      // Efectos de sonido para la cuenta regresiva
-      const countdownSound = new Audio('../../assets/sonidos/cuentaRegresiva1.mp4');
-      const yaSound = new Audio('../../assets/sonidos/cuentaRegresiva2.mp4');
-      // Para pausar/reanudar sonidos de cuenta regresiva
-      let pausedCountdownSound = false;
-      let pausedYaSound = false;
+    // Efectos de sonido para la cuenta regresiva
+    const countdownSound = new Audio('../../assets/sonidos/cuentaRegresiva1.mp4');
+    const yaSound = new Audio('../../assets/sonidos/cuentaRegresiva2.mp4');
+    // Para pausar/reanudar sonidos de cuenta regresiva
+    let pausedCountdownSound = false;
+    let pausedYaSound = false;
     const main = document.getElementById('main-container');
     const palabraObj = palabras[current];
     if (!palabraObj) return;
@@ -112,10 +178,10 @@ const Game2 = (() => {
           }
         }
         if (pausedCountdownSound && countdownSound.paused) {
-          setTimeout(() => { try { countdownSound.play().catch(()=>{}); } catch(e){} }, 0);
+          setTimeout(() => { try { countdownSound.play().catch(() => { }); } catch (e) { } }, 0);
         }
         if (pausedYaSound && yaSound.paused) {
-          setTimeout(() => { try { yaSound.play().catch(()=>{}); } catch(e){} }, 0);
+          setTimeout(() => { try { yaSound.play().catch(() => { }); } catch (e) { } }, 0);
         }
         resumeCallbacks.forEach(fn => fn());
         resumeCallbacks = [];
@@ -148,7 +214,7 @@ const Game2 = (() => {
       if (count > 0) {
         countdown.textContent = count;
         countdown.style.opacity = '1';
-        try { countdownSound.currentTime = 0; countdownSound.play().catch(() => {}); } catch (e) {}
+        try { countdownSound.currentTime = 0; countdownSound.play().catch(() => { }); } catch (e) { }
       }
       if (count > 1) {
         setTimeout(() => {
@@ -162,7 +228,7 @@ const Game2 = (() => {
           if (paused) { resumeCallbacks.push(doCountdown); return; }
           countdown.textContent = '¡Ya!';
           countdown.style.opacity = '1';
-          try { yaSound.currentTime = 0; yaSound.play().catch(() => {}); } catch (e) {}
+          try { yaSound.currentTime = 0; yaSound.play().catch(() => { }); } catch (e) { }
           setTimeout(() => {
             if (paused) { resumeCallbacks.push(doCountdown); return; }
             countdown.style.opacity = '0';
@@ -181,6 +247,29 @@ const Game2 = (() => {
       window._activeAudio = audio;
       let playCount = 0;
       let waitingToPlay = false;
+      let fallbackBtn = null;
+      function showFallbackBtn() {
+        if (fallbackBtn) return;
+        const audioArea = document.getElementById('audio-area');
+        audioArea.style.display = 'block';
+        fallbackBtn = document.createElement('button');
+        fallbackBtn.textContent = '🔊 Reproducir sonido';
+        fallbackBtn.className = 'btn btn-audio';
+        fallbackBtn.style.margin = '0.7rem auto 0 auto';
+        fallbackBtn.onclick = () => {
+          audio.currentTime = 0;
+          audio.play().then(() => {
+            fallbackBtn.style.display = 'none';
+          }).catch(() => {
+            fallbackBtn.style.display = 'block';
+          });
+        };
+        audioArea.innerHTML = '';
+        audioArea.appendChild(fallbackBtn);
+      }
+      function hideFallbackBtn() {
+        if (fallbackBtn) fallbackBtn.style.display = 'none';
+      }
       function playNext() {
         if (paused) {
           // Solo apilar una vez
@@ -201,8 +290,10 @@ const Game2 = (() => {
           if (playPromise && typeof playPromise.then === 'function') {
             playPromise.catch(err => {
               if (err.name === 'AbortError') return; // Ignorar error por pausa
-              // Puedes loguear otros errores si lo deseas
+              // Si es un error de reproducción automática, mostrar botón
+              showFallbackBtn();
             });
+            playPromise.then(() => { hideFallbackBtn(); });
           }
         } else {
           window._activeAudio = null;
@@ -311,6 +402,52 @@ const Game2 = (() => {
           w.classList.remove('dragging');
           dropSound.currentTime = 0; dropSound.play();
         };
+        // Soporte táctil para móviles: simular drop al tocar la palabra
+        w.addEventListener('touchstart', function(e) {
+          if (w.getAttribute('draggable') === 'false' || fallArea.classList.contains('respondido')) return;
+          e.preventDefault();
+          dropSound.currentTime = 0; dropSound.play();
+          // Animar la palabra hacia la drop-box
+          const dropRect = dropBox.getBoundingClientRect();
+          const wordRect = w.getBoundingClientRect();
+          // Calcular el desplazamiento necesario
+          const deltaX = dropRect.left + dropRect.width/2 - (wordRect.left + wordRect.width/2);
+          const deltaY = dropRect.top + dropRect.height/2 - (wordRect.top + wordRect.height/2);
+          w.style.transition = 'transform 0.55s cubic-bezier(.4,1.2,.6,1), opacity 0.2s';
+          w.style.zIndex = '10000';
+          w.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(1.15)`;
+          setTimeout(() => {
+            w.style.opacity = '0';
+            // Simular drop en la drop-box
+            const idx = op.idx;
+            const palabraCorrecta = palabraObj.opciones.find(o => o.correcto).texto;
+            // Desactivar drag de todas las palabras al responder
+            const allWords = fallArea.querySelectorAll('.fall-word');
+            allWords.forEach(fw => { fw.setAttribute('draggable', 'false'); fw.classList.add('fall-inactiva'); });
+            fallArea.classList.add('respondido');
+            if (op.correcto) {
+              correctSound.currentTime = 0; correctSound.play();
+              dropBox.textContent = op.texto;
+              dropBox.classList.add('drop-correct');
+              showJ2Feedback(true, palabraCorrecta);
+              setTimeout(() => nextPalabra(), 3400);
+            } else {
+              wrongSound.currentTime = 0; wrongSound.play();
+              dropBox.classList.add('drop-wrong');
+              showJ2Feedback(false, palabraCorrecta);
+              // animación de desarmar
+              const fallWords = document.querySelectorAll('.fall-word');
+              fallWords.forEach(fw => {
+                if (fw.textContent === op.texto) {
+                  fw.style.transition = 'opacity 0.7s, transform 0.7s';
+                  fw.style.opacity = '0';
+                  fw.style.transform = 'scale(0.7) rotate(-18deg)';
+                }
+              });
+              setTimeout(() => nextPalabra(), 4200);
+            }
+          }, 550);
+        }, { passive: false });
       });
       // Drop box
       const dropBox = document.getElementById('drop-box');
@@ -361,7 +498,7 @@ const Game2 = (() => {
       try { Pet.setHappy(); Pet.speak('¡Este sonido está en su lugar!'); } catch (e) { }
       aciertos++;
       setTimeout(() => { fb.textContent = ''; fb.className = 'j2-feedback'; try { Pet.setIdle(); } catch (e) { } }, 3200);
-    } else { 
+    } else {
       fb.textContent = 'Parece que no es la palabra que escuchaste, la palabra era ' + palabraCorrecta.toUpperCase() + '.';
       fb.className = 'j2-feedback incorrecto';
       try { Pet.setSad(); Pet.speak('La palabra correcta era ' + palabraCorrecta); } catch (e) { }
@@ -373,48 +510,24 @@ const Game2 = (() => {
     if (current < palabras.length) {
       showJuego();
     } else {
-      showJ2Resultados();
-    }
-  }
-  //}
-
-  function showJ2Resultados() {
-    const main = document.getElementById('main-container');
-    // Mostrar pantalla intermedia de puntos obtenidos
-    main.innerHTML = `
-      <div class="result-card" style="max-width:420px; margin:3rem auto; padding:1.5rem; border-radius:12px; box-shadow:var(--sombra-media); background:var(--color-blanco); text-align:center">
-        <h2>¡Juego completado!</h2>
-        <p>Palabras restauradas: <strong>${aciertos} / ${palabras.length}</strong></p>
-        <p style="font-size:1.3rem;margin:1.2rem 0 0.7rem 0;">Puntos obtenidos en este nivel: <strong>${aciertos}</strong></p>
-        <button id="btn-finish" class="btn btn-primary">Ver resultados finales</button>
-      </div>
-    `;
-    setTimeout(() => { try { Pet.setHappy(); Pet.speak('¡Has restaurado los sonidos perdidos!'); } catch (e) { } }, 400);
-    document.getElementById('btn-finish').onclick = () => {
-      // Guardar los puntos de este nivel en el progreso global
+      // Redirigir directamente a resultados.html con los datos
       try {
-        const STORAGE_KEY = 'dixly_progress_v1';
-        let p = localStorage.getItem(STORAGE_KEY);
-        p = p ? JSON.parse(p) : { perGame: {}, total: 0 };
-        if (!p.perGame['juego2']) p.perGame['juego2'] = { score: 0, levels: {} };
-        if (!p.perGame['juego2'].levels['nivel1']) {
-          p.perGame['juego2'].levels['nivel1'] = { completedAt: Date.now() };
-          p.perGame['juego2'].score = (p.perGame['juego2'].score || 0) + aciertos;
-          p.total = (p.total || 0) + aciertos;
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
-        }
-      } catch(e){}
-      // Calcular puntos totales acumulados (juego1 + juego2)
+        // Guardar progreso y calcular puntos acumulados
+        addLevelCompletion('juego2', 'nivel-facil');
+      } catch (e) { }
       let total = 0;
       try {
         const STORAGE_KEY = 'dixly_progress_v1';
         let p = localStorage.getItem(STORAGE_KEY);
         p = p ? JSON.parse(p) : { perGame: {}, total: 0 };
         total = p.total || 0;
-      } catch(e){}
-      window.location.href = '../resultados.html?game=juego2&level=nivel-facil&score=' + aciertos + '&total=' + total;
-    };
+      } catch (e) { }
+      // aciertos = palabras correctas, intentos = cantidad de palabras jugadas
+      const intentos = palabras.length;
+      window.location.href = `../resultados.html?game=juego2&level=nivel-facil&aciertos=${aciertos}&intentos=${intentos}&score=${aciertos}&total=${total}`;
+    }
   }
+  //}
 
   async function init() {
     await loadPalabras();

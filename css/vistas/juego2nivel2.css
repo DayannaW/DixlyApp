@@ -1,8 +1,8 @@
 /* Pixel en esquina superior izquierda, pequeño y en primer plano */
 #pixel-container {
   position: fixed;
-  top: 24px;
-  left: 24px;
+  top: 15%;
+  left: 10%;
   width: 110px;
   height: 110px;
   z-index: 4000;
@@ -28,6 +28,24 @@
   text-align: center;
   pointer-events: auto;
 }
+
+
+@media (max-width: 700px) {
+  #pixel-container {
+    top: 8%;
+    width: 90px;
+    height: 90px;
+  }
+  #pixel-animation {
+    width: 70px;
+    height: 70px;
+  }
+  #pixel-dialog {
+    font-size: 0.85rem;
+    max-width: 100px;
+  }
+}
+
 /* Estilos específicos para el nivel intermedio del juego 2 */
 .j2-card {
   max-width: 480px;
