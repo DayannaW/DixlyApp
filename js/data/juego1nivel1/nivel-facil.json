@@ -9,14 +9,24 @@
             { "texto": "Una colección de piedras que quería ordenar.", "correcto": false }
         ]
     },
-     {
+    {
         "titulo": "La historia de Nico",
-        "texto": "Nico siempre llegaba tarde. Tarde a clases, tarde a entrenar, tarde a todo. Por eso, cuando el director le dijo que tenía cinco minutos para demostrar que merecía seguir en el equipo de básquet, pensó que ya estaba perdido. El gimnasio estaba casi vacío. El balón parecía más pesado que nunca. Falló el primer tiro. Luego el segundo. Sus compañeros miraban en silencio. Respiró hondo y recordó por qué había empezado a jugar: no para ganar, sino para {{espacio}}.\n\nEl tercer tiro entró limpio.\n\nEl cuarto también.\n\nCuando el tiempo se acabó, Nico estaba sonriendo, sudado y sin aliento.\n\n—No llegaste tarde —dijo el director—. Llegaste justo a tiempo.",
+        "texto": "Nico siempre llegaba tarde. Tarde a clases, tarde a entrenar, tarde a todo. Por eso, cuando el director le dijo que tenía cinco minutos para demostrar que merecía seguir en el equipo de futbol, pensó que ya estaba perdido. El gimnasio estaba casi vacío. El balón parecía más pesado que nunca. Falló el primer tiro. Luego el segundo. Sus compañeros miraban en silencio. Respiró hondo y recordó por qué había empezado a jugar: no para ganar, sino para {{espacio}}.\n\nEl tercer tiro entró limpio.\n\nEl cuarto también.\n\nCuando el tiempo se acabó, Nico estaba sonriendo, sudado y sin aliento.\n\n—No llegaste tarde —dijo el director—. Llegaste justo a tiempo.",
         "img": "../../assets/imagenes/cuento1Juego1_2.png", 
         "opciones": [
-            { "texto": "Sentirse bien.", "correcto": true },
-            { "texto": "Viajar a China.", "correcto": false },
+            { "texto": "Demostrarse a sí mismo que puede.", "correcto": true },
+            { "texto": "Viajar a China con sus amigos.", "correcto": false },
             { "texto": "Visitar zoológicos.", "correcto": false }
+        ]
+    },
+    {
+        "titulo": "Más allá del recreo",
+        "texto": "La idea surgió entre risas: subir a la colina antes de que anocheciera, solo para romper la rutina. El camino fue más duro de lo que parecía. El sol quemaba, se quedaron sin agua y {{espacio}} saltando de piedra en piedra. Se ayudaron a subir las partes más empinadas, se rieron de las caídas y siguieron adelante aunque las piernas ya dolían. Cuando llegaron a la cima, cansados y sudados, el paisaje los dejó en silencio. El pueblo se veía pequeño, y ellos se sintieron enormes. Bajaron al atardecer sabiendo que no habían conquistado una montaña famosa, pero sí algo mejor: la certeza de que juntos podían llegar más lejos de lo que creían.",
+        "img": "../../assets/imagenes/cuento1Juego1_2.png", 
+        "opciones": [
+            { "texto": "tuvieron que cruzar un arroyo", "correcto": true },
+            { "texto": "empezaron a cocinar", "correcto": false },
+            { "texto": "encontraron un tesoro", "correcto": false }
         ]
     }
 ]

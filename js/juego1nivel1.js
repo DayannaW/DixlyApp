@@ -158,6 +158,16 @@ const Game1 = (() => {
     // ----------------------------
     // VIEW
     // ----------------------------
+
+    // Función para mezclar un array (Fisher-Yates)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
     // Nueva versión de renderStory con soporte para una opción draggable
     function renderStory() {
         const storyData = getCurrentStory();
@@ -203,9 +213,13 @@ const Game1 = (() => {
         const opcionesContainer = document.getElementById("opciones");
         opcionesContainer.innerHTML = ""; // limpiar
 
-        storyData.opciones.forEach((op, index) => {
+        // Mezclar las opciones antes de mostrarlas
+        const opcionesMezcladas = shuffleArray([...storyData.opciones]);
 
+        // Guardar las opciones mezcladas en el dropZone para acceso en el evento drop
+        dropZone._opcionesMezcladas = opcionesMezcladas;
 
+        opcionesMezcladas.forEach((op, index) => {
             const div = document.createElement("div");
             div.classList.add("draggable-option");
             div.textContent = op.texto;
@@ -358,7 +372,9 @@ const Game1 = (() => {
             dropZone.classList.remove("hover");
 
             const index = e.dataTransfer.getData("text/plain");
-            const opcion = storyData.opciones[index];
+            // Usar el array mezclado guardado en el dropZone
+            const opcionesMezcladas = dropZone._opcionesMezcladas || storyData.opciones;
+            const opcion = opcionesMezcladas[index];
 
             // Sonido de soltar
             sDrop.currentTime = 0;
@@ -471,7 +487,7 @@ const Game1 = (() => {
         // limpiar timeout previo
         if (feedbackTimeout) clearTimeout(feedbackTimeout);
 
-        feedback.textContent = isCorrect ? "¡Correcto!" : "Intenta otra vez";
+        feedback.textContent = isCorrect ? "¡Correcto!" : "¡Vamos! Intenta otra vez";
         feedback.className = isCorrect ? "correcto" : "incorrecto";
         try {
             if (isCorrect) {
@@ -479,7 +495,7 @@ const Game1 = (() => {
                 Pet.speak('¡Muy bien!');
             } else {
                 Pet.setSad();
-                Pet.speak('Intenta otra vez');
+                Pet.speak('¡Vamos! Intenta otra vez');
             }
         } catch (e) { }
 

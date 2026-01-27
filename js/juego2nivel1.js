@@ -62,7 +62,7 @@ const Game2 = (() => {
     cardWrapper.appendChild(card);
 
     card.innerHTML = `
-            <h2 style="margin-bottom: 1rem;">El Inicio del Relato</h2>
+            <h2 style="margin-bottom: 1rem;">Eco Preciso</h2>
             <p >No todos los sonidos dicen exactamente lo mismo.<br>
               A veces una palabra se parece mucho a otra… pero no es la misma.<br><br>
               En este laboratorio, tu misión es escuchar con atención.<br><br>

@@ -90,14 +90,24 @@
 }
 
 /* Corrección para el recuadro de intentos en resultados.html */
-#attempts-row-box {
-  min-width: 160px;
-  max-width: 220px;
-  display: block !important;
-  background: #f4f6fb;
-  border-radius: 10px;
-  padding: 0.8rem 1rem;
-  margin: 0;
+.score-box {
+background: var(--bg-soft);
+    border-radius: 16px;
+    padding: 1rem;
+
+    display: block;
+    gap: 1rem;
+    align-items: center;
+
+    /* 🔑 eliminamos el borde */
+    border: none;
+
+    /* 🔑 sombra subordinada al overlay */
+    box-shadow:
+        0 4px 10px rgba(0, 0, 0, 0.08),
+        0 1px 4px rgba(0, 0, 0, 0.05);
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 #attempts-row {
   font-size: 1.1rem;
@@ -105,4 +115,51 @@
   margin-bottom: 0.5rem;
   min-height: 1.2em;
   display: block;
+}
+
+.resultados-btn {
+  margin-top: 2rem;
+  align-self: flex-end;
+
+  background:
+    radial-gradient(120% 80% at center top,
+      var(--cta) 0%,
+      var(--cta-hover) 70%);
+
+  color: #fff;
+
+  border: none;
+  border-radius: 10px;
+  padding: 0.4rem 1.3rem;
+
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.16),
+    0 2px 6px rgba(0, 0, 0, 0.11);
+
+  /* estado normal, visible */
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+
+  /* sin animaciones */
+  transition: none;
+}
+
+
+.resultados-btn.siguiente {
+  background:
+    radial-gradient(120% 80% at center top,
+      var(--success) 0%,
+      var(--success) 70%);
+}
+
+.resultados-btn.menu {
+  background:
+    radial-gradient(120% 80% at center top,
+      var(--error) 0%,
+      var(--error) 70%);
 }

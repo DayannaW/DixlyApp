@@ -9,9 +9,27 @@
   <link rel="stylesheet" href="../css/ui.css">
   <style>
     .result-card { max-width:640px; margin:3rem auto; padding:1.5rem; border-radius:12px; box-shadow:var(--sombra-media); background:var(--color-blanco); text-align:center }
-    .scores { display:flex; gap:1rem; justify-content:center; margin:1rem 0 }
-    .score-box { padding:0.8rem 1rem; border-radius:10px; background:#f4f6fb }
+    .scores-grid {
+      display: grid;
+      gap: 1.2rem;
+      justify-content: center;
+      margin: 2.2rem 0 1.2rem 0;
+    }
+    .score-box {
+      
+      min-height: 120px;
+      padding: 1.2rem 1rem;
+      flex-direction: column;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+    
     .actions { display:flex; gap:0.8rem; justify-content:center; margin-top:1.2rem }
+    @media (max-width: 600px) {
+      .score-box { min-width: 140px; max-width: 100%; }
+    }
   </style>
 </head>
 <body class="body--juegos">
@@ -21,41 +39,59 @@
       <h1>Misión completada</h1>
       <p id="summary">Esto fue lo que lograste</p>
 
-
-
-      <div id="score-section" style="margin: 2.2rem 0 1.2rem 0; display: flex; flex-wrap: wrap; gap: 1.2rem; justify-content: center;">
-        <div class="score-box" style="min-width: 160px; max-width: 220px;">
+      <div id="score-section" class="scores-grid">
+        <div class="score-box">
           <strong>Aciertos</strong>
           <div id="aciertos-score" style="font-size:2.2rem; font-weight:700; margin:0.5rem 0;">0</div>
         </div>
-        <div class="score-box" id="attempts-row-box" style="min-width: 160px; max-width: 220px; display:none;">
-          <div id="attempts-row" style="font-size:1.1rem; color:#555; margin-bottom:0.5rem;"></div>
+        <div class="score-box" id="attempts-row-box" style="display:none;">
+          <strong>Intentos</strong>
+          <div id="attempts-row" style="font-size:2.2rem; font-weight:700; margin:0.5rem 0;"></div>
         </div>
-        <div class="score-box" style="min-width: 160px; max-width: 220px;">
+        <div class="score-box">
           <strong>Puntos en este juego</strong>
           <div id="game-score" style="font-size:2.2rem; font-weight:700; margin:0.5rem 0;">0</div>
         </div>
-        <div class="score-box" style="min-width: 160px; max-width: 220px; background:#eaf6e7;">
+        <div class="score-box bg-acumulado">
           <strong>Puntos acumulados</strong>
-          <div id="total-game-score" style="font-size:1.5rem; font-weight:600; margin:0.3rem 0;">0</div>
+          <div id="total-game-score" style="font-size:2.2rem; font-weight:700; margin:0.5rem 0;">0</div>
         </div>
-        <div style="flex-basis:100%;height:0;"></div>
       </div>
 
       <div class="actions" id="badges-action-row" style="display:none;">
-        <button id="btn-badges" class="btn btn-warning">Recoger insignias</button>
+        <button id="btn-badges" class="resultados-btn btn-warning">Recoger insignias</button>
       </div>
 
       <div class="actions" style="margin-top:0.5rem;">
-        <button id="btn-repeat" class="btn btn-primary">Repetir nivel</button>
-        <button id="btn-next" class="btn btn-success">Siguiente nivel</button>
-        <button id="btn-menu" class="btn btn-secondary">Volver al menú</button>
+        <button id="btn-repeat" class="resultados-btn">Repetir nivel</button>
+        <button id="btn-next" class="resultados-btn siguiente">Siguiente nivel</button>
+        <button id="btn-menu" class="resultados-btn menu">Volver al menú</button>
       </div>
 
     </section>
   </main>
 
   <script type="module">
+        // Ajustar la cuadrícula de las cards según cuántas estén visibles
+        function ajustarGridCards() {
+          const grid = document.getElementById('score-section');
+          const cards = Array.from(grid.querySelectorAll('.score-box'));
+          // Solo contar las cards visibles
+          const visibles = cards.filter(card => card.style.display !== 'none');
+          if (visibles.length === 3) {
+            grid.style.gridTemplateColumns = '1fr';
+            grid.style.gridTemplateRows = 'repeat(3, 1fr)';
+          } else if (visibles.length === 4) {
+            grid.style.gridTemplateColumns = '1fr 1fr';
+            grid.style.gridTemplateRows = '1fr 1fr';
+          } else {
+            grid.style.gridTemplateColumns = '';
+            grid.style.gridTemplateRows = '';
+          }
+        }
+
+        // Llamar al ajustarGridCards después de mostrar/ocultar cards
+        setTimeout(ajustarGridCards, 0);
     import { getTotalScore, getGameScore, getLevelPoints, hasCompletedLevel, getBadge } from '../js/util.js';
     let BADGES_DICT = {};
     async function loadBadgesDict() {
@@ -198,8 +234,9 @@
     try {
       intentos = parseInt(params.get('intentos') || '0', 10);
     } catch (e) {}
-    attemptsRowBox.style.display = 'block';
-    attemptsRow.textContent = `Intentos realizados: ${intentos}`;
+    attemptsRowBox.style.display = 'flex';
+    attemptsRow.textContent = `${intentos}`;
+    ajustarGridCards();
 
     // Puntos acumulados en todo el juego
     // Mostrar el total acumulado de todos los juegos
@@ -210,7 +247,7 @@
     if (totalGameScoreEl) totalGameScoreEl.textContent = totalGameScore;
 
     // Mostrar intentos solo para juego1 nivel-facil
-    if (game === 'juego1' && level === 'nivel-facil' || level === 'nivel-intermedio') {
+    if (game === 'juego1' && (level === 'nivel-facil' || level === 'nivel-intermedio')) {
       console.log('Mostrando intentos para juego1 nivel-facil');
       console.log(game +" nivel "+ level);
       // Buscar intentos en localStorage o similar (ajusta según tu lógica)
@@ -220,9 +257,12 @@
         attempts = parseInt(localStorage.getItem(key) || '0', 10);
       } catch (e) {}
       attemptsRow.style.display = 'block';
-      attemptsRow.textContent = `Intentos realizados: ${attempts}`;
+      attemptsRow.textContent = `${attempts}`;
+      ajustarGridCards();
     } else {
       attemptsRow.style.display = 'none';
+      attemptsRowBox.style.display = 'none';
+      ajustarGridCards();
     }
 
 
