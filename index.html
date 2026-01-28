@@ -20,13 +20,21 @@
     <meta name="theme-color" content="#4a90e2">
 
     <!-- Iconos -->
-    <link rel="icon" href="assets/iconos/icon-192.png" type="image/png">
+    <!-- <link rel="icon" href="assets/iconos/icon-192.png" type="image/png"> -->
 
 </head>
 
 <body class="body--juegos">
 
     <h1 class="hero-title">DixlyApp</h1>
+
+    <div id="pixel-container">
+        <div id="pixel-animation"></div>
+        <div id="pixel-dialog">
+            <p id="pixel-text"></p>
+        </div>
+    </div>
+
     <!-- Card Overlay Layout -->
     <div class="card-overlay">
         <h2 class="card-overlay-title">Elige un desafío</h2>
@@ -96,7 +104,7 @@
             <span style="font-size:1.5rem;">🎮</span>
             <span>Juegos</span>
         </button>
-        <button class="nav-item"  onclick="window.location.href='historicoInsignias.html'">
+        <button class="nav-item" onclick="window.location.href='historicoInsignias.html'">
             <span style="font-size:1.5rem;">🏅</span>
             <span>Insignias</span>
         </button>
@@ -104,6 +112,7 @@
 
 
     <!-- Scripts globales -->
+    <script src="js/lottie.min.js"></script>
     <script type="module" src="js/util.js"></script>
     <script src="js/main.js"></script>
     <script src="js/pwa.js"></script>
@@ -120,7 +129,15 @@
     </script>
 
     <script type="module">
-        console.log("Hola 3");
+        console.log("Hola 2");
+        import Pet from './pet.js';
+        Pet.init();
+        Pet.setIdle();
+        setTimeout(() => {
+            console.log("Hablando...");
+            try { Pet.speak('Lee con atención'); } catch (e) { }
+
+        }, 5000);
         // Selección de juegos por botón
         const playButtons = document.querySelectorAll('.play-btn');
         console.log("Play buttons found:");

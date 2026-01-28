@@ -1,3 +1,44 @@
+// Mostrar texto grande 'Toca para reclamar' al cargar
+window.addEventListener('DOMContentLoaded', () => {
+        let claimText = document.createElement('div');
+        claimText.id = 'claim-text';
+        claimText.textContent = 'Toca para reclamar';
+        claimText.style.position = 'fixed';
+        claimText.style.width = '90%';
+        claimText.style.top = '8%';
+        claimText.style.left = '50%';
+        claimText.style.transform = 'translateX(-50%)';
+        claimText.style.fontSize = '2rem';
+        claimText.style.fontWeight = 'bold';
+        claimText.style.color = '#222';
+        claimText.style.padding = '0.8rem';
+        claimText.style.zIndex = '200';
+        claimText.style.textAlign = 'center';
+        claimText.style.letterSpacing = '0.04em';
+        claimText.style.animation = 'floatY 2s ease-in-out infinite alternate';
+        document.body.appendChild(claimText);
+
+        // Agregar keyframes de animación flotante si no existen
+        if (!document.getElementById('floatY-keyframes')) {
+            const style = document.createElement('style');
+            style.id = 'floatY-keyframes';
+            // Reducir desplazamiento vertical de -22px a -10px
+            style.innerHTML = `@keyframes floatY { 0% { transform: translateX(-50%) translateY(0); } 100% { transform: translateX(-50%) translateY(-7px); } }`;
+            document.head.appendChild(style);
+        }
+
+    // Detectar click en el cofre para ocultar el texto
+    const observer = new MutationObserver(() => {
+        const cofre = document.querySelector('.cofre, #cofre, .cofre-anim, .cofre-animacion');
+        if (cofre) {
+            cofre.addEventListener('click', () => {
+                claimText.style.display = 'none';
+            }, { once: true });
+            observer.disconnect();
+        }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+});
 // Este script gestiona la animación y el flujo de revelado de insignias
 // Ahora como módulo ES6
 import Pet from './pet.js';
@@ -5,7 +46,10 @@ import Pet from './pet.js';
 window.Pet = Pet;
 Pet.setAnimPath('../assets/animaciones/');
 Pet.init();
+
 Pet.setIdle();
+// Pixel habla al abrir la pantalla de insignias
+setTimeout(() => { try { Pet.speak('Veamos qué hay dentro!'); } catch(e){} }, 400);
 
 // Simulación: obtener insignias desde la URL (badge=...&badge=...)
 function getBadgesFromURL() {

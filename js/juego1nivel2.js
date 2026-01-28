@@ -3,14 +3,45 @@ import Pet from './pet.js';
 
 const btnSalir = document.createElement('button');
 
+// --- Audio progress bar ---
+let audioEl = null;
+let audioBtn = null;
+let audioSrcActual = null;
+let audioState = 'idle'; // 'idle', 'playing', 'paused', 'ended'
+let playCount = 0;
+let initialPlayLimit = 2;
+const extraPlaysAfterReview = 1;
+let fragmentsShown = false;
+let progressBar = null;
+let progressFill = null;
+let progressRAF = null;
+
+function updateAudioProgress() {
+  if (!audioEl || !progressFill) return;
+  if (audioEl.duration > 0) {
+    const percent = Math.min(100, (audioEl.currentTime / audioEl.duration) * 100);
+    progressFill.style.width = percent + '%';
+  } else {
+    progressFill.style.width = '0%';
+  }
+  if (audioState === 'playing') {
+    progressRAF = requestAnimationFrame(updateAudioProgress);
+  } else {
+    if (progressRAF) cancelAnimationFrame(progressRAF);
+    progressRAF = null;
+  }
+}
+
+
 const Game1_2 = (() => {
   // Botón de pausa/reanudar audio
   // Botón único para reproducir, pausar y reanudar audio
+  // (NO volver a declarar audioEl, audioState, etc. aquí)
   function createAudioControlButton() {
     if (document.getElementById('btn-audio-control')) return document.getElementById('btn-audio-control');
     const btn = document.createElement('button');
     btn.id = 'btn-audio-control';
-    btn.textContent = '▶️ Reproducir audio';
+    btn.textContent = '▶';
     btn.className = 'btn btn-audio';
     btn.style.display = 'block';
     btn.style.margin = '18px auto 0 auto';
@@ -18,7 +49,6 @@ const Game1_2 = (() => {
     btn.style.padding = '0.5rem 1.4rem';
     btn.style.borderRadius = '1.5rem';
     btn.style.border = 'none';
-    btn.style.background = '#1976d2';
     btn.style.color = 'white';
     btn.style.cursor = 'pointer';
     btn.disabled = false;
@@ -35,9 +65,10 @@ const Game1_2 = (() => {
   function createExitButton() {
     if (document.getElementById('btn-salir-j2')) return;
     btnSalir.id = 'btn-salir-j2';
-    btnSalir.textContent = 'Salir';
-    btnSalir.className = 'btn btn-exit';
+    btnSalir.textContent = 'X';
+    btnSalir.className = 'close-btn';
     btnSalir.style.position = 'absolute';
+    btnSalir.style.height = '5%';
     btnSalir.style.top = '18px';
     btnSalir.style.right = '18px';
     btnSalir.style.zIndex = '1001';
@@ -45,7 +76,7 @@ const Game1_2 = (() => {
     btnSalir.style.padding = '0.5rem 1.4rem';
     btnSalir.style.borderRadius = '1.5rem';
     btnSalir.style.border = 'none';
-    btnSalir.style.background = '#f44336';
+
     btnSalir.style.color = 'white';
     btnSalir.style.cursor = 'pointer';
     btnSalir.style.visibility = 'hidden';
@@ -58,14 +89,7 @@ const Game1_2 = (() => {
   let stories = [];
   let currentStoryIndex = 0;
 
-  let audioEl = null;
-  let audioBtn = null;
-  let audioSrcActual = null;
-  let audioState = 'idle'; // 'idle', 'playing', 'paused', 'ended'
-  let playCount = 0;
-  let initialPlayLimit = 2;
-  const extraPlaysAfterReview = 1;
-  let fragmentsShown = false;
+  // ...variables globales ya declaradas arriba...
   // selection sounds
   const sDrag = new Audio("../../assets/sonidos/drag.mp3");
   const sDrop = new Audio("../../assets/sonidos/drop.mp3");
@@ -101,10 +125,14 @@ const Game1_2 = (() => {
     if (audioEl) { audioEl.pause(); audioEl = null; }
     audioEl = new Audio(src);
     audioEl.preload = 'auto';
+    // Progreso
+    if (!progressBar) progressBar = document.getElementById('audio-progress-bar');
+    if (!progressFill && progressBar) progressFill = progressBar.querySelector('.audio-progress-fill');
+    if (progressFill) progressFill.style.width = '0%';
     if (!audioBtn) audioBtn = document.getElementById('btn-audio-control');
     if (audioBtn) {
       audioBtn.disabled = false;
-      audioBtn.textContent = '▶️ Reproducir audio';
+      audioBtn.textContent = '▶';
       audioState = 'idle';
       audioBtn.onclick = () => {
         if (!audioEl) return;
@@ -120,18 +148,40 @@ const Game1_2 = (() => {
     }
     audioEl.addEventListener('play', () => {
       audioState = 'playing';
-      if (audioBtn) audioBtn.textContent = '⏸️ Pausar audio';
+      if (audioBtn) audioBtn.textContent = '⏸';
+      // Efecto de parpadeo en el círculo de la imagen
+      const artwork = document.getElementById('artwork-circle');
+      // if (artwork) artwork.classList.add('audio-playing');
+      // Iniciar barra de progreso
+      if (progressFill) updateAudioProgress();
     });
     audioEl.addEventListener('pause', () => {
       if (audioEl.currentTime < audioEl.duration) {
         audioState = 'paused';
-        if (audioBtn) audioBtn.textContent = '▶️ Reanudar audio';
+        if (audioBtn) audioBtn.textContent = '▶';
+      }
+      // Quitar efecto de parpadeo
+      const artwork = document.getElementById('artwork-circle');
+      // if (artwork) artwork.classList.remove('audio-playing');
+      // Detener barra de progreso
+      if (progressRAF) {
+        cancelAnimationFrame(progressRAF);
+        progressRAF = null;
       }
     });
     audioEl.addEventListener('ended', () => {
       audioState = 'ended';
-      if (audioBtn) audioBtn.textContent = '▶️ Reproducir audio';
+      if (audioBtn) audioBtn.textContent = '▶';
+      // Quitar efecto de parpadeo
+      const artwork = document.getElementById('artwork-circle');
+      // if (artwork) artwork.classList.remove('audio-playing');
       updatePlayUI();
+      // Llenar barra al 100% al terminar
+      if (progressFill) progressFill.style.width = '100%';
+      if (progressRAF) {
+        cancelAnimationFrame(progressRAF);
+        progressRAF = null;
+      }
     });
     audioEl.addEventListener('ended', () => {
       updatePlayUI();
@@ -161,7 +211,7 @@ const Game1_2 = (() => {
   function updatePlayUI() {
     const pc = document.getElementById('play-count');
     if (!pc) return;
-    pc.textContent = `${playCount}/${initialPlayLimit}`;
+    pc.textContent = `Reproducciones: ${playCount}/${initialPlayLimit}`;
     const playBtn = document.getElementById('play-audio');
     if (playBtn) playBtn.disabled = playCount >= initialPlayLimit;
   }
@@ -219,10 +269,10 @@ const Game1_2 = (() => {
 
     overlay.appendChild(cardWrapper);
     document.body.appendChild(overlay);
-            // Mostrar el botón después de 2.5 segundos
-        setTimeout(() => {
-            document.querySelector('.instruction-btn')?.classList.add('visible');
-        }, 5000);
+    // Mostrar el botón después de 2.5 segundos
+    setTimeout(() => {
+      document.querySelector('.instruction-btn')?.classList.add('visible');
+    }, 5000);
     // Pixel grande y ocultar dialog
     try {
       Pet.init();
@@ -250,6 +300,10 @@ const Game1_2 = (() => {
     if (!story) return;
     createAudio(story.audio);
     playCount = 0; updatePlayUI();
+    // Reset barra de progreso
+    if (!progressBar) progressBar = document.getElementById('audio-progress-bar');
+    if (!progressFill && progressBar) progressFill = progressBar.querySelector('.audio-progress-fill');
+    if (progressFill) progressFill.style.width = '0%';
     // ensure show button hidden until audio ends
     const showBtn = document.getElementById('btn-show-fragments'); if (showBtn) { showBtn.style.display = 'none'; showBtn.disabled = true; }
     fragmentsShown = false;
@@ -270,11 +324,64 @@ const Game1_2 = (() => {
     if (!story) return;
     const titleEl = document.getElementById('title'); if (titleEl) titleEl.textContent = story.titulo;
     const img = document.getElementById('story-img'); if (img) { img.src = story.img; img.alt = story.titulo; }
+    // Insertar línea de separación y barra de control
+    let separator = document.getElementById('fragments-separator');
+    if (!separator) {
+      separator = document.createElement('hr');
+      separator.id = 'fragments-separator';
+      separator.className = 'fragments-separator';
+      const container = document.getElementById('opciones');
+      if (container && container.parentNode) {
+        container.parentNode.insertBefore(separator, container);
+      }
+    } else {
+      separator.style.display = 'block';
+    }
+
+    let bar = document.getElementById('fragments-bar');
+    let btnReview = document.getElementById('btn-review');
+    if (!btnReview) {
+      // Crear el botón si no existe (por recarga o navegación)
+      btnReview = document.createElement('button');
+      btnReview.id = 'btn-review';
+      btnReview.className = 'btn-review';
+      btnReview.textContent = 'Revisar';
+      btnReview.style.display = 'block';
+      btnReview.onclick = reviewPlacement;
+    }
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.id = 'fragments-bar';
+      bar.className = 'fragments-bar';
+      bar.innerHTML = `<span class=\"fragments-bar-text\">Ordena los fragmentos</span>`;
+      bar.appendChild(btnReview);
+      const container = document.getElementById('opciones');
+      if (container && container.parentNode) {
+        container.parentNode.insertBefore(bar, container);
+      }
+    } else {
+      bar.style.display = 'flex';
+      if (!bar.contains(btnReview)) bar.appendChild(btnReview);
+      btnReview.style.display = 'block';
+    }
     const container = document.getElementById('opciones'); if (!container) return; container.innerHTML = '';
 
     // Start timer for 'mirada atenta' when fragments are shown
     rondaStartTime = Date.now();
     console.log("Ronda start time:", rondaStartTime);
+
+    // Mensajes de Pixel a los 10 y 20 segundos
+    const storyIdxAtShow = currentStoryIndex;
+    setTimeout(() => {
+      if (currentStoryIndex === storyIdxAtShow) {
+        try { Pet.speak('¿Qué pasó al principio?'); } catch (e) { }
+      }
+    }, 10000);
+    setTimeout(() => {
+      if (currentStoryIndex === storyIdxAtShow) {
+        try { Pet.speak('¿Recuerdas lo que pasó al final?'); } catch (e) { }
+      }
+    }, 25000);
 
     const correctOrder = (story._fragments && story._fragments.slice()) || story.fragments.slice();
     const shuffled = shuffle(correctOrder.slice());
@@ -399,6 +506,9 @@ const Game1_2 = (() => {
 
     // Cada vez que el usuario presiona revisar, cuenta como intento
     intentos++;
+    // El botón Revisar debe permanecer visible y activo
+    const btnReview = document.getElementById('btn-review');
+    if (btnReview) btnReview.style.display = 'block';
     // Do not increase initialPlayLimit on review; just refresh UI
     updatePlayUI();
 
@@ -432,11 +542,19 @@ const Game1_2 = (() => {
   }
 
   function renderNextStory() {
-    const pc = document.getElementById('play-count'); if (pc) pc.textContent = `0/2`;
+    const pc = document.getElementById('play-count'); if (pc) pc.textContent = `Reproducciones: 0/2`;
     const reviewBtn = document.getElementById('btn-review'); if (reviewBtn) reviewBtn.disabled = true;
     const story = getCurrentStory();
+    // Actualizar título de la historia
+    const storyTitle = document.getElementById('story-title');
+    if (storyTitle && story && story.titulo) storyTitle.textContent = story.titulo;
     const titleEl = document.getElementById('title'); if (titleEl && story) titleEl.textContent = story.titulo;
     const img = document.getElementById('story-img'); if (img && story) { img.src = story.img; img.alt = story.titulo; }
+    // Ocultar fragment-bar y fragment-separator
+    const bar = document.getElementById('fragments-bar');
+    if (bar) bar.style.display = 'none';
+    const separator = document.getElementById('fragments-separator');
+    if (separator) separator.style.display = 'none';
     // hide show button when moving to next story
     const showBtn = document.getElementById('btn-show-fragments'); if (showBtn) { showBtn.style.display = 'none'; showBtn.disabled = true; }
     fragmentsShown = false;
@@ -477,6 +595,7 @@ const Game1_2 = (() => {
       showBtn.id = 'btn-show-fragments';
       showBtn.className = 'btn-show-fragments btn';
       showBtn.textContent = 'Mostrar fragmentos';
+      showBtn.style.background = '#3F6E8C';
       showBtn.style.display = 'none';
       showBtn.disabled = true;
       if (controlsRow) controlsRow.appendChild(showBtn);
@@ -487,6 +606,9 @@ const Game1_2 = (() => {
       fragmentsShown = true;
       showBtn.style.display = 'none';
       const reviewBtn2 = document.getElementById('btn-review'); if (reviewBtn2) reviewBtn2.disabled = false;
+      setTimeout(() => {
+          try { Pet.speak('Tómate tu tiempo para hacerlo bien'); } catch (e) { }
+      }, 5000);
     });
   }
 
@@ -499,6 +621,10 @@ const Game1_2 = (() => {
     aciertos = 0;
     intentos = 0;
     try { Pet.init(); Pet.setIdle(); } catch (e) { }
+    // Mostrar el título de la historia desde el inicio
+    const story = getCurrentStory();
+    const storyTitle = document.getElementById('story-title');
+    if (storyTitle && story && story.titulo) storyTitle.textContent = story.titulo;
     initControls();
     showInstructions();
   }

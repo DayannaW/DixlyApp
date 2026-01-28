@@ -172,6 +172,12 @@ const Game1 = (() => {
     function renderStory() {
         const storyData = getCurrentStory();
 
+        setTimeout(() => {
+            if (currentStoryIndex === storyIdxAtShow) {
+                try { Pet.speak('Lee con atención'); } catch (e) { }
+            }
+        }, 5000);
+
         // Si es la primera historia, reiniciar contadores
         if (currentStoryIndex === 0) {
             aciertos = 0;
@@ -244,7 +250,7 @@ const Game1 = (() => {
             });
 
             // Soporte táctil para móviles: simular drop al tocar la opción
-            div.addEventListener('touchstart', function(e) {
+            div.addEventListener('touchstart', function (e) {
                 if (div.getAttribute('draggable') === 'false') return;
                 e.preventDefault();
                 sDrop.currentTime = 0; sDrop.play();
@@ -252,8 +258,8 @@ const Game1 = (() => {
                 const dropZone = document.getElementById('drop-zone');
                 const dropRect = dropZone.getBoundingClientRect();
                 const wordRect = div.getBoundingClientRect();
-                const deltaX = dropRect.left + dropRect.width/2 - (wordRect.left + wordRect.width/2);
-                const deltaY = dropRect.top + dropRect.height/2 - (wordRect.top + wordRect.height/2);
+                const deltaX = dropRect.left + dropRect.width / 2 - (wordRect.left + wordRect.width / 2);
+                const deltaY = dropRect.top + dropRect.height / 2 - (wordRect.top + wordRect.height / 2);
                 div.style.transition = 'transform 0.55s cubic-bezier(.4,1.2,.6,1), opacity 0.2s';
                 div.style.zIndex = '10000';
                 div.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(1.15)`;
@@ -316,7 +322,7 @@ const Game1 = (() => {
                                             badgeParams = res.badges.map(b => `badge=${encodeURIComponent(b)}`).join('&');
                                             badgeParams = badgeParams ? ('&' + badgeParams) : '';
                                         }
-                                    } catch (e) {}
+                                    } catch (e) { }
                                     window.location.href = `../resultados.html?game=juego1&level=${encodeURIComponent(currentLevel)}&aciertos=${aciertos}&intentos=${intentos}` + badgeParams;
                                 }
                             }, 1600);

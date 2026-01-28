@@ -179,10 +179,32 @@
         .btn-recoger:hover {
             background: #ffe066;
         }
+
+        .badges-screen {
+            background:
+                radial-gradient(circle at center,
+                    rgba(255, 215, 130, 0.55) 0%,
+                    rgba(255, 215, 130, 0.28) 28%,
+                    rgba(242, 230, 210, 0.9) 55%,
+                    var(--bg-main) 100%);
+
+        }
+
+
+        .badges-screen::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at center,
+                    rgba(255, 255, 255, 0.12),
+                    transparent 60%);
+            pointer-events: none;
+        }
     </style>
 </head>
 
-<body>
+<body class="badges-screen">
     <div id="pixel-container">
         <div id="pixel-animation"></div>
         <div id="pixel-dialog">
@@ -201,8 +223,8 @@
         <button id="btn-next" class="btn btn-success">Siguiente nivel</button>
         <button id="btn-menu" class="btn btn-secondary">Volver al menú</button>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+    
+    <script src="../../js/lottie.min.js"></script>
     <script type="module" src="../js/insignias.js"></script>
     <script src="../js/cofre_animacion.js"></script>
     <script>

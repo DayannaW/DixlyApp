@@ -20,21 +20,27 @@
     <!-- Botón de sonido -->
     <!--<button id="toggle-sound" class="btn-sound">🔊</button> -->
 
-    <div id="container">
 
-
-        <!-- Nueva área para imagen -->
-        <div id="img-area">
-            <img id="story-img" src="" alt="Imagen de la historia">
+    <div id="container" class="player-container">
+        <div class="player-artwork-area">
+            <div id="artwork-circle" class="player-artwork-circle">
+                    <img id="story-img" src="../../assets/imagenes/juego2.png" alt="Imagen de la historia">
+            </div>
         </div>
-        <h2 id="title"></h2>
+        <div id="audio-progress-bar" class="audio-progress-bar"><div class="audio-progress-fill"></div></div>
+        <div id="story-title" class="player-story-title"></div>
+        <div class="player-controls">
+            <button id="btn-audio-control" class="player-audio-btn" aria-label="Reproducir/Pausar audio">
+                <span id="audio-icon">▶</span>
+            </button>
+            <div class="player-attempts">
+                <span id="play-count">Reproducciones: 0/2</span>
+            </div>
+            <!-- El botón Revisar se insertará dinámicamente en la barra de fragmentos -->
+            <button id="btn-show-fragments" class="player-show-fragments-btn" style="display:none;">Mostrar fragmentos</button>
+        </div>
+        <!-- <h2 id="title"></h2> -->
         <p id="texto-principal"></p>
-
-        <div class="controls-row">
-            <span class="play-count" id="play-count">0/2</span>
-            <button id="btn-review" class="btn-review" disabled>Revisar</button>
-        </div>
-
         <div id="feedback"></div>
         <div id="opciones" class="fragments-container" aria-live="polite"></div>
     </div>
@@ -46,7 +52,8 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+   
+    <script src="../../js/lottie.min.js"></script>
 
 
     <script type="module">

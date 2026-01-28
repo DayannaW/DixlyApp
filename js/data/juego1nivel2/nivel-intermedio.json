@@ -1,7 +1,7 @@
 [
     {
         "titulo": "No abras la puerta",
-        "img": "../../assets/imagenes/cuento1Juego1_3.jpg",
+        "img": "../../assets/imagenes/juego2.png",
         "audio": "../../assets/sonidos/microcuento1.mp4",
         "fragments": [
             "El celular de Leo vibró en la madrugada.",
@@ -13,7 +13,7 @@
     },
     {
         "titulo": "Lo que quedó del tren",
-        "img": "../../assets/imagenes/cuento1Juego1_4.png",
+        "img": "../../assets/imagenes/juego2.png",
         "audio": "../../assets/sonidos/microcuento2.mp4",
         "fragments": [
             "A las 11:45 p.m., escuchaba el tren. El mismo ruido, la misma vibración.",
@@ -25,7 +25,7 @@
     },
     {
         "titulo": "Un café por la tarde",
-        "img": "../../assets/imagenes/cuento1Juego1_5.jpg",
+        "img": "../../assets/imagenes/juego2.png",
         "audio": "../../assets/sonidos/microcuento3.mp4",
         "fragments": [
             "Cada tarde, me sentaba junto a la ventana, esperando verla entrar. Ella pedía un té verde.",

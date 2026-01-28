@@ -66,8 +66,9 @@ const Pet = (() => {
     function calcSpeakDuration(text) {
         if (!text) return 1200;
         const words = (text + '').trim().split(/\s+/).filter(Boolean).length;
-        const dur = Math.round(words * 500);
-        return Math.max(800, Math.min(8000, dur));
+        // Aumentar el tiempo por palabra de 500ms a 800ms
+        const dur = Math.round(words * 800);
+        return Math.max(1200, Math.min(12000, dur));
     }
 
     function speak(text, duration) {
