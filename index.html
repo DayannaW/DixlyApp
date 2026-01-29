@@ -101,11 +101,11 @@
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-nav">
         <button class="nav-item active" onclick="window.location.href='index.html'">
-            <span style="font-size:1.5rem;">🎮</span>
+            <span style="font-size:1.2rem;">🎮</span>
             <span>Juegos</span>
         </button>
         <button class="nav-item" onclick="window.location.href='historicoInsignias.html'">
-            <span style="font-size:1.5rem;">🏅</span>
+            <span style="font-size:1.2rem;">🏅</span>
             <span>Insignias</span>
         </button>
     </nav>
@@ -130,14 +130,18 @@
 
     <script type="module">
         console.log("Hola 2");
-        import Pet from './pet.js';
+        import Pet from './js/pet.js';
         Pet.init();
         Pet.setIdle();
         setTimeout(() => {
-            console.log("Hablando...");
-            try { Pet.speak('Lee con atención'); } catch (e) { }
-
+            try { Pet.speak('Hola! soy Pixel '); } catch (e) { }
+        }, 2000);
+        setTimeout(() => {
+            try { Pet.speak('Estoy aqui para acompañarte en esta aventura ...'); } catch (e) { }
         }, 5000);
+        setTimeout(() => {
+            try { Pet.speak('Elige un juego para comenzar '); } catch (e) { }
+        }, 11000);
         // Selección de juegos por botón
         const playButtons = document.querySelectorAll('.play-btn');
         console.log("Play buttons found:");

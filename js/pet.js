@@ -4,7 +4,10 @@ const Pet = (() => {
     let instances = {};
     let dialogTimeout = null;
 
-    let animBasePath = '../../assets/animaciones/';
+    // Si se llama desde index.html, usar ruta diferente
+    let animBasePath = (window.location.pathname.endsWith('/index.html') || window.location.pathname === '/index.html')
+        ? 'assets/animaciones/'
+        : '../../assets/animaciones/';
     let ANIMS = {
         idle: animBasePath + 'pixel.json',
         happy: animBasePath + 'pixel.json',
@@ -66,9 +69,8 @@ const Pet = (() => {
     function calcSpeakDuration(text) {
         if (!text) return 1200;
         const words = (text + '').trim().split(/\s+/).filter(Boolean).length;
-        // Aumentar el tiempo por palabra de 500ms a 800ms
-        const dur = Math.round(words * 800);
-        return Math.max(1200, Math.min(12000, dur));
+        const dur = Math.round(words * 500);
+        return Math.max(800, Math.min(8000, dur));
     }
 
     function speak(text, duration) {
