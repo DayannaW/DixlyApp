@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Histórico de Insignias</title>
+    <title>Insignias Ganadas</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/layout.css">
@@ -29,23 +29,34 @@
             margin-bottom: 1.5rem;
         }
         .insignia-lista {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 1.2rem;
         }
         .insignia-item {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 1rem;
-            background: #f3f3f3;
+            background: #faf7f1;
             border-radius: 0.8rem;
-            padding: 0.8rem 1rem;
+            padding: 1.2rem 0.5rem 0.8rem 0.5rem;
+            min-height: 140px;
+            min-width: 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16),
+    0 2px 6px rgba(0, 0, 0, 0.11);
+            box-sizing: border-box;
         }
         .insignia-img {
-            width: 48px;
-            height: 48px;
+            width: 60%;
+            height: 70%;
             object-fit: contain;
+            /* margin-bottom: 0.5rem; */
         }
+        .insignia-info {
+            flex: none;
+            text-align: center;
+        }
+ 
         .insignia-info {
             flex: 1;
         }
@@ -63,15 +74,7 @@
     <div class="historico-container">
         <h1>Histórico de Insignias</h1>
         <div class="insignia-lista">
-            <!-- Aquí se mostrarán las insignias obtenidas históricamente -->
-            <div class="insignia-item">
-                <img class="insignia-img" src="../assets/iconos/insignia1.png" alt="Insignia ejemplo">
-                <div class="insignia-info">
-                    <div class="insignia-nombre">Insignia Ejemplo</div>
-                    <div class="insignia-fecha">Obtenida: 10/01/2026</div>
-                </div>
-            </div>
-            <!-- Más insignias aquí -->
+            <!-- Las insignias se cargarán aquí dinámicamente -->
         </div>
     </div>
 
@@ -86,5 +89,6 @@
             <span>Insignias</span>
         </button>
     </nav>
+    <script src="js/historicoInsignias.js"></script>
 </body>
 </html>

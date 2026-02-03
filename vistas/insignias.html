@@ -6,7 +6,7 @@
     <title>Insignias obtenidas</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../css/layout.css">
     <link rel="stylesheet" href="../css/ui.css">
     <link rel="stylesheet" href="../css/vistas/juego1nivel1.css">
     <style>
@@ -49,7 +49,7 @@
             min-width: 90px;
             max-width: 120px;
             min-height: 90px;
-            max-height: 140px;
+            /* max-height: 140px; */
             padding: 0.5rem 0.5rem 0.3rem 0.5rem;
             margin-bottom: 0;
             margin-top: 0;
@@ -133,8 +133,8 @@
             background: #fff;
             border-radius: 18px;
             box-shadow: 0 4px 32px #0002;
-            padding: 1.5rem 2rem 1.2rem 2rem;
-            min-width: 260px;
+            padding: 1rem 1.5rem 0.8rem 1.5rem;
+            min-width: 60px;
             text-align: center;
             z-index: 10;
             transition: all 0.7s cubic-bezier(.68, -0.55, .27, 1.55);
@@ -146,9 +146,9 @@
         }
 
         .insignia-img {
-            width: 72px;
-            height: 72px;
-            margin-bottom: 1rem;
+            width: 80%;
+            height: 60%;
+            /* margin-bottom: 1rem; */
         }
 
         .insignia-title {
@@ -201,6 +201,37 @@
                     transparent 60%);
             pointer-events: none;
         }
+
+        .btn-ins {
+            margin-top: 0.6rem;
+            align-self: flex-end;
+
+            color: #fff;
+
+            border: none;
+            border-radius: 10px;
+            padding: 0.4rem 1.3rem;
+
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+
+            box-shadow:
+                0 4px 10px rgba(0, 0, 0, 0.16),
+                0 2px 6px rgba(0, 0, 0, 0.11);
+
+            transition: background 0.2s ease, transform 0.15s ease;
+        }
+
+        .btn-repeat{
+            background: var(--accent-ui);
+        }
+        .btn-next{
+            background: var(--cta);
+        }
+        .btn-menu{
+            background: var(--accent-ui-hover);
+        }
     </style>
 </head>
 
@@ -219,12 +250,12 @@
 
     <div class="actions" id="insignias-actions"
         style="display:none; margin-top:2.5rem; justify-content:center; gap:1rem;">
-        <button id="btn-repeat" class="btn btn-primary">Repetir nivel</button>
-        <button id="btn-next" class="btn btn-success">Siguiente nivel</button>
-        <button id="btn-menu" class="btn btn-secondary">Volver al menú</button>
+        <button id="btn-repeat" class="btn-ins btn-repeat">Repetir nivel</button>
+        <button id="btn-next" class="btn-ins btn-next">Siguiente nivel</button>
+        <button id="btn-menu" class="btn-ins btn-menu">Volver al menú</button>
     </div>
-    
-    <script src="../../js/lottie.min.js"></script>
+
+    <script src="../js/lottie.min.js"></script>
     <script type="module" src="../js/insignias.js"></script>
     <script src="../js/cofre_animacion.js"></script>
     <script>

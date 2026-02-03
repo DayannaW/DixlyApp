@@ -67,7 +67,7 @@ async function loadBadgeInfo(badgeIds) {
     const allBadges = await resp.json();
     return badgeIds.map(id => ({
         id,
-        img: `../imagenes/insignias/${id}.png`, // imagen por convención
+        img: allBadges[id]?.path || `../imagenes/insignias/${id}.png`, // imagen por convención
         title: allBadges[id]?.name || id,
         desc: allBadges[id]?.desc || ''
     }));
@@ -102,21 +102,12 @@ function showBadge(index) {
     let pixelDialogTimeout = null;
     setTimeout(() => {
         card.classList.add('visible');
-        function speakLoop() {
-            if (!speaking) return;
-            if (badge.desc) {
-                try {
-                    Pet.speak(badge.desc);
-                    // Guardar el timeout de diálogo para poder cancelarlo
-                    const dur = (typeof Pet.calcSpeakDuration === 'function') ? Pet.calcSpeakDuration(badge.desc) : 2000;
-                    pixelDialogTimeout = setTimeout(speakLoop, dur + 300);
-                } catch(e) {
-                    pixelDialogTimeout = setTimeout(speakLoop, 2000);
-                }
-            }
+        // Pixel solo habla una vez la descripción
+        if (badge.desc) {
+            try {
+                Pet.speak(badge.desc);
+            } catch(e) {}
         }
-        speaking = true;
-        speakLoop();
     }, 100);
     document.getElementById('btn-recoger').onclick = () => {
         speaking = false;

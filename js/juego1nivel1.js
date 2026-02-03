@@ -173,9 +173,9 @@ const Game1 = (() => {
         const storyData = getCurrentStory();
 
         setTimeout(() => {
-            if (currentStoryIndex === storyIdxAtShow) {
+            
                 try { Pet.speak('Lee con atención'); } catch (e) { }
-            }
+            
         }, 5000);
 
         // Si es la primera historia, reiniciar contadores
