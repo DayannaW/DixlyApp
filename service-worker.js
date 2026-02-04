@@ -1,5 +1,5 @@
 // Nombre del caché (cambiar la versión cuando actualices la app)
-const CACHE_NAME = 'mi-pwa-cache-v3';
+const CACHE_NAME = 'mi-pwa-cache-v4';
 
 // Archivos que queremos precargar
 const FILES_TO_CACHE = [
@@ -119,7 +119,8 @@ const FILES_TO_CACHE = [
   'assets/imagenes/insignias/reporganizador-experto.png',
   'assets/imagenes/insignias/mirada-atenta.png',
   // Iconos y fonts
-  'assets/iconos/iconApp.png',
+  'assets/iconos/iconApp512.png',
+  'assets/iconos/iconApp192.png',
   'assets/fonts/Lexend-Regular.ttf',
   'assets/fonts/Lexend/static/Lexend-Bold.ttf',
   'assets/fonts/Lexend/static/Lexend-Medium.ttf',
