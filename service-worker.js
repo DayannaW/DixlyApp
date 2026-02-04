@@ -1,5 +1,5 @@
 // Nombre del caché (cambiar la versión cuando actualices la app)
-const CACHE_NAME = 'mi-pwa-cache-v4';
+const CACHE_NAME = 'mi-pwa-cache-v5';
 
 // Archivos que queremos precargar
 const FILES_TO_CACHE = [
@@ -8,6 +8,7 @@ const FILES_TO_CACHE = [
   'inicio.html',
   'historicoInsignias.html',
   'manifest.json',
+  'favicon.ico',
   // Vistas
   'vistas/juego1/index.html',
   'vistas/juego1/juego1nivel1.html',
