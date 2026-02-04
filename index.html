@@ -116,6 +116,13 @@
     <script type="module" src="js/util.js"></script>
     <script src="js/main.js"></script>
     <script src="js/pwa.js"></script>
+    <script>
+        const basePath = location.pathname.endsWith('/DixlyApp/');
+
+        if (basePath) {
+            window.location.replace('./inicio.html');
+        }
+    </script>
 
     <!-- Registro del service worker (extra por seguridad) -->
     <script>
