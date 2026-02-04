@@ -117,7 +117,7 @@ const FILES_TO_CACHE = [
   'assets/imagenes/insignias/lector-paciente.png',
   'assets/imagenes/insignias/oido-narrativo.png',
   'assets/imagenes/insignias/primer-paso.png',
-  'assets/imagenes/insignias/reporganizador-experto.png',
+  'assets/imagenes/insignias/reorganizador-experto.png',
   'assets/imagenes/insignias/mirada-atenta.png',
   // Iconos y fonts
   'assets/iconos/iconApp512.png',
