@@ -1,7 +1,7 @@
 {
     "name": "DixlyApp",
     "short_name": "DixlyApp",
-    "start_url": "inicio.html",
+    "start_url": "./inicio.html",
     "scope": "./",
     "display": "standalone",
     "background_color": "#f7f8fc",

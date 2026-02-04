@@ -1,5 +1,5 @@
 // Nombre del caché (cambiar la versión cuando actualices la app)
-const CACHE_NAME = 'mi-pwa-cache-v6';
+const CACHE_NAME = 'mi-pwa-cache-v7';
 
 // Archivos que queremos precargar
 const FILES_TO_CACHE = [
