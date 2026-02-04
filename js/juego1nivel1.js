@@ -38,9 +38,9 @@ const Game1 = (() => {
     let storyStartTimes = [];
 
     // --- Sonido de fondo ---
-    const bgAudio = new Audio("../../assets/sonidos/juego1-fondo.mp3");
-    bgAudio.loop = true;
-    bgAudio.volume = 0.35;
+    // const bgAudio = new Audio("../../assets/sonidos/juego1-fondo.mp3");
+    // bgAudio.loop = true;
+    // bgAudio.volume = 0.35;
 
     // Pantalla de instrucciones
     function showInstrucciones() {
@@ -559,13 +559,13 @@ const Game1 = (() => {
         btn.style.cursor = 'pointer';
         btn.style.margin = '0';
         btn.addEventListener("click", () => {
-            if (bgAudio.paused) {
-                bgAudio.play();
-                btn.textContent = "🔊";
-            } else {
-                bgAudio.pause();
-                btn.textContent = "🔈";
-            }
+            // if (bgAudio.paused) {
+            //     bgAudio.play();
+            //     btn.textContent = "🔊";
+            // } else {
+            //     bgAudio.pause();
+            //     btn.textContent = "🔈";
+            // }
         });
     }
 
