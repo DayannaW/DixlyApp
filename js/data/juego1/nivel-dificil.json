@@ -1,7 +1,7 @@
 [
   {
     "titulo": "El misterio del faro",
-    "img": "../../assets/imagenes/faro.jpg",
+    "img": "../../assets/imagenes/cuento1Juego1.jpg",
     "base": "La tormenta azotaba la costa y el faro permanecía encendido. Los habitantes del pueblo miraban con preocupación, pues el guardián no había sido visto en días. Nadie sabía qué había pasado, pero todos esperaban que la luz siguiera guiando a los barcos a salvo. [FINAL]",
     "fragmentos": [
       "De pronto, la puerta del faro se abrió y el guardián apareció sano y salvo, explicando que solo había estado reparando la linterna.",
@@ -15,7 +15,7 @@
   },
   {
     "titulo": "El concurso de pasteles",
-    "img": "../../assets/imagenes/pastel.jpg",
+    "img": "../../../assets/imagenes/cuento2Juego1.jpg",
     "base": "Cada año, el pueblo organizaba un concurso de pasteles. Marta, la repostera más joven, decidió participar por primera vez. Pasó días perfeccionando su receta secreta y el día del concurso llegó con nervios y esperanza. [FINAL]",
     "fragmentos": [
       "El jurado probó su pastel y quedó sorprendido por el sabor único.",
@@ -29,7 +29,7 @@
   },
   {
     "titulo": "El perro perdido",
-    "img": "../../assets/imagenes/perro.jpg",
+    "img": "../../../assets/imagenes/cuento3Juego1.jpg",
     "base": "Lucas buscaba a su perro por todo el vecindario. Pegó carteles, preguntó a los vecinos y recorrió cada calle. No perdió la esperanza y cada noche dejaba la puerta entreabierta por si volvía. [FINAL]",
     "fragmentos": [
       "Una noche escuchó un ladrido y corrió a la puerta.",
@@ -43,7 +43,7 @@
   },
   {
     "titulo": "La carta misteriosa",
-    "img": "../../assets/imagenes/carta.jpg",
+    "img": "../../../assets/imagenes/cuento4Juego1.jpg",
     "base": "Sofía encontró una carta sin remitente en su buzón. La abrió con curiosidad y leyó palabras que parecían escritas para ella. Durante días, pensó en quién podría haberla enviado y qué significaba el mensaje. [FINAL]",
     "fragmentos": [
       "Finalmente, descubrió que era de su mejor amiga, quien quería sorprenderla.",

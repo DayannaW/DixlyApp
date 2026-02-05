@@ -128,19 +128,12 @@ const Game1_3 = (() => {
   function createExitButton() {
     if (document.getElementById('btn-salir-j2')) return;
     btnSalir.id = 'btn-salir-j2';
-    btnSalir.textContent = 'Salir';
-    btnSalir.className = 'btn btn-exit';
+    btnSalir.textContent = 'X';
+    btnSalir.className = 'close-btn';
     btnSalir.style.position = 'absolute';
     btnSalir.style.top = '18px';
     btnSalir.style.right = '18px';
-    btnSalir.style.zIndex = '1001';
-    btnSalir.style.fontSize = '1.1rem';
-    btnSalir.style.padding = '0.5rem 1.4rem';
-    btnSalir.style.borderRadius = '1.5rem';
-    btnSalir.style.border = 'none';
-    btnSalir.style.background = '#f44336';
-    btnSalir.style.color = 'white';
-    btnSalir.style.cursor = 'pointer';
+    btnSalir.style.zIndex = '1001';    
     btnSalir.style.visibility = 'hidden';
     btnSalir.onclick = () => {
       window.location.href = '../juego1/index.html';
@@ -155,11 +148,11 @@ const Game1_3 = (() => {
     main.innerHTML = `
       <div class="story-base-card">
         <h2>${story.titulo}</h2>
-        <img src="${story.img}" alt="${story.titulo}" class="story-img" style="max-width:220px; margin:0 auto 1rem; display:block; border-radius:10px;" />
+        <img src="${story.img}" alt="${story.titulo}" class="story-img" style="max-width:120px; margin:0 auto 0.8rem; display:block; border-radius:10px;" />
         <div class="story-text" style="margin-bottom:1.5rem; text-align:justify;">
           ${story.base.replace('[FINAL]', '<span class="final-placeholder" id="final-placeholder">(Aquí irá el final)</span>')}
         </div>
-        <button id="btn-end-reading" class="btn btn-primary">Terminar de leer</button>
+        <button id="btn-end-reading" class="final-read-btn">Terminar de leer</button>
       </div>
     `;
     // Pixel siempre visible y abajo con mensaje
@@ -193,11 +186,13 @@ const Game1_3 = (() => {
     main.innerHTML = `
       <div class="story-base-card">
         <h2>${story.titulo}</h2>
-        <img src="${story.img}" alt="${story.titulo}" class="story-img" style="max-width:220px; margin:0 auto 1rem; display:block; border-radius:10px;" />
+        <img src="${story.img}" alt="${story.titulo}" class="story-img" style="max-width:120px; margin:0 auto 0.8rem; display:block; border-radius:10px;" />
         <div class="story-text" style="margin-bottom:1.5rem; text-align:justify;">
-          ${story.base.replace('[FINAL]', '<span class=\"final-placeholder\" id=\"final-placeholder\">'
-            + '<div id=\"final-slots\" class=\"final-slots\"></div>'
-            + '</span>')}
+          ${story.base.replace('[FINAL]', '<span class="final-placeholder" id="final-placeholder">' + '<div id="final-slots" class="final-slots"></div>' + '</span>')}
+        </div>
+        <div id="separator-instruction" style="display:none;">
+          <hr style="margin: 1.2rem 0 0.7rem 0; border: none; border-top: 2px solid #e0e0e0;" />
+          <div style="font-size:1.04rem; color:#444; margin-bottom:0.7rem; text-align:center;">Elige tres opciones y colócalas arriba en orden lógico</div>
         </div>
         <div id="fragment-list" class="fragment-list"></div>
         <button id="btn-review" class="btn btn-success" style="display:none;margin-top:1.2rem;">Revisar</button>
@@ -241,22 +236,35 @@ const Game1_3 = (() => {
     function renderFragments() {
       const fragList = document.getElementById('fragment-list');
       fragList.innerHTML = '';
+      const isSmallScreen = window.innerWidth <= 700;
       shuffled.forEach((frag, idx) => {
         // Si ya está en un slot, no mostrar
         if (selectedSlots.includes(frag.i)) return;
         const card = document.createElement('div');
         card.className = 'fragment-card';
         card.textContent = frag.f;
-        card.draggable = true;
+        card.draggable = !isSmallScreen;
         card.style.margin = '0 0 8px 0';
         card.style.padding = '10px';
         card.style.background = '#fff';
         card.style.border = '1.5px solid #b3b3b3';
         card.style.borderRadius = '8px';
-        card.style.cursor = 'grab';
-        card.ondragstart = e => {
-          e.dataTransfer.setData('frag-idx', frag.i);
-        };
+        card.style.fontSize = '0.8rem';
+        card.style.cursor = isSmallScreen ? 'pointer' : 'grab';
+        if (!isSmallScreen) {
+          card.ondragstart = e => {
+            e.dataTransfer.setData('frag-idx', frag.i);
+          };
+        } else {
+          // Click para seleccionar y colocar en slot
+          card.onclick = () => {
+            // Buscar primer slot vacío
+            const emptyIdx = selectedSlots.findIndex(x => x === null);
+            if (emptyIdx !== -1) {
+              placeFragmentInSlot(frag.i, emptyIdx);
+            }
+          };
+        }
         fragList.appendChild(card);
       });
     }
@@ -303,6 +311,18 @@ const Game1_3 = (() => {
     renderSlots();
     renderFragments();
     checkReviewBtn();
+    // Mostrar la línea separadora e instrucción solo si hay fragmentos
+    setTimeout(() => {
+      const fragList = document.getElementById('fragment-list');
+      const separator = document.getElementById('separator-instruction');
+      if (fragList && separator) {
+        if (fragList.children.length > 0) {
+          separator.style.display = '';
+        } else {
+          separator.style.display = 'none';
+        }
+      }
+    }, 50);
     // Pixel siempre visible con mensaje
     setTimeout(() => {
       try {
@@ -358,9 +378,7 @@ const Game1_3 = (() => {
         <img src="${story.img}" alt="${story.titulo}" class="story-img" style="max-width:220px; margin:0 auto 1rem; display:block; border-radius:10px;" />
         <div class="story-text" style="margin-bottom:1.5rem; text-align:justify;">
           ${story.base.replace('[FINAL]',
-            '<span class=\"final-placeholder\" id=\"final-placeholder\">' +
-            selectedSlots.map(idx => `<mark class=\"user-frag\">${story.fragmentos[idx]}</mark>`).join('') +
-            '</span>')}
+            '<span class="final-placeholder" id="final-placeholder">' + selectedSlots.map(idx => `<mark class="user-frag">${story.fragmentos[idx]}</mark>`).join('') + '</span>')}
         </div>
         <div class="feedback-result" style="font-size:1.2rem; font-weight:bold; margin-bottom:1rem;">${resultado}</div>
         <div class="actions">

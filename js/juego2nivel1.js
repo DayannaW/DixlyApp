@@ -67,9 +67,9 @@ const Game2 = (() => {
               A veces una palabra se parece mucho a otra… pero no es la misma.<br><br>
               En este laboratorio, tu misión es escuchar con atención.<br><br>
               Oirás una palabra.<br>
-              Luego aparecerán varias opciones.<br><br>
+              Luego aparecerán varias opciones cayendo hacia el piso.<br><br>
               Elige la palabra que sí estaba en el audio.<br>
-              Confía en tu oído, no en la prisa.</p>
+              Afina tu oído, no dejes que las palabras caigan al piso.</p>
             <button id="start-btn" class="instruction-btn">Entiendo</button>
         `;
     overlay.appendChild(cardWrapper);

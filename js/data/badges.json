@@ -24,6 +24,11 @@
     "desc": "Completaste el nivel intermedio ordenando todas las historias correctamente.",
     "level": "nivel-intermedio"
   },
+    "arquitecto-sentido": {
+    "name": "Arquitecto del sentido",
+    "desc": "Completaste el nivel intermedio ordenando todas las historias correctamente.",
+    "level": "nivel-intermedio"
+  },
   "reorganizador-experto": {
     "name": "Reorganizador experto",
     "desc": "Lograste el orden correcto después de al menos un intento fallido.",

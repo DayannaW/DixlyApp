@@ -7,7 +7,7 @@ const sCorrect = new Audio('../../assets/sonidos/correct.mp3');
 sCorrect.preload = 'auto';
 const sWrong = new Audio('../../assets/sonidos/wrong.mp3');
 sWrong.preload = 'auto';
-import { loadJSON } from './util.js';
+import { loadJSON, addLevelCompletion } from './util.js';
 import Pet from './pet.js';
 
 const Juego3Nivel1 = (() => {
@@ -121,7 +121,7 @@ const Juego3Nivel1 = (() => {
     }
     const main = document.getElementById('main-container');
     // Botón salir arriba a la derecha
-    let salirBtnHtml = `<button id="btn-salir-j3" style="position:absolute;top:18px;right:18px;z-index:2000;font-size:1.1rem;padding:0.5rem 1.4rem;border-radius:1.5rem;border:none;background:#f44336;color:white;cursor:pointer;">Salir</button>`;
+    let salirBtnHtml = `<button id="btn-salir-j3" class="close-btn">X</button>`;
     // Mostrar siempre las 12 palabras en la ruleta, usadas en gris
     let palabrasRuleta = [];
     if (palabrasDisponibles.length + palabrasUsadas.length < 12) {
@@ -202,7 +202,7 @@ const Juego3Nivel1 = (() => {
             <svg width=\"60\" height=\"60\" style=\"filter:drop-shadow(0 2px 6px #0005);transform:rotate(180deg);\"><polygon points=\"30,0 50,32 10,32\" fill=\"#e74c3c\" stroke=\"#b71c1c\" stroke-width=\"3\" /></svg>
           </div>
         </div>
-        <button id=\"btn-girar\" class=\"btn btn-primary\">Empezar a girar</button>
+        <button id=\"btn-girar\" class=\"boton-azul\">Empezar a girar</button>
       </div>
       <div id=\"palabra-animada\" style=\"position:absolute;left:0;right:0;top:40px;text-align:center;z-index:10;pointer-events:none;opacity:0;transition:all .7s cubic-bezier(.7,.2,.3,1);font-size:3.2rem;font-weight:700;letter-spacing:2px;color:#234;\"></div>
     `;
@@ -304,13 +304,13 @@ const Juego3Nivel1 = (() => {
     }
     opciones = opciones.sort(() => Math.random() - 0.5);
     main.innerHTML = `
-      <div class=\"palabra-seleccionada\" style=\"text-align:center;margin-bottom:2rem;\">
-        <h2 style=\"font-size:2.5rem;letter-spacing:2px;transition:all .7s cubic-bezier(.7,.2,.3,1);\">${palabraObj.texto}</h2>
+      <div class="palabra-seleccionada" style="text-align:center;margin-bottom:2rem;">
+        <h2 style="font-size:2.5rem;letter-spacing:2px;transition:all .7s cubic-bezier(.7,.2,.3,1);">${palabraObj.texto}</h2>
       </div>
-      <div class=\"imagenes-opciones\" style=\"display:flex;flex-wrap:wrap;gap:2rem;justify-content:center;\">
-        ${opciones.map((op, i) => `<div class=\"img-opcion\" data-palabra=\"${op.id}\" style=\"cursor:pointer;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px #0002;transition:box-shadow .2s;\"><img src=\"../../assets/imagenes/juego3/${op.imagen}\" alt=\"${op.texto}\" style=\"width:140px;height:140px;object-fit:contain;display:block;\"></div>`).join('')}
+      <div class="imagenes-opciones" style="display:grid;grid-template-columns:repeat(2, 1fr);gap:2rem;justify-items:center;align-items:center;max-width:340px;margin:0 auto;">
+        ${opciones.map((op, i) => `<div class="img-opcion" data-palabra="${op.id}" style="cursor:pointer;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px #0002;transition:box-shadow .2s;"><img src="../../assets/imagenes/juego3/${op.imagen}" alt="${op.texto}" style="width:140px;height:140px;object-fit:contain;display:block;"></div>`).join('')}
       </div>
-      <div id=\"feedback-j3\" style=\"text-align:center;font-size:1.3rem;margin-top:2.5rem;min-height:2.5rem;\"></div>
+      <div id="feedback-j3" style="text-align:center;font-size:1.3rem;margin-top:2.5rem;min-height:2.5rem;"></div>
     `;
     document.querySelectorAll('.img-opcion').forEach(div => {
       div.onclick = () => seleccionarImagen(div, palabraObj.id);
@@ -355,7 +355,19 @@ const Juego3Nivel1 = (() => {
   }
 
   function mostrarResultados() {
-    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel-facil&score=' + aciertos;
+    try {
+      addLevelCompletion('juego3', 'nivel-facil');
+    } catch (e) { }
+    let total = 0;
+    let score = 0;
+    try {
+      const STORAGE_KEY = 'dixly_progress_v1';
+      let p = localStorage.getItem(STORAGE_KEY);
+      p = p ? JSON.parse(p) : { perGame: {}, total: 0 };
+      total = p.total || 0;
+      score = (p.perGame && p.perGame['juego3'] && p.perGame['juego3'].score) || 0;
+    } catch (e) { }
+    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel-facil&score=' + score + '&total=' + total + '&aciertos=' + aciertos;
     // const main = document.getElementById('main-container');
     // main.innerHTML = `
     //   <div class=\"result-card\" style=\"max-width:420px; margin:3rem auto; padding:1.5rem; border-radius:12px; box-shadow:var(--sombra-media); background:var(--color-blanco); text-align:center\">

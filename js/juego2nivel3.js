@@ -1,4 +1,4 @@
-import { loadJSON } from './util.js';
+import { loadJSON, addLevelCompletion } from './util.js';
 import Pet from './pet.js';
 
 const Game2Nivel3 = (() => {
@@ -129,7 +129,16 @@ const Game2Nivel3 = (() => {
         <div style="background:#fff;padding:2.5rem 2.5rem 2rem 2.5rem;border-radius:18px;box-shadow:0 4px 32px #0002;font-size:2.2rem;font-weight:700;color:#234;">En pausa</div>
       </div>
     `;
-    setTimeout(() => { try { Pet.speak('Escucha bien… una de estas palabras no coincide con lo que oíste.'); } catch (e) { } }, 400);
+    setTimeout(() => { try { Pet.speak('Escucha bien… una de estas palabras que oiste aparece mal escrita.'); } catch (e) { } }, 400);
+        setTimeout(() => {
+          try {
+            Pet.speak('Escucha bien… una de estas palabras que oiste aparece mal escrita.');
+            setTimeout(() => {
+              const dialog = document.getElementById('pixel-dialog');
+              if (dialog) dialog.style.display = 'none';
+            }, 5000); // Oculta el cuadro después de 3 segundos (ajusta el tiempo si es necesario)
+          } catch (e) { }
+        }, 400);
     // Pausa
     const pauseBtn = document.getElementById('pause-btn');
     const pauseOverlay = document.getElementById('pause-overlay');
@@ -306,6 +315,53 @@ const Game2Nivel3 = (() => {
         w.style.left = `${Math.round(spacing * (i + 1) - 60)}px`;
         w.style.opacity = '0';
         fallArea.appendChild(w);
+        // Solo permitir click/tap en pantallas pequeñas
+        if (window.innerWidth < 700) {
+          w.addEventListener('click', function(e) {
+            // Solo si no está desactivado y no se ha respondido
+            if (w.getAttribute('draggable') === 'false' || fallArea.classList.contains('respondido')) return;
+            e.preventDefault();
+            // Animar la palabra hacia la drop-box
+            const dropBox = document.getElementById('drop-box');
+            const dropRect = dropBox.getBoundingClientRect();
+            const wordRect = w.getBoundingClientRect();
+            const deltaX = dropRect.left + dropRect.width/2 - (wordRect.left + wordRect.width/2);
+            const deltaY = dropRect.top + dropRect.height/2 - (wordRect.top + wordRect.height/2);
+            w.style.transition = 'transform 0.55s cubic-bezier(.4,1.2,.6,1), opacity 0.2s';
+            w.style.zIndex = '10000';
+            w.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(1.15)`;
+            setTimeout(() => {
+              w.style.opacity = '0';
+              // Simular drop
+              // Buscar el índice de la opción
+              const idx = op.idx;
+              // Ejecutar la lógica de drop tal como en dropBox.ondrop
+              const allWords = fallArea.querySelectorAll('.fall-word');
+              allWords.forEach(fw => { fw.setAttribute('draggable', 'false'); fw.classList.add('fall-inactiva'); });
+              fallArea.classList.add('respondido');
+              if (!op.correcto) {
+                correctSound.currentTime = 0; correctSound.play();
+                dropBox.textContent = op.texto;
+                dropBox.classList.add('drop-correct');
+                showJ2Feedback(true, op.texto);
+                setTimeout(() => nextPalabra(), 1400);
+              } else {
+                wrongSound.currentTime = 0; wrongSound.play();
+                dropBox.classList.add('drop-wrong');
+                showJ2Feedback(false, op.texto);
+                const fallWords = document.querySelectorAll('.fall-word');
+                fallWords.forEach(fw => {
+                  if (fw.textContent === op.texto) {
+                    fw.style.transition = 'opacity 0.7s, transform 0.7s';
+                    fw.style.opacity = '0';
+                    fw.style.transform = 'scale(0.7) rotate(-18deg)';
+                  }
+                });
+                setTimeout(() => nextPalabra(), 3000);
+              }
+            }, 550);
+          }, { passive: false });
+        }
         // Velocidad intermedia: delay, step e interval entre el original y el rápido
         const delay = 500 + Math.random() * 700 + i * 500;
         const finalTop = minTop + Math.random() * (maxTop - minTop);
@@ -432,7 +488,19 @@ const Game2Nivel3 = (() => {
     `;
     setTimeout(() => { try { Pet.setHappy(); Pet.speak('¡Has detectado todos los errores!'); } catch (e) { } }, 400);
     document.getElementById('btn-finish').onclick = () => {
-      window.location.href = '../resultados.html?game=juego2&level=nivel-dificil&score=' + aciertos;
+      try {
+        addLevelCompletion('juego2', 'nivel-dificil');
+      } catch (e) { }
+      let total = 0;
+      let score = 0;
+      try {
+        const STORAGE_KEY = 'dixly_progress_v1';
+        let p = localStorage.getItem(STORAGE_KEY);
+        p = p ? JSON.parse(p) : { perGame: {}, total: 0 };
+        total = p.total || 0;
+        score = (p.perGame && p.perGame['juego2'] && p.perGame['juego2'].score) || 0;
+      } catch (e) { }
+      window.location.href = `../resultados.html?game=juego2&level=nivel-dificil&score=${score}&total=${total}&aciertos=${aciertos}`;
     };
   }
 

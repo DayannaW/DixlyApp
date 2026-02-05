@@ -152,3 +152,39 @@
 
 /* PANTALLAS GRANDES */
 @media (min-width: 601px) {}
+
+
+
+.boton-azul {
+  margin-top: 0.5rem;
+	padding: 0.7rem 1.5rem;
+	border-radius: 1.5rem;
+	border: none;
+	color: #fff;
+	font-size: 1rem;
+	cursor: pointer;
+	display: block;
+  
+  /* Fondo con profundidad */
+  background: radial-gradient(circle at center,
+      var(--accent-ui) 0%,
+      var(--accent-ui-hover) 65%);
+
+  /* Relieve + hundimiento central */
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.7),
+    /* luz arriba */
+    inset 0 -2px 4px rgba(0, 0, 0, 0.18),
+    /* sombra abajo */
+    inset 0 0 4px rgba(0, 0, 0, 0.22),
+    /* centro hundido */
+    0 1px 2px rgba(0, 0, 0, 0.10);
+  /* separación */
+
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+
+
+}

@@ -1,5 +1,5 @@
 // Nombre del caché (cambiar la versión cuando actualices la app)
-const CACHE_NAME = 'mi-pwa-cache-v8';
+const CACHE_NAME = 'mi-pwa-cache-v9';
 
 // Archivos que queremos precargar
 const FILES_TO_CACHE = [
@@ -112,6 +112,8 @@ const FILES_TO_CACHE = [
   'assets/imagenes/juego3/llave.jpg',
   // Imágenes insignias
   'assets/imagenes/insignias/arquitecto-historia.png',
+  'assets/imagenes/insignias/arquitecto-sentido.png',
+  'assets/imagenes/insignias/pensador-valiente.png',
   'assets/imagenes/insignias/cazador-pistas.png',
   'assets/imagenes/insignias/lector-atento.png',
   'assets/imagenes/insignias/lector-paciente.png',

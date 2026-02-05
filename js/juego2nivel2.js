@@ -14,7 +14,7 @@ const Game2Nivel2 = (() => {
             [rondas[i], rondas[j]] = [rondas[j], rondas[i]];
         }
         // Limitar a 10 rondas
-        rondas = rondas.slice(0, 10);
+        rondas = rondas.slice(0, 6);
         current = 0;
         aciertos = 0;
     }
@@ -63,9 +63,9 @@ const Game2Nivel2 = (() => {
         card.innerHTML = `
             <h2 style="margin-bottom: 1rem;">Sonidos en Movimiento</h2>
             <p >Los sonidos ya no esperan.<br>
-                Ahora se mueven.<br><br>
-                Escucha la palabra con atención.<br>
-                Después, varias palabras caerán lentamente frente a ti.<br><br>
+                Ahora se mueven mas rapido.<br><br>
+                Escucha las palabras con atención.<br>
+                Después, varias palabras caerán hacia el piso.<br><br>
                 Algunas se parecen…<br>
                 pero solo una coincide con lo que escuchaste.<br><br>
                 Observa, recuerda y decide en el momento justo.</p>
@@ -323,7 +323,13 @@ const Game2Nivel2 = (() => {
                                 // Mensaje según etapa
                                 let msg = 'Solo una palabra que escuchaste está aquí.';
                                 if (etapa === 'avanzado') msg = '¡Atento! Ahora escuchaste tres palabras.';
-                                try { Pet.speak(msg, 1000); } catch (e) { }
+                                try { 
+                                    Pet.speak(msg, 1000);
+                                    setTimeout(() => {
+                                        const dialog = document.getElementById('pixel-dialog');
+                                        if (dialog) dialog.style.display = 'none';
+                                    }, 5000); // Oculta el cuadro después de 3 segundos (ajusta el tiempo si es necesario)
+                                } catch (e) { }
                                 // Limpiar callbacks de reproducción de palabras
                                 resumeCallbacks = resumeCallbacks.filter(fn => fn.name !== 'next');
                                 // Limpiar timeouts y audio de palabras

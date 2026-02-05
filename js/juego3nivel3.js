@@ -7,7 +7,7 @@ const sCorrect = new Audio('../../assets/sonidos/correct.mp3');
 sCorrect.preload = 'auto';
 const sWrong = new Audio('../../assets/sonidos/wrong.mp3');
 sWrong.preload = 'auto';
-import { loadJSON } from './util.js';
+import { loadJSON, addLevelCompletion } from './util.js';
 import Pet from './pet.js';
 
 const Juego3Nivel3 = (() => {
@@ -202,7 +202,7 @@ const Juego3Nivel3 = (() => {
       const angleText = ((startAngle+endAngle)/2) + 90;
        svgTexts += `<text x="${tx}" y="${ty}" text-anchor="middle" alignment-baseline="middle" font-size="32" font-family="Lexend,Arial,sans-serif" fill="#222" transform="rotate(${angleText},${tx},${ty})">${palabrasRuleta[i].emoji}</text>`;
     }
-    let salirBtnHtml = `<button id=\"btn-salir-j3\" style=\"position:absolute;top:18px;right:18px;z-index:2000;font-size:1.1rem;padding:0.5rem 1.4rem;border-radius:1.5rem;border:none;background:#f44336;color:white;cursor:pointer;\">Salir<\/button>`;
+    let salirBtnHtml = `<button id="btn-salir-j3" class="close-btn">X</button>`;
     main.innerHTML = `
       ${salirBtnHtml}
       <div class=\"ruleta-container\" style=\"display:flex;flex-direction:column;align-items:center;gap:2rem;\">
@@ -220,7 +220,7 @@ const Juego3Nivel3 = (() => {
             <svg width=\"60\" height=\"60\" style=\"filter:drop-shadow(0 2px 6px #0005);transform:rotate(180deg);\"><polygon points=\"30,0 50,32 10,32\" fill=\"#e74c3c\" stroke=\"#b71c1c\" stroke-width=\"3\" /></svg>
           </div>
         </div>
-        <button id=\"btn-girar\" class=\"btn btn-primary\">Girar ruleta</button>
+        <button id=\"btn-girar\" class=\"boton-azul\">Girar ruleta</button> 
       </div>
       <div id=\"palabra-animada\" style=\"position:absolute;left:0;right:0;top:40px;text-align:center;z-index:10;pointer-events:none;opacity:0;transition:all .7s cubic-bezier(.7,.2,.3,1);font-size:2rem;font-weight:700;letter-spacing:2px;color:#234;\"></div>
     `;
@@ -375,7 +375,7 @@ const Juego3Nivel3 = (() => {
       <div class="palabra-seleccionada" style="text-align:center;margin-bottom:2rem;">
         <p style="font-size:1.2rem;color:#555;margin-top:1rem;">${obj.oracion}</p>
       </div>
-      <div class="imagenes-opciones" style="display:flex;flex-wrap:wrap;gap:2rem;justify-content:center;">
+      <div class="imagenes-opciones" style="display:grid;grid-template-columns:repeat(2, 1fr);gap:2rem;justify-items:center;align-items:center;max-width:340px;margin:0 auto;">
         ${opciones.map((op,i) => `<div class="img-opcion" data-palabra="${op.id}" style="cursor:pointer;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px #0002;transition:box-shadow .2s;"><img src="${op.imagen}" alt="${op.texto}" style="width:140px;height:140px;object-fit:contain;display:block;"></div>`).join('')}
       </div>
       <div id="feedback-j3" style="text-align:center;font-size:1.3rem;margin-top:2.5rem;min-height:2.5rem;"></div>
@@ -417,7 +417,19 @@ const Juego3Nivel3 = (() => {
   }
 
   function mostrarResultados() {
-    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel3&score=' + aciertos;
+    try {
+      addLevelCompletion('juego3', 'nivel-dificil');
+    } catch (e) { }
+    let total = 0;
+    let score = 0;
+    try {
+      const STORAGE_KEY = 'dixly_progress_v1';
+      let p = localStorage.getItem(STORAGE_KEY);
+      p = p ? JSON.parse(p) : { perGame: {}, total: 0 };
+      total = p.total || 0;
+      score = (p.perGame && p.perGame['juego3'] && p.perGame['juego3'].score) || 0;
+    } catch (e) { }
+    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel3&score=' + score + '&total=' + total + '&aciertos=' + aciertos;
   }
 
   async function init() {
