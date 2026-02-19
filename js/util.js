@@ -1,3 +1,22 @@
+// --- Puntaje de la sesión actual ---
+const SESSION_SCORE_KEY = 'dixly_session_score';
+
+export function setSessionScore(gameId, score) {
+    try {
+        let session = localStorage.getItem(SESSION_SCORE_KEY);
+        session = session ? JSON.parse(session) : {};
+        session[gameId] = score;
+        localStorage.setItem(SESSION_SCORE_KEY, JSON.stringify(session));
+    } catch (e) {}
+}
+
+export function getSessionScore(gameId) {
+    try {
+        let session = localStorage.getItem(SESSION_SCORE_KEY);
+        session = session ? JSON.parse(session) : {};
+        return session[gameId] || 0;
+    } catch (e) { return 0; }
+}
 export async function loadJSON(url) { 
     const resp = await fetch(url);
     if (!resp.ok) throw new Error("No se pudo cargar: " + url);

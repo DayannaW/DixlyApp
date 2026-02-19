@@ -93,6 +93,7 @@
         // Llamar al ajustarGridCards después de mostrar/ocultar cards
         setTimeout(ajustarGridCards, 0);
     import { getTotalScore, getGameScore, getLevelPoints, hasCompletedLevel, getBadge } from '../js/util.js';
+      import { getSessionScore } from '../js/util.js';
     let BADGES_DICT = {};
     async function loadBadgesDict() {
       try {
@@ -216,8 +217,13 @@
 
 
 
-    // Puntos obtenidos en este juego
-    const gScore = game ? getGameScore(game) : 0;
+    // Puntos obtenidos en esta sesión para este juego
+    let gScore = 0;
+    if (game) {
+      gScore = getSessionScore(game);
+      // Si no hay puntaje de sesión, usar el acumulado como fallback
+      if (!gScore) gScore = getGameScore(game);
+    }
     gameScoreEl.textContent = gScore;
 
     // Aciertos: para juego1 nivel-facil, buscar en localStorage; para otros juegos, puedes adaptar la lógica

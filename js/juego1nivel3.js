@@ -9,12 +9,14 @@ const Game1_3 = (() => {
   let score = 0;
   let userEndings = [];
   let pensadorValienteAchieved = false;
+  let aciertosGenerales = 0; // Nuevo: aciertos generales del juego
 
   async function loadStories() {
     stories = await loadJSON('../../js/data/juego1/nivel-dificil.json');
     currentStory = 0;
     score = 0;
     userEndings = [];
+    aciertosGenerales = 0;
   }
 
   // function showInstructions() {
@@ -353,6 +355,10 @@ const Game1_3 = (() => {
     for (let i = 0; i < 3; i++) {
       if (selectedSlots[i] === correct[i]) aciertos++;
     }
+    // Guardar acierto general solo si el final es completamente coherente
+    if (aciertos === 3) {
+      aciertosGenerales++;
+    }
     let resultado = '';
     let puntos = 1;
     let pixelMsg = '';
@@ -422,6 +428,7 @@ const Game1_3 = (() => {
   function showFinalResults() {
     const main = document.getElementById('main-container');
     const total = userEndings.reduce((sum, e) => sum + (e ? e.puntos : 0), 0);
+    const aciertos = aciertosGenerales;
     // Verificar insignias
     let arquitectoSentido = userEndings.some(e => e && e.puntos === 3);
     let badgeConditions = {};
@@ -453,7 +460,31 @@ const Game1_3 = (() => {
       } catch (e) {}
     }, 400);
     document.getElementById('btn-finish').onclick = () => {
-      window.location.href = '../resultados.html?game=juego1&level=nivel-dificil&score=' + total;
+      // Sumar el puntaje de la sesión actual al total global en dixly_progress_v1
+      try {
+        const storageKey = 'dixly_progress_v1';
+        let data = localStorage.getItem(storageKey);
+        let json = {};
+        if (data) {
+          json = JSON.parse(data);
+        }
+        const prevTotal = parseInt(json.total || 0, 10);
+        json.total = prevTotal + total;
+        localStorage.setItem(storageKey, JSON.stringify(json));
+      } catch (e) {}
+      // Guardar el puntaje de la sesión actual para este juego
+      try {
+        // Importación dinámica para evitar problemas si no está importado arriba
+        if (typeof setSessionScore === 'function') {
+          setSessionScore('juego1', total);
+        } else if (window.setSessionScore) {
+          window.setSessionScore('juego1', total);
+        } else {
+          // Importar si es módulo
+          import('./util.js').then(mod => mod.setSessionScore('juego1', total));
+        }
+      } catch (e) {}
+      window.location.href = '../resultados.html?game=juego1&level=nivel-dificil&score=' + total + '&aciertos=' + aciertos;
     };
   }
 

@@ -533,6 +533,53 @@ const Game1_2 = (() => {
             badgeParam = badgeParam ? ('&' + badgeParam) : '';
           } catch (e) { }
           window.location.href = `../resultados.html?game=juego1&level=${encodeURIComponent(currentLevel)}&aciertos=${aciertos}&intentos=${intentos}` + badgeParam;
+          // Sumar el puntaje de la sesión al total global
+          try {
+            const storageKey = 'dixly_progress_v1';
+            let data = localStorage.getItem(storageKey);
+            let json = {};
+            if (data) {
+              json = JSON.parse(data);
+            }
+            const prevTotal = parseInt(json.total || 0, 10);
+            json.total = prevTotal + aciertos;
+            localStorage.setItem(storageKey, JSON.stringify(json));
+          } catch (e) {}
+          // Guardar el puntaje de la sesión
+          try {
+            if (typeof setSessionScore === 'function') {
+              setSessionScore('juego1', aciertos);
+            } else if (window.setSessionScore) {
+              window.setSessionScore('juego1', aciertos);
+            } else {
+              import('./util.js').then(mod => mod.setSessionScore('juego1', aciertos));
+            }
+          } catch (e) {}
+          // Sumar el score de la sesión al score acumulado del juego y al total global
+          try {
+            const storageKey = 'score';
+            let data = localStorage.getItem(storageKey);
+            let json = {};
+            if (data) {
+              json = JSON.parse(data);
+            }
+            if (!json.perGame) json.perGame = {};
+            if (!json.perGame.juego1) json.perGame.juego1 = {};
+            const prevScore = parseInt(json.perGame.juego1.score || 0, 10);
+            json.perGame.juego1.score = prevScore + aciertos;
+            const prevTotal = parseInt(json.total || 0, 10);
+            json.total = prevTotal + aciertos;
+            localStorage.setItem(storageKey, JSON.stringify(json));
+          } catch (e) {}
+          try {
+            if (typeof setSessionScore === 'function') {
+              setSessionScore('juego1', aciertos);
+            } else if (window.setSessionScore) {
+              window.setSessionScore('juego1', aciertos);
+            } else {
+              import('./util.js').then(mod => mod.setSessionScore('juego1', aciertos));
+            }
+          } catch (e) {}
         }
       }, 900);
     } else {
