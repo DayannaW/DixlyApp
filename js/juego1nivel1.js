@@ -267,11 +267,7 @@ const Game1 = (() => {
                     // Simular drop
                     // Contar intento
                     intentos++;
-                    try {
-                        if (currentLevel === 'nivel-facil') {
-                            localStorage.setItem('juego1_nivel-facil_intentos', intentos);
-                        }
-                    } catch (e) { }
+                    
                     if (!storyAttempts[currentStoryIndex]) {
                         storyAttempts[currentStoryIndex] = 1;
                     } else {
@@ -307,6 +303,7 @@ const Game1 = (() => {
                                     // Insignias especiales
                                     let badgeParams = '';
                                     let badgeConditions = {};
+                                    var puntajeMaxNivel1 = 10;
                                     if (aciertos === intentos && aciertos === stories.length) {
                                         badgeConditions['lector-atento'] = true;
                                     }
@@ -317,47 +314,24 @@ const Game1 = (() => {
                                         badgeConditions['lector-paciente'] = true;
                                     }
                                     try {
-                                        const res = addLevelCompletion('juego1', currentLevel, badgeConditions);
+                                        const res = addLevelCompletion('juego1', currentLevel, badgeConditions, puntajeMaxNivel1);
                                         if (res && res.badges && res.badges.length) {
                                             badgeParams = res.badges.map(b => `badge=${encodeURIComponent(b)}`).join('&');
                                             badgeParams = badgeParams ? ('&' + badgeParams) : '';
                                         }
                                     } catch (e) { }
                                     window.location.href = `../resultados.html?game=juego1&level=${encodeURIComponent(currentLevel)}&aciertos=${aciertos}&intentos=${intentos}` + badgeParams;
-                                                                                                        // Sumar el score de la sesión al score acumulado del juego y al total global
-                                                                                                        try {
-                                                                                                            const storageKey = 'score';
-                                                                                                            let data = localStorage.getItem(storageKey);
-                                                                                                            let json = {};
-                                                                                                            if (data) {
-                                                                                                                json = JSON.parse(data);
-                                                                                                            }
-                                                                                                            if (!json.perGame) json.perGame = {};
-                                                                                                            if (!json.perGame.juego1) json.perGame.juego1 = {};
-                                                                                                            const prevScore = parseInt(json.perGame.juego1.score || 0, 10);
-                                                                                                            json.perGame.juego1.score = prevScore + aciertos;
-                                                                                                            const prevTotal = parseInt(json.total || 0, 10);
-                                                                                                            json.total = prevTotal + aciertos;
-                                                                                                            localStorage.setItem(storageKey, JSON.stringify(json));
-                                                                                                        } catch (e) {}
-                                                                    try {
-                                                                        if (typeof setSessionScore === 'function') {
-                                                                            setSessionScore('juego1', aciertos);
-                                                                        } else if (window.setSessionScore) {
-                                                                            window.setSessionScore('juego1', aciertos);
-                                                                        } else {
-                                                                            import('./util.js').then(mod => mod.setSessionScore('juego1', aciertos));
-                                                                        }
-                                                                    } catch (e) {}
-                                                        try {
-                                                            if (typeof setSessionScore === 'function') {
-                                                                setSessionScore('juego1', aciertos);
-                                                            } else if (window.setSessionScore) {
-                                                                window.setSessionScore('juego1', aciertos);
-                                                            } else {
-                                                                import('./util.js').then(mod => mod.setSessionScore('juego1', aciertos));
-                                                            }
-                                                        } catch (e) {}
+                                    
+                                    // Guardar el puntaje de la sesión
+                                    try {
+                                        if (typeof setSessionScore === 'function') {
+                                            setSessionScore('juego1', puntajeMaxNivel1);
+                                        } else if (window.setSessionScore) {
+                                            window.setSessionScore('juego1', puntajeMaxNivel1);
+                                        } else {
+                                            import('./util.js').then(mod => mod.setSessionScore('juego1', puntajeMaxNivel1));
+                                        }
+                                    } catch (e) {}
                                 }
                             }, 1600);
                         }, 550);

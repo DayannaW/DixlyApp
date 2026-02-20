@@ -356,19 +356,23 @@ const Juego3Nivel2 = (() => {
   }
 
   function mostrarResultados() {
+    let levelScore = aciertos * 10;
     try {
-      addLevelCompletion('juego3', 'nivel-intermedio');
+      addLevelCompletion('juego3', 'nivel-intermedio','',levelScore);
     } catch (e) { }
-    let total = 0;
-    let score = 0;
+
     try {
-      const STORAGE_KEY = 'dixly_progress_v1';
-      let p = localStorage.getItem(STORAGE_KEY);
-      p = p ? JSON.parse(p) : { perGame: {}, total: 0 };
-      total = p.total || 0;
-      score = (p.perGame && p.perGame['juego3'] && p.perGame['juego3'].score) || 0;
-    } catch (e) { }
-    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel-intermedio&score=' + score + '&total=' + total + '&aciertos=' + aciertos;
+        // Importación dinámica para evitar problemas si no está importado arriba
+        if (typeof setSessionScore === 'function') {
+          setSessionScore('juego3', levelScore);
+        } else if (window.setSessionScore) {
+          window.setSessionScore('juego3', levelScore);
+        } else {
+          // Importar si es módulo
+          import('./util.js').then(mod => mod.setSessionScore('juego3', levelScore));
+        }
+      } catch (e) { }
+    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel-intermedio&score=' + levelScore + '&aciertos=' + aciertos;
   }
 
   async function init() {

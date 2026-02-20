@@ -323,7 +323,7 @@ const Game2Nivel2 = (() => {
                                 // Mensaje según etapa
                                 let msg = 'Solo una palabra que escuchaste está aquí.';
                                 if (etapa === 'avanzado') msg = '¡Atento! Ahora escuchaste tres palabras.';
-                                try { 
+                                try {
                                     Pet.speak(msg, 1000);
                                     setTimeout(() => {
                                         const dialog = document.getElementById('pixel-dialog');
@@ -482,7 +482,7 @@ const Game2Nivel2 = (() => {
                 w.classList.remove('dragging');
             };
             // Soporte táctil para móviles: simular drop al tocar la palabra
-            w.addEventListener('touchstart', function(e) {
+            w.addEventListener('touchstart', function (e) {
                 if (w.getAttribute('draggable') === 'false' || fallArea.classList.contains('respondido')) return;
                 e.preventDefault();
                 playSfx('drop.mp3');
@@ -490,8 +490,8 @@ const Game2Nivel2 = (() => {
                 const dropBox = document.getElementById('drop-box');
                 const dropRect = dropBox.getBoundingClientRect();
                 const wordRect = w.getBoundingClientRect();
-                const deltaX = dropRect.left + dropRect.width/2 - (wordRect.left + wordRect.width/2);
-                const deltaY = dropRect.top + dropRect.height/2 - (wordRect.top + wordRect.height/2);
+                const deltaX = dropRect.left + dropRect.width / 2 - (wordRect.left + wordRect.width / 2);
+                const deltaY = dropRect.top + dropRect.height / 2 - (wordRect.top + wordRect.height / 2);
                 w.style.transition = 'transform 0.55s cubic-bezier(.4,1.2,.6,1), opacity 0.2s';
                 w.style.zIndex = '10000';
                 w.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(1.15)`;
@@ -583,19 +583,24 @@ const Game2Nivel2 = (() => {
         if (current < rondas.length) {
             showJuego();
         } else {
+            let levelScore = aciertos * 10;
             // Guardar progreso y redirigir a resultados.html
             try {
-                addLevelCompletion('juego2', 'nivel-intermedio');
+                addLevelCompletion('juego2', 'nivel-intermedio', '', levelScore);
             } catch (e) { }
-            let total = 0;
             try {
-                const STORAGE_KEY = 'dixly_progress_v1';
-                let p = localStorage.getItem(STORAGE_KEY);
-                p = p ? JSON.parse(p) : { perGame: {}, total: 0 };
-                total = p.total || 0;
+                // Importación dinámica para evitar problemas si no está importado arriba
+                if (typeof setSessionScore === 'function') {
+                    setSessionScore('juego2', levelScore);
+                } else if (window.setSessionScore) {
+                    window.setSessionScore('juego2', levelScore);
+                } else {
+                    // Importar si es módulo
+                    import('./util.js').then(mod => mod.setSessionScore('juego2', levelScore));
+                }
             } catch (e) { }
             const intentos = rondas.length;
-            window.location.href = `../resultados.html?game=juego2&level=nivel-intermedio&aciertos=${aciertos}&intentos=${intentos}&score=${aciertos}&total=${total}`;
+            window.location.href = `../resultados.html?game=juego2&level=nivel-intermedio&aciertos=${aciertos}&intentos=${intentos}&score=${levelScore}`;
         }
     }
 

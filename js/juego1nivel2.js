@@ -524,62 +524,38 @@ const Game1_2 = (() => {
         } else {
           let badgeParam = '';
           let badgeConditions = {};
+          let puntajeMaxNivel2 = 20;
           if (failedReviewCount > 0) badgeConditions['reorganizador-experto'] = true;
           if (oidoNarrativoAchieved) badgeConditions['oido-narrativo'] = true;
           if (miradaAtentaAchieved) badgeConditions['mirada-atenta'] = true;
           try {
-            const res = addLevelCompletion('juego1', currentLevel, badgeConditions);
+            const res = addLevelCompletion('juego1', currentLevel, badgeConditions, puntajeMaxNivel2);
             if (res && res.badges && res.badges.length) badgeParam = res.badges.map(b => `badge=${encodeURIComponent(b)}`).join('&');
             badgeParam = badgeParam ? ('&' + badgeParam) : '';
           } catch (e) { }
           window.location.href = `../resultados.html?game=juego1&level=${encodeURIComponent(currentLevel)}&aciertos=${aciertos}&intentos=${intentos}` + badgeParam;
-          // Sumar el puntaje de la sesión al total global
-          try {
-            const storageKey = 'dixly_progress_v1';
-            let data = localStorage.getItem(storageKey);
-            let json = {};
-            if (data) {
-              json = JSON.parse(data);
-            }
-            const prevTotal = parseInt(json.total || 0, 10);
-            json.total = prevTotal + aciertos;
-            localStorage.setItem(storageKey, JSON.stringify(json));
-          } catch (e) {}
+          // // Sumar el puntaje de la sesión al total global
+          // try {
+          //   const storageKey = 'dixly_progress_v1';
+          //   let data = localStorage.getItem(storageKey);
+          //   let json = {};
+          //   if (data) {
+          //     json = JSON.parse(data);
+          //   }
+          //   const prevTotal = parseInt(json.total || 0, 10);
+          //   json.total = prevTotal + aciertos;
+          //   localStorage.setItem(storageKey, JSON.stringify(json));
+          // } catch (e) {}
           // Guardar el puntaje de la sesión
           try {
             if (typeof setSessionScore === 'function') {
-              setSessionScore('juego1', aciertos);
+              setSessionScore('juego1', puntajeMaxNivel2);
             } else if (window.setSessionScore) {
-              window.setSessionScore('juego1', aciertos);
+              window.setSessionScore('juego1', puntajeMaxNivel2);
             } else {
-              import('./util.js').then(mod => mod.setSessionScore('juego1', aciertos));
+              import('./util.js').then(mod => mod.setSessionScore('juego1', puntajeMaxNivel2));
             }
-          } catch (e) {}
-          // Sumar el score de la sesión al score acumulado del juego y al total global
-          try {
-            const storageKey = 'score';
-            let data = localStorage.getItem(storageKey);
-            let json = {};
-            if (data) {
-              json = JSON.parse(data);
-            }
-            if (!json.perGame) json.perGame = {};
-            if (!json.perGame.juego1) json.perGame.juego1 = {};
-            const prevScore = parseInt(json.perGame.juego1.score || 0, 10);
-            json.perGame.juego1.score = prevScore + aciertos;
-            const prevTotal = parseInt(json.total || 0, 10);
-            json.total = prevTotal + aciertos;
-            localStorage.setItem(storageKey, JSON.stringify(json));
-          } catch (e) {}
-          try {
-            if (typeof setSessionScore === 'function') {
-              setSessionScore('juego1', aciertos);
-            } else if (window.setSessionScore) {
-              window.setSessionScore('juego1', aciertos);
-            } else {
-              import('./util.js').then(mod => mod.setSessionScore('juego1', aciertos));
-            }
-          } catch (e) {}
+          } catch (e) {}        
         }
       }, 900);
     } else {

@@ -67,7 +67,7 @@ async function loadBadgeInfo(badgeIds) {
     const allBadges = await resp.json();
     return badgeIds.map(id => ({
         id,
-        img: allBadges[id]?.path || `../imagenes/insignias/${id}.png`, // imagen por convención
+        img: allBadges[id]?.path || `../assets/imagenes/insignias/${id}.png`, // imagen por convención
         title: allBadges[id]?.name || id,
         desc: allBadges[id]?.desc || ''
     }));

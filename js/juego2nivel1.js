@@ -507,24 +507,37 @@ const Game2 = (() => {
   }
   function nextPalabra() {
     current++;
+
     if (current < palabras.length) {
       showJuego();
     } else {
+      let levelScore = aciertos * 10;
       // Redirigir directamente a resultados.html con los datos
       try {
         // Guardar progreso y calcular puntos acumulados
-        addLevelCompletion('juego2', 'nivel-facil');
+        addLevelCompletion('juego2', 'nivel-facil','', levelScore);
       } catch (e) { }
-      let total = 0;
       try {
-        const STORAGE_KEY = 'dixly_progress_v1';
-        let p = localStorage.getItem(STORAGE_KEY);
-        p = p ? JSON.parse(p) : { perGame: {}, total: 0 };
-        total = p.total || 0;
-      } catch (e) { }
+        // Importación dinámica para evitar problemas si no está importado arriba
+        if (typeof setSessionScore === 'function') {
+          setSessionScore('juego2', levelScore);
+        } else if (window.setSessionScore) {
+          window.setSessionScore('juego2', levelScore);
+        } else {
+          // Importar si es módulo
+          import('./util.js').then(mod => mod.setSessionScore('juego2', levelScore));
+        }
+      } catch (e) {}
+      // let total = 0;
+      // try {
+      //   const STORAGE_KEY = 'dixly_progress_v1';
+      //   let p = localStorage.getItem(STORAGE_KEY);
+      //   p = p ? JSON.parse(p) : { perGame: {}, total: 0 };
+      //   total = p.total || 0;
+      // } catch (e) { }
       // aciertos = palabras correctas, intentos = cantidad de palabras jugadas
       const intentos = palabras.length;
-      window.location.href = `../resultados.html?game=juego2&level=nivel-facil&aciertos=${aciertos}&intentos=${intentos}&score=${aciertos}&total=${total}`;
+      window.location.href = `../resultados.html?game=juego2&level=nivel-facil&aciertos=${aciertos}&intentos=${intentos}&score=${levelScore}`;
     }
   }
   //}

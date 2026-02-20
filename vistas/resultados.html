@@ -49,7 +49,7 @@
           <div id="attempts-row" style="font-size:2.2rem; font-weight:700; margin:0.5rem 0;"></div>
         </div>
         <div class="score-box">
-          <strong>Puntos en este juego</strong>
+          <strong>Puntos en este nivel</strong>
           <div id="game-score" style="font-size:2.2rem; font-weight:700; margin:0.5rem 0;">0</div>
         </div>
         <div class="score-box bg-acumulado">
@@ -257,13 +257,9 @@
       console.log('Mostrando intentos para juego1 nivel-facil');
       console.log(game +" nivel "+ level);
       // Buscar intentos en localStorage o similar (ajusta según tu lógica)
-      let attempts = 0;
-      try {
-        const key = `juego1_nivel-facil_intentos`;
-        attempts = parseInt(localStorage.getItem(key) || '0', 10);
-      } catch (e) {}
+      
       attemptsRow.style.display = 'block';
-      attemptsRow.textContent = `${attempts}`;
+      attemptsRow.textContent = `${intentos}`;
       ajustarGridCards();
     } else {
       attemptsRow.style.display = 'none';

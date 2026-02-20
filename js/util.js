@@ -7,7 +7,7 @@ export function setSessionScore(gameId, score) {
         session = session ? JSON.parse(session) : {};
         session[gameId] = score;
         localStorage.setItem(SESSION_SCORE_KEY, JSON.stringify(session));
-    } catch (e) {}
+    } catch (e) { }
 }
 
 export function getSessionScore(gameId) {
@@ -17,7 +17,7 @@ export function getSessionScore(gameId) {
         return session[gameId] || 0;
     } catch (e) { return 0; }
 }
-export async function loadJSON(url) { 
+export async function loadJSON(url) {
     const resp = await fetch(url);
     if (!resp.ok) throw new Error("No se pudo cargar: " + url);
     return await resp.json();
@@ -63,21 +63,26 @@ export function hasCompletedLevel(gameId, level) {
     return !!(p.perGame[gameId] && p.perGame[gameId].levels && p.perGame[gameId].levels[level]);
 }
 
-export function addLevelCompletion(gameId, level) {
+export function addLevelCompletion(gameId, level, badgeConditions, points) {
     console.log(`Agregando nivel completado: ${gameId} - ${level}`);
-    const points = LEVEL_POINTS[level] || 0;
+    //const points = LEVEL_POINTS[level] || 0;
     if (!gameId || !level || points <= 0) return false;
 
     const p = _read();
-    if (!p.perGame[gameId]) p.perGame[gameId] = { score: 0, levels: {} };
-    console.log("Progreso antes de agregar nivel:", p);
+    if (!p.perGame[gameId]) p.perGame[gameId] = {levels: {} };
+    
     let badgesAdded = [];
     if (!p.perGame[gameId].badges) p.perGame[gameId].badges = {};
-    let alreadyCompleted = !!p.perGame[gameId].levels[level];
-    if (!alreadyCompleted) {
-        // sumar puntos solo si no estaba completado
-        p.perGame[gameId].levels[level] = { completedAt: Date.now() };
-        p.perGame[gameId].score = (p.perGame[gameId].score || 0) + points;
+    
+    const levelData = p.perGame[gameId].levels[level];
+
+    if (!levelData || (levelData.score || 0) < points) {
+
+        p.perGame[gameId].levels[level] = {
+            completedAt: Date.now(),
+            score: points
+        };
+
         p.total = (p.total || 0) + points;
     }
     // Si es el primer nivel, otorgar insignia "primer-paso"
@@ -90,6 +95,7 @@ export function addLevelCompletion(gameId, level) {
         p.perGame[gameId].badges['arquitecto-historia'] = { earnedAt: Date.now(), name: 'Arquitecto de la historia', desc: 'Completaste el nivel intermedio ordenando todas las historias correctamente.' };
         badgesAdded.push('arquitecto-historia');
     }
+    console.log("argumentos para condiciones de sss:", arguments);
     // Si es el nivel intermedio y badgeConditions['reorganizador-experto'], otorgar insignia
     if (level === 'nivel-intermedio' && arguments.length > 2 && typeof arguments[2] === 'object') {
         const badgeConditions = arguments[2];

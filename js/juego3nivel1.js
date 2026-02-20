@@ -354,20 +354,24 @@ const Juego3Nivel1 = (() => {
     }
   }
 
-  function mostrarResultados() {
+  function mostrarResultados() { 
+    let levelScore = aciertos * 10;
     try {
-      addLevelCompletion('juego3', 'nivel-facil');
+      addLevelCompletion('juego3', 'nivel-facil', '', levelScore);
     } catch (e) { }
-    let total = 0;
-    let score = 0;
+
     try {
-      const STORAGE_KEY = 'dixly_progress_v1';
-      let p = localStorage.getItem(STORAGE_KEY);
-      p = p ? JSON.parse(p) : { perGame: {}, total: 0 };
-      total = p.total || 0;
-      score = (p.perGame && p.perGame['juego3'] && p.perGame['juego3'].score) || 0;
-    } catch (e) { }
-    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel-facil&score=' + score + '&total=' + total + '&aciertos=' + aciertos;
+        // Importación dinámica para evitar problemas si no está importado arriba
+        if (typeof setSessionScore === 'function') {
+          setSessionScore('juego3', levelScore);
+        } else if (window.setSessionScore) {
+          window.setSessionScore('juego3', levelScore);
+        } else {
+          // Importar si es módulo
+          import('./util.js').then(mod => mod.setSessionScore('juego3', levelScore));
+        }
+      } catch (e) { }
+    window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel-facil&score=' + levelScore + '&aciertos=' + aciertos;
     // const main = document.getElementById('main-container');
     // main.innerHTML = `
     //   <div class=\"result-card\" style=\"max-width:420px; margin:3rem auto; padding:1.5rem; border-radius:12px; box-shadow:var(--sombra-media); background:var(--color-blanco); text-align:center\">
@@ -377,7 +381,7 @@ const Juego3Nivel1 = (() => {
     //   </div>
     // `;
     // document.getElementById('btn-finish').onclick = () => {
-    //   window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel1&score=' + aciertos;
+    //   window.location.href = '../../vistas/resultados.html?game=juego3&level=nivel1&score=' + levelScore + '&aciertos=' + aciertos;
     // };
   }
 

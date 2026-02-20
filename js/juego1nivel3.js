@@ -429,12 +429,13 @@ const Game1_3 = (() => {
     const main = document.getElementById('main-container');
     const total = userEndings.reduce((sum, e) => sum + (e ? e.puntos : 0), 0);
     const aciertos = aciertosGenerales;
+    let puntajeNivel3 = total * 10;
     // Verificar insignias
     let arquitectoSentido = userEndings.some(e => e && e.puntos === 3);
     let badgeConditions = {};
     if (arquitectoSentido) badgeConditions['arquitecto-sentido'] = true;
     if (pensadorValienteAchieved) badgeConditions['pensador-valiente'] = true;
-    try { addLevelCompletion('juego1', 'nivel-dificil', badgeConditions); } catch (e) {}
+    try { addLevelCompletion('juego1', 'nivel-dificil', badgeConditions, puntajeNivel3); } catch (e) {}
     main.innerHTML = `
       <div class="result-card" style="max-width:480px; margin:3rem auto; padding:1.5rem; border-radius:12px; box-shadow:var(--sombra-media); background:var(--color-blanco); text-align:center">
         <h2>¡Nivel difícil completado!</h2>
@@ -461,30 +462,30 @@ const Game1_3 = (() => {
     }, 400);
     document.getElementById('btn-finish').onclick = () => {
       // Sumar el puntaje de la sesión actual al total global en dixly_progress_v1
-      try {
-        const storageKey = 'dixly_progress_v1';
-        let data = localStorage.getItem(storageKey);
-        let json = {};
-        if (data) {
-          json = JSON.parse(data);
-        }
-        const prevTotal = parseInt(json.total || 0, 10);
-        json.total = prevTotal + total;
-        localStorage.setItem(storageKey, JSON.stringify(json));
-      } catch (e) {}
+      // try {
+      //   const storageKey = 'dixly_progress_v1';
+      //   let data = localStorage.getItem(storageKey);
+      //   let json = {};
+      //   if (data) {
+      //     json = JSON.parse(data);
+      //   }
+      //   const prevTotal = parseInt(json.total || 0, 10);
+      //   json.total = prevTotal + total;
+      //   localStorage.setItem(storageKey, JSON.stringify(json));
+      // } catch (e) {}
       // Guardar el puntaje de la sesión actual para este juego
       try {
         // Importación dinámica para evitar problemas si no está importado arriba
         if (typeof setSessionScore === 'function') {
-          setSessionScore('juego1', total);
+          setSessionScore('juego1', puntajeNivel3);
         } else if (window.setSessionScore) {
-          window.setSessionScore('juego1', total);
+          window.setSessionScore('juego1', puntajeNivel3);
         } else {
           // Importar si es módulo
-          import('./util.js').then(mod => mod.setSessionScore('juego1', total));
+          import('./util.js').then(mod => mod.setSessionScore('juego1', puntajeNivel3));
         }
       } catch (e) {}
-      window.location.href = '../resultados.html?game=juego1&level=nivel-dificil&score=' + total + '&aciertos=' + aciertos;
+      window.location.href = '../resultados.html?game=juego1&level=nivel-dificil&score=' + puntajeNivel3 + '&aciertos=' + aciertos;
     };
   }
 
