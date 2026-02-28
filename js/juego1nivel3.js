@@ -197,7 +197,7 @@ const Game1_3 = (() => {
           <div style="font-size:1.04rem; color:#444; margin-bottom:0.7rem; text-align:center;">Elige tres opciones y colócalas arriba en orden lógico</div>
         </div>
         <div id="fragment-list" class="fragment-list"></div>
-        <button id="btn-review" class="btn btn-success" style="display:none;margin-top:1.2rem;">Revisar</button>
+        <button id="btn-review" class="controles-btn orange-btn" style="display:none;margin-top:1.2rem;">Revisar</button>
       </div>
     `;
     // Render slots
@@ -388,8 +388,8 @@ const Game1_3 = (() => {
         </div>
         <div class="feedback-result" style="font-size:1.2rem; font-weight:bold; margin-bottom:1rem;">${resultado}</div>
         <div class="actions">
-          <button id="btn-retry" class="btn btn-primary">Volver a intentar</button>
-          <button id="btn-next-story" class="btn btn-success">Continuar</button>
+          <button id="btn-retry" class="controles-btn blu-btn">Volver a intentar</button>
+          <button id="btn-next-story" class="controles-btn orange-btn">Continuar</button>
         </div>
       </div>
     `;

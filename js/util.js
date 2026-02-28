@@ -1,3 +1,5 @@
+// Dixly App - utilidades
+
 // --- Puntaje de la sesión actual ---
 const SESSION_SCORE_KEY = 'dixly_session_score';
 

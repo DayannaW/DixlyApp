@@ -463,7 +463,7 @@ const Game1 = (() => {
                         }
                         try {
                             console.log('badgeConditions:', badgeConditions);
-                            const res = addLevelCompletion('juego1', currentLevel, badgeConditions);
+                            const res = addLevelCompletion('juego1', currentLevel, badgeConditions, puntajeMaxNivel1);
 
                             if (res && res.badges && res.badges.length) {
                                 badgeParams = res.badges.map(b => `badge=${encodeURIComponent(b)}`).join('&');
